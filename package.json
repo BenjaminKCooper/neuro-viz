@@ -1,0 +1,25 @@
+{
+  "name": "neuro-viz-ben-luisa",
+  "version": "1.0.0",
+  "description": "neuro-viz project: winter break progress",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --inline --hot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BenjaminKCooper/neuro-viz-ben-luisa.git"
+  },
+  "author": "Benjamin Cooper and Luisa Vasquez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BenjaminKCooper/neuro-viz-ben-luisa/issues"
+  },
+  "homepage": "https://github.com/BenjaminKCooper/neuro-viz-ben-luisa#readme",
+  "dependencies": {
+    "three": "^0.82.1",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2"
+  }
+}
