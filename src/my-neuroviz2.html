@@ -1,0 +1,72 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-neuroviz2">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+    </style>
+  </template>
+  <script src="../bower_components/three.js/build/three.js"></script>
+  <script src="../bower_components/three.js/examples/js/loaders/OBJLoader.js"></script>
+  <script>
+      var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+      camera.position.x = 1;
+      camera.position.y = 4;
+      camera.position.z = 3;
+
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+      var loader = new THREE.JSONLoader();
+
+      loader.load(
+        '../src/models/new_neuron.js',
+        function(geometry, materials) {
+          var material = new THREE.MeshNormalMaterial();   //MultiMaterial(materials);
+          var object = new THREE.Mesh(geometry, material);
+          scene.add(object);
+        }
+      )
+      function onWindowResize() {
+      				camera.aspect = window.innerWidth / window.innerHeight;
+      				camera.updateProjectionMatrix();
+      				renderer.setSize( window.innerWidth, window.innerHeight );
+      			}
+
+      var render = function () {
+				requestAnimationFrame( render );
+        camera.lookAt( scene.position );
+				renderer.render(scene, camera);
+			};
+
+      render();
+
+
+
+
+
+  </script>
+  <script>
+    Polymer({
+      is: 'my-neuroviz2'
+    });
+  </script>
+</dom-module>
