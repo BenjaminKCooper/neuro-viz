@@ -34,6 +34,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     let mouseY = 0;
     let renderer = new THREE.WebGLRenderer();
     let markers = [];
+
+    var PopUpNode = function ( x, y, z, name="" ) {
+
+      let octGeo = new THREE.OctahedronGeometry(.4,0);
+      let octMaterial = new THREE.MeshLambertMaterial( { color: "red" } );
+      this.node = new THREE.Mesh(octGeo, octMaterial);
+      this.node.position.x = x;
+      this.node.position.y = y;
+      this.node.position.z = z;
+      this.node.name = name + " marker";
+      scene.add(this.node);
+
+
+      var plane = new THREE.PlaneGeometry( 5, 5, 32 );
+      var planeMaterial = new THREE.MeshLambertMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+      this.popup= new THREE.Mesh( plane, planeMaterial );
+      this.popup.position.x = x;
+      this.popup.position.y = y;
+      this.popup.position.z = z;
+      this.popup.name = name + " popup";
+      // this.popup.visible = false;
+
+      scene.add(this.popup)
+    }
+
+
     renderer.setPixelRatio( window.devicePixelRatio );
     let windowHalfX = window.innerWidth / 2;
 		let windowHalfY = window.innerHeight / 2;
@@ -64,8 +90,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       loader.load(
         '../src/models/new_neuron.js',
         function(geometry, materials) {
-          var material = new THREE.MeshNormalMaterial();   //MultiMaterial(materials);
+          var material = new THREE.MeshLambertMaterial( {color: "blue"});   //MultiMaterial(materials);
           var theNeuron = new THREE.Mesh(geometry, material);
+
           console.log(theNeuron.position.x)
           console.log(theNeuron)
           theNeuron.scale.x = 3;
@@ -76,9 +103,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       )
 
-      console.log(markers);
+      // console.log(markers);
       initMarkers();
-      console.log(markers);
+      // console.log(markers);
 
 //       var geometry = new THREE.CircleBufferGeometry( .4, 32 );
 //       var material = new THREE.MeshNormalMaterial();
@@ -102,16 +129,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       for (i = 0; i < markerXYZ.length; i++) {
         current = markerXYZ[i];
-        console.log(current)
 
-        let newGeo = new THREE.OctahedronGeometry(.4,0);
-        let newGeoMaterial = new THREE.MeshBasicMaterial( { color: "red" } );
-        let marker = new THREE.Mesh(newGeo, newGeoMaterial);
-
-        marker.position.x = current.x;
-        marker.position.y = current.y;
-        marker.position.z = current.z;
-        scene.add(marker);
+        marker = new PopUpNode(current.x,current.y,current.z, i);
 
         markers.push(marker);
 
@@ -150,22 +169,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       function intersectedNode( node ) {
         console.log('pop up')
+        // var geometry = new THREE.PlaneGeometry( 5, 5, 32 );
+        // var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+        // var plane = new THREE.Mesh( geometry, material );
+        // plane.position.x = node.position.x;
+        // plane.position.y = node.position.y;
+        // plane.position.z = node.position.z;
+        // console.log( node.userData );
+        // scene.add( plane );
 
-        const tri = new mojs.Shape({
-  shape:      'polygon',
-  fill:       'orange',
-  radius:     65,
-  angle:      { [-120]: -40 },
 
-  scaleX:     { 0 : 1.3 },
-
-  repeat:     10,
-  duration:   800,
-  isYoyo:     true,
-  backwardEasing: 'sin.in',
-
-  isShowEnd:  false
-}).play();
 
       }
 
@@ -177,17 +190,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         raycaster.setFromCamera(mouse, camera);
         var intersects = raycaster.intersectObjects( scene.children );
+        var intersects = raycaster.intersectObjects( scene.children );
+        				if ( intersects.length > 0 ) {
+        					if ( INTERSECTED != intersects[ 0 ].object ) {
+        						if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+        						INTERSECTED = intersects[ 0 ].object;
+        						INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+        						INTERSECTED.material.emissive.setHex( "0xff0000" );
+        					}
+        				} else {
+        					if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+        					INTERSECTED = null;
+        				}
+        // if ( intersects.length > 0 ) {
+        //   if ( INTERSECTED != intersects[ 0 ].object ) {
+        //     current = intersects[ 0 ].object ;
+        //     if (current.name != "the Neuron") {
+        //       // console.log(current.name);
+        //       for (i = 0; i < markers.length; i++) {
+        //         if ( markers[i].node.uuid == current.uuid ) {
+        //           markers[i].popup.visable = true;
+        //           console.log(markers[i].popup.visable);
+        //         }
+        //         else {
+        //           // markers[i].popup.visable = false;
+        //         }
+        //       }
+        //     }
+        //   }
+        // } else {
+        //
+        //   /// not intersected with anything!
+        // }
 
-        if ( intersects.length > 0 ) {
-          if ( INTERSECTED != intersects[ 0 ].object ) {
-            current = intersects[ 0 ].object ;
-            if (current.name != "the Neuron") {
-              intersectedNode(current);
-            }
-          }
-        } else {
-          /// not intersected with anything!
-        }
 			};
 
 

@@ -16,7 +16,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="shared-styles">
       :host {
         display: block;
-
         padding: 10px;
       }
     </style>
@@ -28,174 +27,86 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 
-  <script src="../bower_components/three.js/examples/js/renderers/Projector.js"></script>
-  <script src="../bower_components/three.js/examples/js/renderers/CanvasRenderer.js"></script>
-  <script src="../bower_components/three.js/examples/js/renderers/SVGRenderer.js"></script>
-  <script src="../bower_components/three.js/examples/js/renderers/SoftwareRenderer.js"></script>
-
-
-
-  <script>
-    var AMOUNT = 100;
-    var camera, scene;
-    var canvasRenderer, svgRenderer, softwareRenderer, webglRenderer;
-    var mesh, group;
-    init();
-    animate();
-    function init() {
-      var width = window.innerWidth / 2;
-      var height = window.innerHeight / 2;
-      camera = new THREE.PerspectiveCamera( 75, width / height, 1, 10000 );
-      camera.position.z = 500;
-      scene = new THREE.Scene();
-      scene.autoUpdate = false;
-
-      // CUBES
-      var cube = new THREE.BoxGeometry( 100, 100, 100 );
-      mesh = new THREE.Mesh( cube, new THREE.MeshBasicMaterial( { color: 0x0000ff, opacity: 0.5, transparent: true } ) );
-      mesh.position.x = 500;
-      mesh.rotation.x = Math.random();
-      mesh.rotation.y = Math.random();
-      mesh.scale.x = mesh.scale.y = mesh.scale.z = 2;
-      scene.add( mesh );
-      mesh = new THREE.Mesh( cube, new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff } ) );
-      mesh.position.x = 500;
-      mesh.position.y = 500;
-      mesh.rotation.x = Math.random();
-      mesh.rotation.y = Math.random();
-      mesh.scale.x = mesh.scale.y = mesh.scale.z = 2;
-      scene.add( mesh );
-      // PLANE
-      mesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( 100, 100 ), new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff, side: THREE.DoubleSide } ) );
-      mesh.position.y = -500;
-      mesh.scale.x = mesh.scale.y = mesh.scale.z = 2;
-      scene.add( mesh );
-      // CYLINDER
-      mesh = new THREE.Mesh( new THREE.CylinderGeometry( 20, 100, 200, 10 ), new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff } ) );
-      mesh.position.x = -500;
-      mesh.rotation.x = - Math.PI / 2;
-      mesh.scale.x = mesh.scale.y = mesh.scale.z = 2;
-      scene.add( mesh );
-      // POLYFIELD
-      var geometry = new THREE.Geometry();
-      var material = new THREE.MeshBasicMaterial( { vertexColors: THREE.FaceColors, side: THREE.DoubleSide } );
-      for ( var i = 0; i < 100; i ++ ) {
-        var v = new THREE.Vector3(
-          Math.random() * 1000 - 500,
-          Math.random() * 1000 - 500,
-          Math.random() * 1000 - 500
-        );
-        var v0 = new THREE.Vector3(
-          Math.random() * 100 - 50,
-          Math.random() * 100 - 50,
-          Math.random() * 100 - 50
-        );
-        var v1 = new THREE.Vector3(
-          Math.random() * 100 - 50,
-          Math.random() * 100 - 50,
-          Math.random() * 100 - 50
-        );
-        var v2 = new THREE.Vector3(
-          Math.random() * 100 - 50,
-          Math.random() * 100 - 50,
-          Math.random() * 100 - 50
-        );
-        v0.add( v );
-        v1.add( v );
-        v2.add( v );
-        var face = new THREE.Face3(
-          geometry.vertices.push( v0 ) - 1,
-          geometry.vertices.push( v1 ) - 1,
-          geometry.vertices.push( v2 ) - 1,
-          null,
-          new THREE.Color( Math.random() * 0xffffff )
-        );
-        geometry.faces.push( face );
+  		<script>
+      var container, stats;
+			var camera, scene, raycaster, renderer;
+			var mouse = new THREE.Vector2(), INTERSECTED;
+			var radius = 100, theta = 0;
+			init();
+			animate();
+      function buildGeo() {
+        var geometry = new THREE.BoxBufferGeometry( 20, 20, 20 );
+				for ( var i = 0; i < 2000; i ++ ) {
+					var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
+					object.position.x = Math.random() * 800 - 400;
+					object.position.y = Math.random() * 800 - 400;
+					object.position.z = Math.random() * 800 - 400;
+					object.rotation.x = Math.random() * 2 * Math.PI;
+					object.rotation.y = Math.random() * 2 * Math.PI;
+					object.rotation.z = Math.random() * 2 * Math.PI;
+					object.scale.x = Math.random() + 0.5;
+					object.scale.y = Math.random() + 0.5;
+					object.scale.z = Math.random() + 0.5;
+					scene.add( object );
+				}
       }
-      geometry.computeFaceNormals();
-      group = new THREE.Mesh( geometry, material );
-      group.scale.set( 2, 2, 2 );
-      scene.add( group );
-      // SPRITES
-      var textureLoader = new THREE.TextureLoader();
-      textureLoader.load( 'textures/sprite.png', function ( texture ) {
-        var material = new THREE.SpriteMaterial( { map: texture, transparent: true } );
-        for ( var i = 0; i < 50; i ++ ) {
-          var sprite = new THREE.Sprite( material );
-          sprite.position.x = Math.random() * 1000 - 500;
-          sprite.position.y = Math.random() * 1000 - 500;
-          sprite.position.z = Math.random() * 1000 - 500;
-          sprite.scale.set( 64, 64, 1 );
-          scene.add( sprite );
-        }
-      } );
-      for ( var i = 0; i < 50; i ++ ) {
-        var material = new THREE.SpriteMaterial( { color: Math.random() * 0xffffff } );
-        var sprite = new THREE.Sprite( material );
-        sprite.position.x = Math.random() * 1000 - 500;
-        sprite.position.y = Math.random() * 1000 - 500;
-        sprite.position.z = Math.random() * 1000 - 500;
-        sprite.scale.set( 64, 64, 1 );
-        scene.add( sprite );
-      }
-      // LIGHTS
-      var ambient = new THREE.AmbientLight( 0x80ffff );
-      scene.add( ambient );
-      var directional = new THREE.DirectionalLight( 0xffff00 );
-      directional.position.set( - 1, 0.5, 0 );
-      scene.add( directional );
-      canvasRenderer = new THREE.CanvasRenderer();
-      canvasRenderer.setClearColor( 0xf0f0f0 );
-      canvasRenderer.setPixelRatio( window.devicePixelRatio );
-      canvasRenderer.setSize( width, height );
-      document.body.appendChild( canvasRenderer.domElement );
-      svgRenderer = new THREE.SVGRenderer();
-      svgRenderer.setClearColor( 0xf0f0f0 );
-      svgRenderer.setSize( width, height );
-      svgRenderer.setQuality( 'low' );
-      document.body.appendChild( svgRenderer.domElement );
-      softwareRenderer = new THREE.SoftwareRenderer();
-      softwareRenderer.setClearColor( 0xf0f0f0 );
-      softwareRenderer.setSize( width, height );
-      document.body.appendChild( softwareRenderer.domElement );
-      webglRenderer = new THREE.WebGLRenderer( { antialias: true } );
-      webglRenderer.setClearColor( 0xf0f0f0 );
-      webglRenderer.setPixelRatio( window.devicePixelRatio );
-      webglRenderer.setSize( width, height );
-      document.body.appendChild( webglRenderer.domElement );
-
-      //
-      window.addEventListener( 'resize', onWindowResize, false );
-    }
-    function onWindowResize() {
-      var width = window.innerWidth / 2;
-      var height = window.innerHeight / 2;
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      canvasRenderer.setSize( width, height );
-      svgRenderer.setSize( width, height );
-      softwareRenderer.setSize( width, height );
-      webglRenderer.setSize( width, height );
-    }
-    //
-    function animate() {
-      requestAnimationFrame( animate );
-      render();
-
-    }
-    function render() {
-      var time = Date.now() * 0.0002;
-      camera.position.x = Math.sin( time ) * 500;
-      camera.position.z = Math.cos( time ) * 500;
-      camera.lookAt( scene.position );
-      group.rotation.x += 0.01;
-      scene.updateMatrixWorld();
-      // canvasRenderer.render( scene, camera );
-      svgRenderer.render( scene, camera );
-      // softwareRenderer.render( scene, camera );
-      // webglRenderer.render( scene, camera );
-    }
-  </script>
+			function init() {
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
+				scene = new THREE.Scene();
+				var light = new THREE.DirectionalLight( 0xffffff, 1 );
+				light.position.set( 1, 1, 1 ).normalize();
+				scene.add( light );
+        buildGeo();
+				raycaster = new THREE.Raycaster();
+				renderer = new THREE.WebGLRenderer();
+				renderer.setClearColor( 0xf0f0f0 );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.sortObjects = false;
+				container.appendChild(renderer.domElement);
+				// stats = new Stats();
+				// container.appendChild( stats.dom );
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				//
+				window.addEventListener( 'resize', onWindowResize, false );
+			}
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+			function onDocumentMouseMove( event ) {
+				event.preventDefault();
+				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+			}
+			//
+			function animate() {
+				requestAnimationFrame( animate );
+				render();
+			}
+			function render() {
+				camera.lookAt( scene.position );
+				camera.updateMatrixWorld();
+				// find intersections
+				raycaster.setFromCamera( mouse, camera );
+				var intersects = raycaster.intersectObjects( scene.children );
+				if ( intersects.length > 0 ) {
+					if ( INTERSECTED != intersects[ 0 ].object ) {
+						if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+						INTERSECTED = intersects[ 0 ].object;
+						INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+						INTERSECTED.material.emissive.setHex( 0xff0000 );
+					}
+				} else {
+					if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+					INTERSECTED = null;
+				}
+				renderer.render( scene, camera );
+			}
+  		</script>
   <script>
     Polymer({
       is: 'my-neuroviz2'
