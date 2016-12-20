@@ -38,7 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     var PopUpNode = function ( x, y, z, name="" ) {
 
       let octGeo = new THREE.OctahedronGeometry(.4,0);
-      let octMaterial = new THREE.MeshLambertMaterial( { color: "red" } );
+      let octMaterial = new THREE.MeshBasicMaterial( { color: "red" } );
       this.node = new THREE.Mesh(octGeo, octMaterial);
       this.node.position.x = x;
       this.node.position.y = y;
@@ -48,7 +48,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
       var plane = new THREE.PlaneGeometry( 5, 5, 32 );
-      var planeMaterial = new THREE.MeshLambertMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+      var planeMaterial = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
       this.popup= new THREE.Mesh( plane, planeMaterial );
       this.popup.position.x = x;
       this.popup.position.y = y;
@@ -90,7 +90,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       loader.load(
         '../src/models/new_neuron.js',
         function(geometry, materials) {
-          var material = new THREE.MeshLambertMaterial( {color: "blue"});   //MultiMaterial(materials);
+          var material = new THREE.MeshNormalMaterial();   //MultiMaterial(materials);
           var theNeuron = new THREE.Mesh(geometry, material);
 
           console.log(theNeuron.position.x)
@@ -190,16 +190,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         raycaster.setFromCamera(mouse, camera);
         var intersects = raycaster.intersectObjects( scene.children );
-        var intersects = raycaster.intersectObjects( scene.children );
         				if ( intersects.length > 0 ) {
         					if ( INTERSECTED != intersects[ 0 ].object ) {
-        						if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+                    // console.log(INTERSECTED);
+        						// if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
         						INTERSECTED = intersects[ 0 ].object;
-        						INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-        						INTERSECTED.material.emissive.setHex( "0xff0000" );
+                    if (INTERSECTED.name != "the Neuron") {
+                      console.log (INTERSECTED.visible)
+                      INTERSECTED.visible=false;
+                    }
+                    else {
+                      console.log ("the NEURON")
+                    }
+        						// INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+        						// INTERSECTED.material.emissive.setHex( "0xff0000" );
         					}
         				} else {
-        					if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+        					// if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
         					INTERSECTED = null;
         				}
         // if ( intersects.length > 0 ) {
@@ -224,7 +231,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // }
 
 			};
-
 
   </script>
   <script>
