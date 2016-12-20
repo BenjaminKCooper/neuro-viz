@@ -26,10 +26,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="../bower_components/three.js/examples/js/renderers/SVGRenderer.js"></script>
   <script>
     let scene;
+    let raycaster = new THREE.Raycaster();
     let camera;
+    let mouse = new THREE.Vector2(), INTERSECTED;
     let mouseX = 0;
     let mouseY = 0;
     let renderer = new THREE.WebGLRenderer();
+    let markers = [];
     renderer.setPixelRatio( window.devicePixelRatio );
     let windowHalfX = window.innerWidth / 2;
 		let windowHalfY = window.innerHeight / 2;
@@ -44,11 +47,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       var gridHelper = new THREE.GridHelper( 200, 200, 0x0000ff, 0x808080 );
 				gridHelper.position.y = 0;
 				gridHelper.position.x = 0;
-				scene.add( gridHelper );
+				// scene.add( gridHelper );
 			camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
-      camera.position.x = 1;
-      camera.position.y = 4;
-      camera.position.z = 3;
+      camera.position.x = 10;//10;
+      camera.position.y = 10;
+      camera.position.z = 10;
 
 
 
@@ -64,34 +67,62 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var object = new THREE.Mesh(geometry, material);
           console.log(object.position.x)
           console.log(object)
-          object.scale.x = 1;
-          object.scale.y = 1;
-          object.scale.z = 1;
+          object.scale.x = 3;
+          object.scale.y = 3;
+          object.scale.z = 3;
           scene.add(object);
         }
       )
 
+      console.log(markers);
+      initMarkers();
+      console.log(markers);
 
-
-      var newGeo = new THREE.OctahedronGeometry(1,0);
-      var newGeoMaterial = new THREE.MeshBasicMaterial({color: "#4DC5F2"});
-      var theNewGeo = new THREE.Mesh(newGeo, newGeoMaterial);
-
-      scene.add(theNewGeo);
-
-      var geometry = new THREE.CircleBufferGeometry( .4, 32 );
-      var material = new THREE.MeshNormalMaterial();
-var circle = new THREE.Mesh( geometry, material );
-scene.add( circle );
+//       var geometry = new THREE.CircleBufferGeometry( .4, 32 );
+//       var material = new THREE.MeshNormalMaterial();
+// var circle = new THREE.Mesh( geometry, material );
+// scene.add( circle );
 
 
       window.addEventListener( 'resize', onWindowResize, false );
 
     }
 
+
+    function initMarkers() {
+      let markerXYZ = [
+        { x:8, y:2.3, z:0 },
+        { x:1, y:3, z:1 },
+        { x:-5, y:3.5, z:0 },
+        { x:-7, y:2.6, z:3 },
+        { x:10, y:3.1, z:2 }
+       ];
+
+      for (i = 0; i < markerXYZ.length; i++) {
+        current = markerXYZ[i];
+        console.log(current)
+
+        let newGeo = new THREE.OctahedronGeometry(.4,0);
+        let newGeoMaterial = new THREE.MeshBasicMaterial( { color: "red" } );
+        let marker = new THREE.Mesh(newGeo, newGeoMaterial);
+
+        marker.position.x = current.x;
+        marker.position.y = current.y;
+        marker.position.z = current.z;
+        scene.add(marker);
+
+        markers.push(marker);
+
+      }
+
+
+
+    }
+
       function onDocumentMouseMove(){
 
-
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	      mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
         mouseX = ( event.clientX - windowHalfX );
 				mouseY = ( event.clientY - windowHalfY );
@@ -104,16 +135,32 @@ scene.add( circle );
       				renderer.setSize( window.innerWidth, window.innerHeight );
       			};
 
+
+      function updateCamera() {
+          // if (mouseX >= -52 && mouseX <= 84) {
+            camera.position.x = mouseX *.05;//( mouseX - camera.position.x ) * .05;
+          // };
+          // if (mouseY >= 37.5 && mouseY <= 57.5) {
+  				camera.position.y = mouseY *.05;//( - mouseY - camera.position.y ) * .05;
+        // }
+      }
+
       function render () {
 				requestAnimationFrame( render );
-        if (mouseX >= -52 && mouseX <= 84) {
-          camera.position.x = mouseX *.05;//( mouseX - camera.position.x ) * .05;
-        };
-        if (mouseY >= 37.5 && mouseY <= 57.5) {
-				camera.position.y = mouseY *.05;//( - mouseY - camera.position.y ) * .05;
-      }
+        updateCamera()
         camera.lookAt( scene.position );
 				renderer.render(scene, camera);
+
+        raycaster.setFromCamera(mouse, camera);
+        var intersects = raycaster.intersectObjects( scene.children );
+
+	for ( var i = 0; i < intersects.length; i++ ) {
+
+		intersects[ i ].object.material= new THREE.MeshBasicMaterial( { color: "blue" } );
+
+    //.color.set( 0xff0000 );
+
+	}
 			};
 
 
