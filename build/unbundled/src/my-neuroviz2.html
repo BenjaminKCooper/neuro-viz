@@ -1,0 +1,234 @@
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+</head><body><dom-module id="my-neuroviz2">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+    </style>
+  </template>
+  <script src="../bower_components/three.js/build/three.js"></script>
+  <script src="../bower_components/three.js/examples/js/loaders/OBJLoader.js"></script>
+  <script src="../bower_components/three.js/examples/js/renderers/SVGRenderer.js"></script>
+  <script src="../bower_components/mojs/build/mo.js"></script>
+  <script>
+    let scene;
+    let raycaster = new THREE.Raycaster();
+    let camera;
+    let mouse = new THREE.Vector2(), INTERSECTED;
+    let mouseX = 0;
+    let mouseY = 0;
+    let renderer = new THREE.WebGLRenderer();
+    let markers = [];
+
+    var PopUpNode = function ( x, y, z, name="" ) {
+
+      let octGeo = new THREE.OctahedronGeometry(.4,0);
+      let octMaterial = new THREE.MeshBasicMaterial( { color: "red" } );
+      this.node = new THREE.Mesh(octGeo, octMaterial);
+      this.node.position.x = x;
+      this.node.position.y = y;
+      this.node.position.z = z;
+      this.node.name = name + " marker";
+      // scene.add(this.node);
+
+
+      var plane = new THREE.PlaneGeometry( 5, 5, 32 );
+      var planeMaterial = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+      this.popup= new THREE.Mesh( plane, planeMaterial );
+      // this.popup.position.x = x;
+      this.popup.position.y = y * 1.1;
+      // this.popup.position.z = z;
+      this.popup.name = name + " popup";
+      // this.popup.visible = false;
+
+      // scene.add(this.popup)
+      this.node.add(this.popup);
+      scene.add(this.node);
+    }
+
+
+    renderer.setPixelRatio( window.devicePixelRatio );
+    let windowHalfX = window.innerWidth / 2;
+		let windowHalfY = window.innerHeight / 2;
+    document.addEventListener('mousemove', onDocumentMouseMove, false);
+    init();
+    render();
+
+
+    function init(){
+      scene = new THREE.Scene();
+
+      var gridHelper = new THREE.GridHelper( 200, 200, 0x0000ff, 0x808080 );
+				gridHelper.position.y = 0;
+				gridHelper.position.x = 0;
+				// scene.add( gridHelper );
+			camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+      camera.position.x = 10;//10;
+      camera.position.y = 10;
+      camera.position.z = 10;
+
+
+
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+      var loader = new THREE.JSONLoader();
+
+      loader.load(
+        '../src/models/new_neuron.js',
+        function(geometry, materials) {
+          var material = new THREE.MeshNormalMaterial();   //MultiMaterial(materials);
+          var theNeuron = new THREE.Mesh(geometry, material);
+
+          console.log(theNeuron.position.x)
+          console.log(theNeuron)
+          theNeuron.scale.x = 3;
+          theNeuron.scale.y = 3;
+          theNeuron.scale.z = 3;
+          theNeuron.name = "the Neuron"
+          scene.add(theNeuron);
+        }
+      )
+
+      // console.log(markers);
+      initMarkers();
+      // console.log(markers);
+
+//       var geometry = new THREE.CircleBufferGeometry( .4, 32 );
+//       var material = new THREE.MeshNormalMaterial();
+// var circle = new THREE.Mesh( geometry, material );
+// scene.add( circle );
+
+
+      window.addEventListener( 'resize', onWindowResize, false );
+
+    }
+
+
+    function initMarkers() {
+      let markerXYZ = [
+        { x:8, y:2.3, z:0 },
+        { x:1, y:3, z:1 },
+        { x:-5, y:3.5, z:0 },
+        { x:-7, y:2.6, z:3 },
+        { x:10, y:3.1, z:2 }
+       ];
+
+      for (i = 0; i < markerXYZ.length; i++) {
+        current = markerXYZ[i];
+
+        marker = new PopUpNode(current.x,current.y,current.z, i);
+
+        markers.push(marker);
+
+      }
+
+
+
+    }
+
+      function onDocumentMouseMove(){
+
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	      mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+        mouseX = ( event.clientX - windowHalfX );
+				mouseY = ( event.clientY - windowHalfY );
+        // console.log(mouseX, mouseY)
+      }
+
+      function onWindowResize() {
+      				camera.aspect = window.innerWidth / window.innerHeight;
+      				camera.updateProjectionMatrix();
+      				renderer.setSize( window.innerWidth, window.innerHeight );
+      			};
+
+
+      function updateCamera() {
+          // if (mouseX >= -52 && mouseX <= 84) {
+            camera.position.x = mouseX *.05;//( mouseX - camera.position.x ) * .05;
+          // };
+          // if (mouseY >= 37.5 && mouseY <= 57.5) {
+  				camera.position.y = mouseY *.05;//( - mouseY - camera.position.y ) * .05;
+        // }
+      }
+
+
+      function intersectedNode( node ) {
+        console.log('pop up')
+        // var geometry = new THREE.PlaneGeometry( 5, 5, 32 );
+        // var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+        // var plane = new THREE.Mesh( geometry, material );
+        // plane.position.x = node.position.x;
+        // plane.position.y = node.position.y;
+        // plane.position.z = node.position.z;
+        // console.log( node.userData );
+        // scene.add( plane );
+
+
+
+      }
+
+      function render () {
+				requestAnimationFrame( render );
+        // updateCamera();
+        camera.lookAt( scene.position );
+				renderer.render(scene, camera);
+
+        raycaster.setFromCamera(mouse, camera);
+        var intersects = raycaster.intersectObjects( scene.children );
+        				if ( intersects.length > 0 ) {
+        					if ( INTERSECTED != intersects[ 0 ].object ) {
+                    // console.log(INTERSECTED);
+        						// if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+        						INTERSECTED = intersects[ 0 ].object;
+                    if (INTERSECTED.name != "the Neuron") {
+                      console.log (INTERSECTED.visible)
+                      INTERSECTED.visible = false;
+                    }
+                    else {
+                      // console.log ("the NEURON")
+                    }
+        						// INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+        						// INTERSECTED.material.emissive.setHex( "0xff0000" );
+        					}
+        				} else {
+        					// if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+                  // INTERSECTED.visible=false;
+
+                  INTERSECTED = null;
+                  console.log(scene.children)
+
+        				}
+        // if ( intersects.length > 0 ) {
+        //   if ( INTERSECTED != intersects[ 0 ].object ) {
+        //     current = intersects[ 0 ].object ;
+        //     if (current.name != "the Neuron") {
+        //       // console.log(current.name);
+        //       for (i = 0; i < markers.length; i++) {
+        //         if ( markers[i].node.uuid == current.uuid ) {
+        //           markers[i].popup.visable = true;
+        //           console.log(markers[i].popup.visable);
+        //         }
+        //         else {
+        //           // markers[i].popup.visable = false;
+        //         }
+        //       }
+        //     }
+        //   }
+        // } else {
+        //
+        //   /// not intersected with anything!
+        // }
+
+			};
+
+  </script>
+  <script>Polymer({is:"my-neuroviz2"});</script>
+</dom-module>
+</body></html>
