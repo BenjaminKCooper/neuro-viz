@@ -1,17 +1,7 @@
-<!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="my-neuroviz2">
+</head><body><dom-module id="my-neuroviz2">
   <template>
     <style include="shared-styles">
       :host {
@@ -161,7 +151,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       function updateCamera() {
           // if (mouseX >= -52 && mouseX <= 84) {
-          camera.position.x = mouseX *.05;//( mouseX - camera.position.x ) * .05;
+            camera.position.x = mouseX *.05;//( mouseX - camera.position.x ) * .05;
           // };
           // if (mouseY >= 37.5 && mouseY <= 57.5) {
   				camera.position.y = mouseY *.05;//( - mouseY - camera.position.y ) * .05;
@@ -239,9 +229,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			};
 
   </script>
-  <script>
-    Polymer({
-      is: 'my-neuroviz2'
-    });
-  </script>
+  <script>Polymer({is:"my-neuroviz2"});</script>
 </dom-module>
+</body></html>
