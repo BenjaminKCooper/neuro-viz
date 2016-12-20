@@ -44,19 +44,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       this.node.position.y = y;
       this.node.position.z = z;
       this.node.name = name + " marker";
-      scene.add(this.node);
+      // scene.add(this.node);
 
 
       var plane = new THREE.PlaneGeometry( 5, 5, 32 );
       var planeMaterial = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
       this.popup= new THREE.Mesh( plane, planeMaterial );
-      this.popup.position.x = x;
-      this.popup.position.y = y;
-      this.popup.position.z = z;
+      // this.popup.position.x = x;
+      this.popup.position.y = y * 1.1;
+      // this.popup.position.z = z;
       this.popup.name = name + " popup";
       // this.popup.visible = false;
 
-      scene.add(this.popup)
+      // scene.add(this.popup)
+      this.node.add(this.popup);
+      scene.add(this.node);
     }
 
 
@@ -197,17 +199,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         						INTERSECTED = intersects[ 0 ].object;
                     if (INTERSECTED.name != "the Neuron") {
                       console.log (INTERSECTED.visible)
-                      INTERSECTED.visible=false;
+                      INTERSECTED.visible = false;
                     }
                     else {
-                      console.log ("the NEURON")
+                      // console.log ("the NEURON")
                     }
         						// INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
         						// INTERSECTED.material.emissive.setHex( "0xff0000" );
         					}
         				} else {
         					// if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
-        					INTERSECTED = null;
+                  // INTERSECTED.visible=false;
+
+                  INTERSECTED = null;
+                  console.log(scene.children)
+
         				}
         // if ( intersects.length > 0 ) {
         //   if ( INTERSECTED != intersects[ 0 ].object ) {
