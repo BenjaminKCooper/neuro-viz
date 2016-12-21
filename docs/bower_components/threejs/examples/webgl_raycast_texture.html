@@ -1,0 +1,73 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js raycast - texture</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #808080;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #ffffff;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			#controls {
+				position: absolute;
+				text-align:left;
+				top: 40px;
+				left: 5px;
+				padding: 5px;
+			}
+
+			.control {
+				margin-bottom: 3px;
+			}
+
+			input {
+				width: 50px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container"></div>
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> - raycast texture<br>Left to right: buffer geometry - geometry - indexed buffer geometry</div>
+		<fieldset id="controls">
+			<legend>Circle</legend>
+			<div class="control">
+				WrapS : <select onchange="setwrapS(this)">
+					<option value="ClampToEdgeWrapping">ClampToEdgeWrapping</option>
+					<option value="RepeatWrapping" selected="">RepeatWrapping</option>
+					<option value="MirroredRepeatWrapping">MirroredRepeatWrapping</option>
+				</select>
+			</div>
+			<div class="control">
+				WrapT : <select onchange="setwrapT(this)">
+					<option value="ClampToEdgeWrapping">ClampToEdgeWrapping</option>
+					<option value="RepeatWrapping" selected="">RepeatWrapping</option>
+					<option value="MirroredRepeatWrapping">MirroredRepeatWrapping</option>
+				</select>
+			</div>
+			<div class="control">
+				Offset : X <input type="number" value="0" step="0.05" onchange="setOffsetU(this)">
+				Y <input type="number" value="0" step="0.05" onchange="setOffsetV(this)"><br>
+			</div>
+			<div class="control">
+				Repeat : X <input type="number" value="1" step="0.1" onchange="setRepeatU(this)">
+				Y <input type="number" value="1" step="0.1" onchange="setRepeatV(this)">
+			</div>
+		</fieldset>
+		<script src="../build/three.js"></script>
+		<script>CanvasTexture=function(s){this._canvas=document.createElement("canvas"),this._canvas.width=this._canvas.height=1024,this._context2D=this._canvas.getContext("2d"),s&&(this._parentTexture.push(s),s.image=this._canvas);var t=this;this._background=document.createElement("img"),this._background.addEventListener("load",function(s){t._canvas.width=t._background.naturalWidth,t._canvas.height=t._background.naturalHeight,t._crossRadius=Math.ceil(Math.min(t._canvas.width,t._canvas.height/30)),t._crossMax=Math.ceil(.70710678*t._crossRadius),t._crossMin=Math.ceil(t._crossMax/10),t._crossThickness=Math.ceil(t._crossMax/10),t._draw()},!1),this._background.crossOrigin="",this._background.src="textures/UV_Grid_Sm.jpg",this._draw()},CanvasTexture.prototype={constructor:CanvasTexture,_canvas:null,_context2D:null,_xCross:0,_yCross:0,_crossRadius:57,_crossMax:40,_crossMin:4,_crossThickness:4,_parentTexture:[],addParent:function(s){this._parentTexture.indexOf(s)===-1&&(this._parentTexture.push(s),s.image=this._canvas)},setCrossPosition:function(s,t){this._xCross=s*this._canvas.width,this._yCross=t*this._canvas.height,this._draw()},_draw:function(){if(this._context2D){this._context2D.clearRect(0,0,this._canvas.width,this._canvas.height),this._context2D.drawImage(this._background,0,0),this._context2D.lineWidth=3*this._crossThickness,this._context2D.strokeStyle="#FFFF00",this._context2D.beginPath(),this._context2D.moveTo(this._xCross-this._crossMax-2,this._yCross-this._crossMax-2),this._context2D.lineTo(this._xCross-this._crossMin,this._yCross-this._crossMin),this._context2D.moveTo(this._xCross+this._crossMin,this._yCross+this._crossMin),this._context2D.lineTo(this._xCross+this._crossMax+2,this._yCross+this._crossMax+2),this._context2D.moveTo(this._xCross-this._crossMax-2,this._yCross+this._crossMax+2),this._context2D.lineTo(this._xCross-this._crossMin,this._yCross+this._crossMin),this._context2D.moveTo(this._xCross+this._crossMin,this._yCross-this._crossMin),this._context2D.lineTo(this._xCross+this._crossMax+2,this._yCross-this._crossMax-2),this._context2D.stroke();for(var s=0;s<this._parentTexture.length;s++)this._parentTexture[s].needsUpdate=!0}}};</script>
+		<script>function init(){container=document.getElementById("container"),scene=new THREE.Scene,camera=new THREE.PerspectiveCamera(45,width/height,1,1e3),camera.position.x=-30,camera.position.y=40,camera.position.z=50,camera.lookAt(scene.position),renderer=new THREE.WebGLRenderer,renderer.setClearColor(new THREE.Color(15658734,1)),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(width,height),container.appendChild(renderer.domElement),cubeTexture=new THREE.Texture(void 0,THREE.UVMapping,THREE.RepeatWrapping,THREE.RepeatWrapping),canvas=new CanvasTexture(cubeTexture);for(var e,r=new THREE.MeshBasicMaterial({map:cubeTexture}),n=new THREE.BoxGeometry(20,20,20),t=0;t<n.faceVertexUvs[0].length;t++){e=n.faceVertexUvs[0][t];for(var i=0;i<3;i++)e[i].x<.1&&(e[i].x=-1),e[i].y<.1&&(e[i].y=-1)}var a=new THREE.Mesh(n,r);a.position.x=4,a.position.y=-5,a.position.z=0,scene.add(a),planeTexture=new THREE.Texture(void 0,THREE.UVMapping,THREE.MirroredRepeatWrapping,THREE.MirroredRepeatWrapping),canvas.addParent(planeTexture);for(var o=new THREE.MeshBasicMaterial({map:planeTexture}),c=new THREE.PlaneBufferGeometry(25,25,1,1),e=c.attributes.uv.array,t=0;t<e.length;t++)e[t]*=2;var s=new THREE.Mesh(c,o);s.position.x=-16,s.position.y=-5,s.position.z=0,scene.add(s),circleTexture=new THREE.Texture(void 0,THREE.UVMapping,THREE.RepeatWrapping,THREE.RepeatWrapping),canvas.addParent(circleTexture);for(var u=new THREE.MeshBasicMaterial({map:circleTexture}),p=new THREE.CircleBufferGeometry(25,40,0,2*Math.PI),e=p.attributes.uv.array,t=0;t<e.length;t++)e[t]=2*(e[t]-.25);var E=new THREE.Mesh(p,u);E.position.x=24,E.position.y=-5,E.position.z=0,scene.add(E),window.addEventListener("resize",onWindowResize,!1),container.addEventListener("mousemove",onMouseMove,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function onMouseMove(e){e.preventDefault();var r=getMousePosition(container,e.clientX,e.clientY);onClickPosition.fromArray(r);var n=getIntersects(onClickPosition,scene.children);if(n.length>0&&n[0].uv){var t=n[0].uv;n[0].object.material.map.transformUv(t),canvas.setCrossPosition(t.x,t.y)}}function render(){requestAnimationFrame(render),renderer.render(scene,camera)}function setwrapS(e){circleTexture.wrapS=THREE[e.value],circleTexture.needsUpdate=!0}function setwrapT(e){circleTexture.wrapT=THREE[e.value],circleTexture.needsUpdate=!0}function setOffsetU(e){circleTexture.offset.x=parseFloat(e.value)}function setOffsetV(e){circleTexture.offset.y=parseFloat(e.value)}function setRepeatU(e){circleTexture.repeat.x=parseFloat(e.value)}function setRepeatV(e){circleTexture.repeat.y=parseFloat(e.value)}var width=window.innerWidth,height=window.innerHeight,canvas,planeTexture,cubeTexture,circleTexture,container,camera,scene,renderer,raycaster=new THREE.Raycaster,mouse=new THREE.Vector2,onClickPosition=new THREE.Vector2;init(),render();var getMousePosition=function(e,r,n){var t=e.getBoundingClientRect();return[(r-t.left)/t.width,(n-t.top)/t.height]},getIntersects=function(e,r){return mouse.set(2*e.x-1,-(2*e.y)+1),raycaster.setFromCamera(mouse,camera),raycaster.intersectObjects(r)};</script>
+	
+
+</body></html>

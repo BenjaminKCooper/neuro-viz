@@ -1,0 +1,27 @@
+<!DOCTYPE html><html><head>
+	<title>three.js webgl - octree raycasting</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+	<style>
+		body {
+			font-family: Monospace;
+			background-color: #f0f0f0;
+			margin: 0px;
+			overflow: hidden;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<script type="text/javascript" src="../build/three.js"></script>
+	<script type="text/javascript" src="js/Octree.js"></script>
+	<script type="text/javascript" src="js/controls/TrackballControls.js"></script>
+	<script type="text/javascript" src="js/libs/stats.min.js"></script>
+	<script>function init(){scene=new THREE.Scene,camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,1,100*radius),camera.position.z=10*radius,scene.add(camera),renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),document.body.appendChild(renderer.domElement),octree=new THREE.Octree({undeferred:!1,depthMax:1/0,objectsThreshold:8,overlapPct:.15});var e=new THREE.AmbientLight(1052688);scene.add(e);var t=new THREE.DirectionalLight(16777215,.5);t.position.set(1,1,2).normalize(),scene.add(t);for(var r=new THREE.BoxGeometry(1,1,1),a=0;a<simpleMeshCount-1;a++){totalFaces+=r.faces.length;var n=new THREE.MeshBasicMaterial;n.color.setHex(baseColor),modifyOctree(r,n,!1,!0,!0,!0)}controls=new THREE.TrackballControls(camera),controls.rotateSpeed=1,controls.zoomSpeed=1.2,controls.panSpeed=.8,controls.noZoom=!1,controls.noPan=!1,controls.staticMoving=!0,controls.dynamicDampingFactor=.3;var o=document.createElement("div");o.style.position="absolute",o.style.top="0",o.style.width="100%",o.style.textAlign="center",o.style.padding="10px",o.style.background="#FFFFFF",o.innerHTML='<a href="http://threejs.org" target="_blank">three.js</a> webgl - octree (raycasting performance) - by <a href="http://github.com/collinhover/threeoctree" target="_blank">collinhover</a>)</small>',document.body.appendChild(o),stats=new Stats,document.body.appendChild(stats.dom);var c=document.createElement("div");c.style.position="absolute",c.style.bottom="0",c.style.width="100%",c.style.textAlign="center",document.body.appendChild(c),tracker=document.createElement("div"),tracker.style.width="100%",tracker.style.padding="10px",tracker.style.background="#FFFFFF",c.appendChild(tracker);var s=document.createElement("div");s.style.position="absolute",s.style.bottom="100%",s.style.width="100%",s.style.padding="10px",s.style.background="#FFFFFF",c.appendChild(s);var i=document.createElement("input");i.type="checkbox",i.name="octreeToggle",i.value="value",i.id="octreeToggle",i.checked=!0;var d=document.createElement("label");d.htmlFor="octreeToggle",d.appendChild(document.createTextNode("Use Octree")),s.appendChild(i),s.appendChild(d),i.addEventListener("click",toggleOctree,!1),renderer.domElement.addEventListener("mousemove",onDocumentMouseMove,!1),window.addEventListener("resize",onWindowResize,!1)}function toggleOctree(){useOctree=!useOctree}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){controls.update(),renderer.render(scene,camera),octree.update()}function modifyOctree(e,t,r,a,n,o){var c;e&&(c=new THREE.Mesh(e,t),a&&c.position.set(Math.random()*radiusMax-radiusMaxHalf,Math.random()*radiusMax-radiusMaxHalf,Math.random()*radiusMax-radiusMaxHalf),n&&c.rotation.set(2*Math.random()*Math.PI,2*Math.random()*Math.PI,2*Math.random()*Math.PI),o&&(c.scale.x=c.scale.y=c.scale.z=Math.random()*radius*.1+.05*radius),octree.add(c,{useFaces:r}),scene.add(c),objects.push(c))}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function onDocumentMouseMove(e){e.preventDefault(),mouse.x=e.clientX/window.innerWidth*2-1,mouse.y=2*-(e.clientY/window.innerHeight)+1,raycaster.setFromCamera(mouse,camera);var t,r,a,n=0;if(useOctree){t=octree.search(raycaster.ray.origin,raycaster.ray.far,!0,raycaster.ray.direction),a=raycaster.intersectOctreeObjects(t),r=t.length;for(var o=0,c=r;o<c;o++)n+=t[o].faces.length}else a=raycaster.intersectObjects(objects),r=objects.length,n=totalFaces;a.length>0?(intersected!=a[0].object&&(intersected&&intersected.material.color.setHex(baseColor),intersected=a[0].object,intersected.material.color.setHex(intersectColor)),document.body.style.cursor="pointer"):intersected&&(intersected.material.color.setHex(baseColor),intersected=null,document.body.style.cursor="auto"),tracker.innerHTML=(useOctree?"Octree search":"Search without octree")+" using infinite ray from camera found [ "+r+" / "+objects.length+" ] objects, [ "+n+" / "+totalFaces+" ] faces, and [ "+a.length+" ] intersections."}var camera,scene,renderer,controls,stats,tracker,octree,objects=[],objectsSearch=[],totalFaces=0,simpleMeshCount=5e3,radius=100,radiusMax=10*radius,radiusMaxHalf=.5*radiusMax,radiusSearch=.75*radius,baseColor=3355443,foundColor=1229027,intersectColor=54891,clock=new THREE.Clock,searchDelay=1,searchInterval=0,useOctree=!0,raycaster=new THREE.Raycaster,mouse=new THREE.Vector2,intersected;init(),animate();</script>
+
+
+
+
+</body></html>

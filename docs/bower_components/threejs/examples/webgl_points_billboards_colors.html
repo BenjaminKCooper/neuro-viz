@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - particles - billboards - colors</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+				text-align:center;
+			}
+
+			a {
+				color:#0078ff;
+			}
+
+			#info {
+				color:#fff;
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+				z-index:100;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - webgl particle billboards colors example
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){for(container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(50,window.innerWidth/window.innerHeight,1,3e3),camera.position.z=1400,scene=new THREE.Scene,scene.fog=new THREE.FogExp2(0,9e-4),geometry=new THREE.Geometry,sprite=(new THREE.TextureLoader).load("textures/sprites/ball.png"),i=0;i<5e3;i++){var e=new THREE.Vector3;e.x=2e3*Math.random()-1e3,e.y=2e3*Math.random()-1e3,e.z=2e3*Math.random()-1e3,geometry.vertices.push(e),colors[i]=new THREE.Color(16777215),colors[i].setHSL((e.x+1e3)/2e3,1,.5)}geometry.colors=colors,material=new THREE.PointsMaterial({size:85,map:sprite,vertexColors:THREE.VertexColors,alphaTest:.5,transparent:!0}),material.color.setHSL(1,.2,.7),particles=new THREE.Points(geometry,material),scene.add(particles),renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),document.addEventListener("mousemove",onDocumentMouseMove,!1),document.addEventListener("touchstart",onDocumentTouchStart,!1),document.addEventListener("touchmove",onDocumentTouchMove,!1),window.addEventListener("resize",onWindowResize,!1)}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,mouseY=e.clientY-windowHalfY}function onDocumentTouchStart(e){1===e.touches.length&&(e.preventDefault(),mouseX=e.touches[0].pageX-windowHalfX,mouseY=e.touches[0].pageY-windowHalfY)}function onDocumentTouchMove(e){1===e.touches.length&&(e.preventDefault(),mouseX=e.touches[0].pageX-windowHalfX,mouseY=e.touches[0].pageY-windowHalfY)}function onWindowResize(e){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){var e=5e-5*Date.now();camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-mouseY-camera.position.y),camera.lookAt(scene.position),h=360*(1+e)%360/360,material.color.setHSL(h,1,.6),renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var container,stats,camera,scene,renderer,particles,geometry,material,i,h,color,colors=[],sprite,size,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;init(),animate();</script>
+	
+
+</body></html>

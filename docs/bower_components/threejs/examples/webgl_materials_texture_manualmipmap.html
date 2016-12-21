@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - materials - manual mipmaping</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #aaa;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+				z-index:100;
+			}
+
+			.lbl { color:#fff; font-size:16px; font-weight:bold; position: absolute; bottom:0px; z-index:100; text-shadow:#000 1px 1px 1px; background-color:rgba(0,0,0,0.85); padding:1em }
+			#lbl_left { text-align:left; left:0px }
+			#lbl_right { text-align:left; right:0px }
+
+			.g { color:#aaa }
+			.c { color:#fa0 }
+
+			a { color:red }
+
+		</style>
+	</head>
+
+	<body>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - texture manual mipmapping example
+			- painting by <a href="http://en.wikipedia.org/wiki/Basket_of_Fruit_%28Caravaggio%29">Caravaggio</a>
+		</div>
+
+		<div id="lbl_left" class="lbl">
+		Floor <span class="g">(128x128)</span><br>
+		mag: <span class="c">Linear</span><br>
+		min: <span class="c">LinearMipMapLinear</span><br>
+		<br>
+		Painting <span class="g">(748x600)</span><br>
+		mag: <span class="c">Linear</span><br>
+		min: <span class="c">Linear</span>
+		</div>
+
+		<div id="lbl_right" class="lbl">
+		Floor <br>
+		mag: <span class="c">Nearest</span><br>
+		min: <span class="c">NearestMipMapNearestFilter</span><br>
+		<br>
+		Painting <br>
+		mag: <span class="c">Nearest</span><br>
+		min: <span class="c">Nearest</span>
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){function e(e,a){var n=document.createElement("canvas"),r=n.getContext("2d");return n.width=n.height=e,r.fillStyle="#444",r.fillRect(0,0,e,e),r.fillStyle=a,r.fillRect(0,0,e/2,e/2),r.fillRect(e/2,e/2,e/2,e/2),n}container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(35,SCREEN_WIDTH/SCREEN_HEIGHT,1,5e3),camera.position.z=1500,scene1=new THREE.Scene,scene1.fog=new THREE.Fog(0,1500,4e3),scene2=new THREE.Scene,scene2.fog=scene1.fog;var a=e(128,"#f00"),n=new THREE.CanvasTexture(a);n.mipmaps[0]=a,n.mipmaps[1]=e(64,"#0f0"),n.mipmaps[2]=e(32,"#00f"),n.mipmaps[3]=e(16,"#400"),n.mipmaps[4]=e(8,"#040"),n.mipmaps[5]=e(4,"#004"),n.mipmaps[6]=e(2,"#044"),n.mipmaps[7]=e(1,"#404"),n.repeat.set(1e3,1e3),n.wrapS=THREE.RepeatWrapping,n.wrapT=THREE.RepeatWrapping;var r=n.clone();r.magFilter=THREE.NearestFilter,r.minFilter=THREE.NearestMipMapNearestFilter,materialCanvas1=new THREE.MeshBasicMaterial({map:n}),materialCanvas2=new THREE.MeshBasicMaterial({color:16764074,map:r});var t=new THREE.PlaneBufferGeometry(100,100),i=new THREE.Mesh(t,materialCanvas1);i.rotation.x=-Math.PI/2,i.scale.set(1e3,1e3,1e3);var s=new THREE.Mesh(t,materialCanvas2);s.rotation.x=-Math.PI/2,s.scale.set(1e3,1e3,1e3);var o=function(){function e(e,r){r.scale.x=a.width/100,r.scale.y=a.height/100,e.add(r);var t=new THREE.Mesh(n,new THREE.MeshBasicMaterial({color:0,polygonOffset:!0,polygonOffsetFactor:1,polygonOffsetUnits:5}));t.scale.x=1.1*a.width/100,t.scale.y=1.1*a.height/100,e.add(t);var o=new THREE.Mesh(n,new THREE.MeshBasicMaterial({color:0,opacity:.75,transparent:!0}));o.position.y=-1.1*a.height/2,o.position.z=-1.1*a.height/2,o.rotation.x=-Math.PI/2,o.scale.x=1.1*a.width/100,o.scale.y=1.1*a.height/100,e.add(o);var E=-1.117*a.height/2;i.position.y=s.position.y=E}var a=E.image;c.image=a,c.needsUpdate=!0,scene1.add(i),scene2.add(s);var n=new THREE.PlaneBufferGeometry(100,100),r=new THREE.Mesh(n,l),t=new THREE.Mesh(n,m);e(scene1,r),e(scene2,t)},E=(new THREE.TextureLoader).load("textures/758px-Canestra_di_frutta_(Caravaggio).jpg",o),c=new THREE.Texture,l=new THREE.MeshBasicMaterial({color:16777215,map:E}),m=new THREE.MeshBasicMaterial({color:16764074,map:c});c.minFilter=c.magFilter=THREE.NearestFilter,E.minFilter=E.magFilter=THREE.LinearFilter,E.mapping=THREE.UVMapping,renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(scene1.fog.color),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),renderer.autoClear=!1,renderer.domElement.style.position="relative",container.appendChild(renderer.domElement),stats=new Stats,document.addEventListener("mousemove",onDocumentMouseMove,!1)}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,mouseY=e.clientY-windowHalfY}function animate(){requestAnimationFrame(animate),stats.begin(),render(),stats.end()}function render(){camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-(mouseY-200)-camera.position.y),camera.lookAt(scene1.position),renderer.clear(),renderer.setScissorTest(!0),renderer.setScissor(0,0,SCREEN_WIDTH/2-2,SCREEN_HEIGHT),renderer.render(scene1,camera),renderer.setScissor(SCREEN_WIDTH/2,0,SCREEN_WIDTH/2-2,SCREEN_HEIGHT),renderer.render(scene2,camera),renderer.setScissorTest(!1)}Detector.webgl||Detector.addGetWebGLMessage();var SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,container,stats,camera,scene1,scene2,renderer,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;init(),animate();</script>
+
+	
+
+</body></html>

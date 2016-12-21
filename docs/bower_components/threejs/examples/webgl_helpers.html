@@ -1,0 +1,21 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - helpers</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				margin: 0px;
+				background-color: #000000;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="../build/three.js"></script>
+
+		<script>function init(){renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),document.body.appendChild(renderer.domElement),camera=new THREE.PerspectiveCamera(70,window.innerWidth/window.innerHeight,1,1e3),camera.position.z=400,scene=new THREE.Scene,light=new THREE.PointLight,light.position.set(200,100,150),scene.add(light),scene.add(new THREE.PointLightHelper(light,5));var e=new THREE.GridHelper(200,40,255,8421504);e.position.y=-150,e.position.x=-150,scene.add(e);var n=new THREE.PolarGridHelper(200,16,8,64,255,8421504);n.position.y=-150,n.position.x=200,scene.add(n);var i=new THREE.JSONLoader;i.load("obj/leeperrysmith/LeePerrySmith.js",function(e,n){var i=new THREE.MeshLambertMaterial,r=new THREE.Group;r.scale.multiplyScalar(50),scene.add(r),r.updateMatrixWorld(!0);var a=new THREE.Mesh(e,i);r.add(a),fnh=new THREE.FaceNormalsHelper(a,5),scene.add(fnh),vnh=new THREE.VertexNormalsHelper(a,5),scene.add(vnh),scene.add(new THREE.BoxHelper(a));var t=new THREE.WireframeGeometry(e),o=new THREE.LineSegments(t);o.material.depthTest=!1,o.material.opacity=.25,o.material.transparent=!0,o.position.x=4,r.add(o),scene.add(new THREE.BoxHelper(o));var d=new THREE.EdgesGeometry(e),o=new THREE.LineSegments(d);o.material.depthTest=!1,o.material.opacity=.25,o.material.transparent=!0,o.position.x=-4,r.add(o),scene.add(new THREE.BoxHelper(o)),scene.add(new THREE.BoxHelper(r)),scene.add(new THREE.BoxHelper(scene))}),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function animate(){requestAnimationFrame(animate);var e=3e-4*-performance.now();camera.position.x=400*Math.cos(e),camera.position.z=400*Math.sin(e),camera.lookAt(scene.position),light.position.x=300*Math.sin(1.7*e),light.position.y=400*Math.cos(1.5*e),light.position.z=300*Math.cos(1.3*e),fnh&&fnh.update(),vnh&&vnh.update(),renderer.render(scene,camera)}var scene,renderer,camera,light,fnh,vnh;init(),animate();</script>
+
+	
+
+</body></html>

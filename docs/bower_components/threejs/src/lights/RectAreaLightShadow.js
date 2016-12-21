@@ -1,0 +1,1 @@
+THREE.RectAreaLightShadow=function(){THREE.LightShadow.call(this,new THREE.PerspectiveCamera(50,1,.5,500))},THREE.RectAreaLightShadow.prototype=Object.create(THREE.LightShadow.prototype),THREE.RectAreaLightShadow.prototype.constructor=THREE.RectAreaLightShadow,THREE.RectAreaLightShadow.prototype.update=function(t){};

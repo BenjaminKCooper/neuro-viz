@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - shadow map</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #000;
+				color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+			}
+			#info a { color: #f00; font-weight: bold; text-decoration: underline; cursor: pointer }
+		</style>
+	</head>
+
+	<body>
+
+		<div id="info">
+		<a href="http://threejs.org" target="_blank">three.js</a> - shadowmap - models by <a href="http://mirada.com/">mirada</a> from <a href="http://ro.me">rome</a><br>
+		move camera with WASD / RF + mouse
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/controls/FirstPersonControls.js"></script>
+
+		<script src="js/shaders/UnpackDepthRGBAShader.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(23,SCREEN_WIDTH/SCREEN_HEIGHT,NEAR,FAR),camera.position.set(700,50,1900),controls=new THREE.FirstPersonControls(camera),controls.lookSpeed=.0125,controls.movementSpeed=500,controls.noFly=!1,controls.lookVertical=!0,controls.constrainVertical=!0,controls.verticalMin=1.5,controls.verticalMax=2,controls.lon=250,controls.lat=30,scene=new THREE.Scene,scene.fog=new THREE.Fog(5850923,1e3,FAR);var e=new THREE.AmbientLight(4473924);scene.add(e),light=new THREE.SpotLight(16777215,1,0,Math.PI/2),light.position.set(0,1500,1e3),light.target.position.set(0,0,0),light.castShadow=!0,light.shadow=new THREE.LightShadow(new THREE.PerspectiveCamera(50,1,700,FAR)),light.shadow.bias=1e-4,light.shadow.mapSize.width=SHADOW_MAP_WIDTH,light.shadow.mapSize.height=SHADOW_MAP_HEIGHT,scene.add(light),createScene(),renderer=new THREE.WebGLRenderer({antialias:!1}),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),container.appendChild(renderer.domElement),renderer.setClearColor(scene.fog.color),renderer.autoClear=!1,renderer.shadowMap.enabled=!0,renderer.shadowMap.type=THREE.PCFSoftShadowMap,stats=new Stats,container.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,camera.aspect=SCREEN_WIDTH/SCREEN_HEIGHT,camera.updateProjectionMatrix(),renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),controls.handleResize()}function createScene(){function e(e,o,n,t,r,a,i,s){var d=new THREE.MeshLambertMaterial({color:16755285,morphTargets:!0,vertexColors:THREE.FaceColors});i&&d.color.offsetHSL(0,.5*Math.random()-.25,.5*Math.random()-.25);var c=new THREE.Mesh(e,d);c.speed=o;var E=e.animations[0];if(s){var h=Math.floor(Math.random()*ANIMATION_GROUPS),l=animGroups[h];if(l.add(c),!mixer.existingAction(E,l)){var m=.6*Math.random()-.3,R=(h+m)/ANIMATION_GROUPS;mixer.clipAction(E,l).setDuration(n).startAt(-n*R).play()}}else mixer.clipAction(E,c).setDuration(n).startAt(-n*Math.random()).play();c.position.set(t,r,a),c.rotation.y=Math.PI/2,c.castShadow=!0,c.receiveShadow=!0,scene.add(c),morphs.push(c)}var o=new THREE.PlaneBufferGeometry(100,100),n=new THREE.MeshPhongMaterial({color:16768409}),t=new THREE.Mesh(o,n);t.position.set(0,FLOOR,0),t.rotation.x=-Math.PI/2,t.scale.set(100,100,100),t.castShadow=!1,t.receiveShadow=!0,scene.add(t);var r=new THREE.FontLoader;r.load("fonts/helvetiker_bold.typeface.json",function(e){var o=new THREE.TextGeometry("THREE.JS",{font:e,size:200,height:50,curveSegments:12,bevelThickness:2,bevelSize:5,bevelEnabled:!0});o.computeBoundingBox();var n=-.5*(o.boundingBox.max.x-o.boundingBox.min.x),t=new THREE.MeshPhongMaterial({color:16711680,specular:16777215}),r=new THREE.Mesh(o,t);r.position.x=n,r.position.y=FLOOR+67,r.castShadow=!0,r.receiveShadow=!0,scene.add(r)});var a=new THREE.Mesh(new THREE.BoxGeometry(1500,220,150),n);a.position.y=FLOOR-50,a.position.z=20,a.castShadow=!0,a.receiveShadow=!0,scene.add(a);var a=new THREE.Mesh(new THREE.BoxGeometry(1600,170,250),n);a.position.y=FLOOR-50,a.position.z=20,a.castShadow=!0,a.receiveShadow=!0,scene.add(a),mixer=new THREE.AnimationMixer(scene);for(var i=0;i!==ANIMATION_GROUPS;++i){new THREE.AnimationObjectGroup;animGroups.push(new THREE.AnimationObjectGroup)}var r=new THREE.JSONLoader;r.load("models/animated/horse.js",function(o){for(var n=-600;n<601;n+=2)e(o,550,1,100-3e3*Math.random(),FLOOR,n,!0,!0)})}function animate(){requestAnimationFrame(animate),stats.begin(),render(),stats.end()}function render(){var e=clock.getDelta();mixer&&mixer.update(e);for(var o=0;o<morphs.length;o++)morph=morphs[o],morph.position.x+=morph.speed*e,morph.position.x>2e3&&(morph.position.x=-1e3-500*Math.random());controls.update(e),renderer.clear(),renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var SHADOW_MAP_WIDTH=2048,SHADOW_MAP_HEIGHT=1024,SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,FLOOR=-250,ANIMATION_GROUPS=25,camera,controls,scene,renderer,container,stats,NEAR=5,FAR=3e3,morph,morphs=[],mixer,animGroups=[],light,clock=new THREE.Clock;init(),animate();</script>
+
+	
+
+</body></html>

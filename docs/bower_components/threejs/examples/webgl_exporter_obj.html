@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - exporter - obj</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display: block;
+			}
+
+			div.floating {
+				color : #ffffff;
+				background : #000000;
+				opacity : 0.8;
+				width : 80%;
+				height : 80%;
+				position : absolute;
+				left : 10%;
+				top : 10%;
+				border : 1px solid #555555;
+				padding : 10px;
+				display : none;
+				overflow : auto;
+				z-index: 100;
+			}
+
+			span.link {
+				color: skyblue;
+				cursor: pointer;
+				text-decoration : underline;
+			}
+
+			a {
+				color: skyblue
+			}
+		</style>
+	</head>
+	<body>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a>
+			- geometries:
+			<span class="link" id="triangle">triangle</span>,
+			<span class="link" id="cube">cube</span>,
+			<span class="link" id="cylinder">cylinder</span>,
+			<span class="link" id="both">both</span>,
+			<span class="link" id="transformed">transformed</span>
+			- <span class="link" id="export">export to obj</span>
+		</div>
+
+		<script src="../build/three.js"></script>
+		<script src="js/exporters/OBJExporter.js"></script>
+
+		<script>function exportToObj(){var e=new THREE.OBJExporter,n=e.parse(scene);floatingDiv.style.display="block",floatingDiv.innerHTML=n.split("\n").join("<br />")}function addGeometry(e){for(var n=0;n<scene.children.length;n++){var t=scene.children[n];t instanceof THREE.Mesh&&(t.geometry.dispose(),scene.remove(t),n--)}if(1===e){var i=new THREE.MeshLambertMaterial({color:52224}),o=new THREE.Geometry;o.vertices.push(new THREE.Vector3(-50,-50,0)),o.vertices.push(new THREE.Vector3(50,-50,0)),o.vertices.push(new THREE.Vector3(50,50,0));var r=new THREE.Face3(0,1,2);o.faces.push(r),o.computeFaceNormals(),scene.add(new THREE.Mesh(o,i))}else if(2===e){var i=new THREE.MeshLambertMaterial({color:52224}),o=new THREE.BoxBufferGeometry(100,100,100);scene.add(new THREE.Mesh(o,i))}else if(3===e){var i=new THREE.MeshLambertMaterial({color:52224}),o=new THREE.CylinderBufferGeometry(50,50,100,30,1);scene.add(new THREE.Mesh(o,i))}else if(4===e||5===e){var i=new THREE.MeshLambertMaterial({color:52224}),o=new THREE.Geometry;o.vertices.push(new THREE.Vector3(-50,-50,0)),o.vertices.push(new THREE.Vector3(50,-50,0)),o.vertices.push(new THREE.Vector3(50,50,0));var r=new THREE.Face3(0,1,2);o.faces.push(r),o.computeFaceNormals();var a=new THREE.Mesh(o,i);a.position.x=-200,scene.add(a);var d=new THREE.BoxBufferGeometry(100,100,100),c=new THREE.Mesh(d,i);scene.add(c);var s=new THREE.CylinderBufferGeometry(50,50,100,30,1),E=new THREE.Mesh(s,i);E.position.x=200,scene.add(E),5===e&&(a.rotation.y=Math.PI/4,c.rotation.y=Math.PI/4,E.rotation.y=Math.PI/4)}}function init(){renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),document.body.appendChild(renderer.domElement),camera=new THREE.PerspectiveCamera(70,window.innerWidth/window.innerHeight,1,1e3),camera.position.set(0,0,400),scene=new THREE.Scene,light=new THREE.DirectionalLight(16777215),scene.add(light),addGeometry(1),window.addEventListener("click",onWindowClick,!1),window.addEventListener("resize",onWindowResize,!1),document.addEventListener("mousemove",onDocumentMouseMove,!1),document.addEventListener("mouseover",onDocumentMouseMove,!1),document.getElementById("triangle").addEventListener("click",function(){addGeometry(1)}),document.getElementById("cube").addEventListener("click",function(){addGeometry(2)}),document.getElementById("cylinder").addEventListener("click",function(){addGeometry(3)}),document.getElementById("both").addEventListener("click",function(){addGeometry(4)}),document.getElementById("transformed").addEventListener("click",function(){addGeometry(5)}),exportButton=document.getElementById("export"),exportButton.addEventListener("click",function(){exportToObj()}),floatingDiv=document.createElement("div"),floatingDiv.className="floating",document.body.appendChild(floatingDiv)}function onWindowClick(e){for(var n=!0,t=e.target;null!==t;){if(t===floatingDiv||t===exportButton){n=!1;break}t=t.parentElement}n&&(floatingDiv.style.display="none")}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function onDocumentMouseMove(e){var n=window.innerWidth/2,t=window.innerHeight/2;mouseX=(e.clientX-n)/2,mouseY=(e.clientY-t)/2}function animate(){requestAnimationFrame(animate),camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-mouseY-camera.position.y),camera.lookAt(scene.position),light.position.set(camera.position.x,camera.position.y,camera.position.z).normalize(),renderer.render(scene,camera)}var camera,scene,light,renderer,exportButton,floatingDiv,mouseX=0,mouseY=0;init(),animate();</script>
+
+	
+
+</body></html>

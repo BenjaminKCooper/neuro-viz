@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - Open Asset Import Library (assimp) / assimp2json</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+
+			}
+
+			a { color: red }
+		</style>
+	</head>
+
+	<body>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> -
+			Jeep by Psionic, interior from
+			<a href="http://assimp.sf.net" target="_blank">Assimp</a>
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/loaders/AssimpJSONLoader.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(50,window.innerWidth/window.innerHeight,1,2e3),camera.position.set(2,4,5),scene=new THREE.Scene,scene.fog=new THREE.FogExp2(0,.035),scene.add(new THREE.AmbientLight(13421772));var e=new THREE.DirectionalLight(15658734);e.position.x=Math.random()-.5,e.position.y=Math.random(),e.position.z=Math.random()-.5,e.position.normalize(),scene.add(e),renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(e){renderer.setSize(window.innerWidth,window.innerHeight),camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix()}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){var e=5e-4*Date.now();camera.position.x=10*Math.cos(e),camera.position.y=4,camera.position.z=10*Math.sin(e),camera.lookAt(scene.position),renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var container,stats,camera,scene,renderer,objects,clock=new THREE.Clock;init();var onProgress=function(e){if(e.lengthComputable){var n=e.loaded/e.total*100;console.log(Math.round(n,2)+"% downloaded")}},onError=function(e){},loader1=new THREE.AssimpJSONLoader;loader1.load("models/assimp/jeep/jeep.assimp.json",function(e){e.scale.multiplyScalar(.2),scene.add(e)},onProgress,onError);var loader2=new THREE.AssimpJSONLoader;loader2.load("models/assimp/interior/interior.assimp.json",function(e){scene.add(e)},onProgress,onError),animate();var t=0;</script>
+	
+
+</body></html>

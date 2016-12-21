@@ -1,0 +1,1 @@
+!function(){"use strict";var t;QUnit.module("Lights - AmbientLight",{beforeEach:function(){t=[new THREE.AmbientLight(11184810)]}}),QUnit.test("standard light tests",function(i){runStdLightTests(i,t)})}();

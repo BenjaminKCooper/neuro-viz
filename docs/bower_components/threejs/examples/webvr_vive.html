@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webvr - htc vive</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #101010;
+				color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+			a {
+				color: #f00;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/controls/VRControls.js"></script>
+		<script src="js/effects/VREffect.js"></script>
+		<script src="js/vr/ViveController.js"></script>
+		<script src="js/vr/WebVR.js"></script>
+
+		<script src="js/loaders/OBJLoader.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container);var e=document.createElement("div");e.style.position="absolute",e.style.top="10px",e.style.width="100%",e.style.textAlign="center",e.innerHTML='<a href="http://threejs.org" target="_blank">three.js</a> webgl - htc vive',container.appendChild(e),scene=new THREE.Scene,camera=new THREE.PerspectiveCamera(70,window.innerWidth/window.innerHeight,.1,10),scene.add(camera),room=new THREE.Mesh(new THREE.BoxGeometry(6,6,6,8,8,8),new THREE.MeshBasicMaterial({color:4210752,wireframe:!0})),room.position.y=3,scene.add(room),scene.add(new THREE.HemisphereLight(6316128,4210752));var n=new THREE.DirectionalLight(16777215);n.position.set(1,1,1).normalize(),scene.add(n);for(var o=new THREE.BoxGeometry(.2,.2,.2),t=0;t<200;t++){var r=new THREE.Mesh(o,new THREE.MeshLambertMaterial({color:16777215*Math.random()}));r.position.x=4*Math.random()-2,r.position.y=4*Math.random()-2,r.position.z=4*Math.random()-2,r.rotation.x=2*Math.random()*Math.PI,r.rotation.y=2*Math.random()*Math.PI,r.rotation.z=2*Math.random()*Math.PI,r.scale.x=Math.random()+.5,r.scale.y=Math.random()+.5,r.scale.z=Math.random()+.5,r.userData.velocity=new THREE.Vector3,r.userData.velocity.x=.01*Math.random()-.005,r.userData.velocity.y=.01*Math.random()-.005,r.userData.velocity.z=.01*Math.random()-.005,room.add(r)}var a=new THREE.MeshStandardMaterial,i=new THREE.OBJLoader;i.setPath("models/obj/cerberus/"),i.load("Cerberus.obj",function(e){var n=new THREE.TextureLoader;n.setPath("models/obj/cerberus/"),a.roughness=1,a.metalness=1,a.map=n.load("Cerberus_A.jpg"),a.roughnessMap=n.load("Cerberus_R.jpg"),a.metalnessMap=n.load("Cerberus_M.jpg"),a.normalMap=n.load("Cerberus_N.jpg"),a.map.wrapS=THREE.RepeatWrapping,a.roughnessMap.wrapS=THREE.RepeatWrapping,a.metalnessMap.wrapS=THREE.RepeatWrapping,a.normalMap.wrapS=THREE.RepeatWrapping,e.traverse(function(e){e instanceof THREE.Mesh&&(e.material=a)}),e.position.y=-2,e.rotation.y=-Math.PI/2,room.add(e)});var i=new THREE.CubeTextureLoader;i.setPath("textures/cube/pisa/"),a.envMap=i.load(["px.png","nx.png","py.png","ny.png","pz.png","nz.png"]),renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(5263440),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),renderer.sortObjects=!1,container.appendChild(renderer.domElement),controls=new THREE.VRControls(camera),controls.standing=!0,controller1=new THREE.ViveController(0),controller1.standingMatrix=controls.getStandingMatrix(),scene.add(controller1),controller2=new THREE.ViveController(1),controller2.standingMatrix=controls.getStandingMatrix(),scene.add(controller2);var i=new THREE.OBJLoader;i.setPath("models/obj/vive-controller/"),i.load("vr_controller_vive_1_5.obj",function(e){var n=new THREE.TextureLoader;n.setPath("models/obj/vive-controller/");var o=e.children[0];o.material.map=n.load("onepointfive_texture.png"),o.material.specularMap=n.load("onepointfive_spec.png"),controller1.add(e.clone()),controller2.add(e.clone())}),effect=new THREE.VREffect(renderer),WEBVR.isAvailable()===!0&&document.body.appendChild(WEBVR.getButton(effect)),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),effect.setSize(window.innerWidth,window.innerHeight)}function animate(){effect.requestAnimationFrame(animate),render()}function render(){var e=60*clock.getDelta();controller1.update(),controller2.update(),controls.update();for(var n=0;n<room.children.length;n++){var o=room.children[n];o.geometry instanceof THREE.BoxGeometry!=!1&&((o.position.x<-3||o.position.x>3)&&(o.position.x=THREE.Math.clamp(o.position.x,-3,3),o.userData.velocity.x=-o.userData.velocity.x),(o.position.y<-3||o.position.y>3)&&(o.position.y=THREE.Math.clamp(o.position.y,-3,3),o.userData.velocity.y=-o.userData.velocity.y),(o.position.z<-3||o.position.z>3)&&(o.position.z=THREE.Math.clamp(o.position.z,-3,3),o.userData.velocity.z=-o.userData.velocity.z),o.rotation.x+=.01*e)}effect.render(scene,camera)}WEBVR.isAvailable()===!1&&document.body.appendChild(WEBVR.getMessage());var clock=new THREE.Clock,container,camera,scene,renderer,effect,controls,controller1,controller2,room;init(),animate();</script>
+	
+
+</body></html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - lines - cubes - colors</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			a {
+				color:#0078ff;
+			}
+
+			#info {
+				position: absolute;
+				top: 10px; width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family: Monospace;
+				font-size: 13px;
+				text-align: center;
+				z-index:100;
+			}
+
+			a {
+				color: orange;
+				text-decoration: none;
+			}
+
+			a:hover {
+				color: #0080ff;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - color lines WebGL demo
+			[<a href="http://en.wikipedia.org/wiki/Hilbert_curve">Hilbert curve</a> thanks to <a href="http://www.openprocessing.org/visuals/?visualID=15599">Thomas Diewald</a>]
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/renderers/Projector.js"></script>
+		<script src="js/renderers/CanvasRenderer.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+		<script src="js/geometries/hilbert2D.js"></script>
+
+		<script>function init(){var e,n;n=document.createElement("div"),document.body.appendChild(n),camera=new THREE.PerspectiveCamera(33,window.innerWidth/window.innerHeight,1,1e4),camera.position.z=700,scene=new THREE.Scene,renderer=new THREE.CanvasRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),n.appendChild(renderer.domElement);var o=new THREE.Geometry,i=hilbert2D(new THREE.Vector3(0,0,0),400,4,0,1,2,3,4,5,6,7),t=[];for(e=0;e<i.length;e++)o.vertices.push(i[e]),t[e]=new THREE.Color(16777215),t[e].setHSL(e/i.length,1,.5);o.colors=t,material=new THREE.LineBasicMaterial({color:16777215,opacity:1,linewidth:3,vertexColors:THREE.VertexColors});var r,a=.3;r=new THREE.Line(o,material),r.scale.x=r.scale.y=r.scale.z=1.5*a,r.position.x=0,r.position.y=0,r.position.z=0,scene.add(r),stats=new Stats,document.addEventListener("mousemove",onDocumentMouseMove,!1),document.addEventListener("touchstart",onDocumentTouchStart,!1),document.addEventListener("touchmove",onDocumentTouchMove,!1),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight),composer.reset()}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,mouseY=e.clientY-windowHalfY}function onDocumentTouchStart(e){e.touches.length>1&&(e.preventDefault(),mouseX=e.touches[0].pageX-windowHalfX,mouseY=e.touches[0].pageY-windowHalfY)}function onDocumentTouchMove(e){1==e.touches.length&&(e.preventDefault(),mouseX=e.touches[0].pageX-windowHalfX,mouseY=e.touches[0].pageY-windowHalfY)}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-mouseY+200-camera.position.y),camera.lookAt(scene.position);for(var e=5e-4*Date.now(),n=0;n<scene.children.length;n++){var o=scene.children[n];o instanceof THREE.Line&&(o.rotation.y=e*(n%2?1:-1))}renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera,scene,renderer,material;init(),animate();</script>
+	
+
+</body></html>

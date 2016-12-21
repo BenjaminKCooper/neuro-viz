@@ -1,0 +1,99 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - mirror with nodes</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #888888;
+				font-family:Monospace;
+				font-size:13px;
+
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px;
+				width: 400px;
+				left: calc(50% - 200px);
+				text-align: center;
+			}
+
+			a {
+				color: #00f;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> - mirror node-based
+		</div>
+
+		<script src="../build/three.js"></script>
+		<script src="js/libs/dat.gui.min.js"></script>
+		<script src="js/Mirror.js"></script>
+		<script src="js/controls/OrbitControls.js"></script>
+
+		
+		<script src="js/nodes/GLNode.js"></script>
+		<script src="js/nodes/RawNode.js"></script>
+		<script src="js/nodes/TempNode.js"></script>
+		<script src="js/nodes/InputNode.js"></script>
+		<script src="js/nodes/ConstNode.js"></script>
+		<script src="js/nodes/FunctionNode.js"></script>
+		<script src="js/nodes/FunctionCallNode.js"></script>
+		<script src="js/nodes/NodeBuilder.js"></script>
+		<script src="js/nodes/NodeLib.js"></script>
+		<script src="js/nodes/NodeMaterial.js"></script>
+
+		
+		<script src="js/nodes/accessors/PositionNode.js"></script>
+		<script src="js/nodes/accessors/NormalNode.js"></script>
+		<script src="js/nodes/accessors/UVNode.js"></script>
+		<script src="js/nodes/accessors/ScreenUVNode.js"></script>
+		<script src="js/nodes/accessors/ColorsNode.js"></script>
+		<script src="js/nodes/accessors/CameraNode.js"></script>
+		<script src="js/nodes/accessors/ReflectNode.js"></script>
+		<script src="js/nodes/accessors/LightNode.js"></script>
+
+		
+		<script src="js/nodes/inputs/IntNode.js"></script>
+		<script src="js/nodes/inputs/FloatNode.js"></script>
+		<script src="js/nodes/inputs/ColorNode.js"></script>
+		<script src="js/nodes/inputs/Vector2Node.js"></script>
+		<script src="js/nodes/inputs/Vector3Node.js"></script>
+		<script src="js/nodes/inputs/Vector4Node.js"></script>
+		<script src="js/nodes/inputs/TextureNode.js"></script>
+		<script src="js/nodes/inputs/CubeTextureNode.js"></script>
+		<script src="js/nodes/inputs/Matrix4Node.js"></script>
+		<script src="js/nodes/inputs/MirrorNode.js"></script>
+
+		
+		<script src="js/nodes/math/Math1Node.js"></script>
+		<script src="js/nodes/math/Math2Node.js"></script>
+		<script src="js/nodes/math/Math3Node.js"></script>
+		<script src="js/nodes/math/OperatorNode.js"></script>
+
+		
+		<script src="js/nodes/utils/SwitchNode.js"></script>
+		<script src="js/nodes/utils/JoinNode.js"></script>
+		<script src="js/nodes/utils/TimerNode.js"></script>
+		<script src="js/nodes/utils/RoughnessToBlinnExponentNode.js"></script>
+		<script src="js/nodes/utils/VelocityNode.js"></script>
+		<script src="js/nodes/utils/LuminanceNode.js"></script>
+		<script src="js/nodes/utils/ColorAdjustmentNode.js"></script>
+		<script src="js/nodes/utils/NoiseNode.js"></script>
+		<script src="js/nodes/utils/ResolutionNode.js"></script>
+		<script src="js/nodes/utils/BlurNode.js"></script>
+
+		
+		<script src="js/nodes/materials/PhongNode.js"></script>
+		<script src="js/nodes/materials/PhongNodeMaterial.js"></script>
+
+		<script>function init(){renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(WIDTH,HEIGHT),scene=new THREE.Scene,camera=new THREE.PerspectiveCamera(VIEW_ANGLE,ASPECT,NEAR,FAR),camera.position.set(0,75,160),cameraControls=new THREE.OrbitControls(camera,renderer.domElement),cameraControls.target.set(0,40,0),cameraControls.maxDistance=400,cameraControls.minDistance=10,cameraControls.update();var e=document.getElementById("container");e.appendChild(renderer.domElement)}function fillScene(){var e=new THREE.PlaneBufferGeometry(100.1,100.1);groundMirror=new THREE.Mirror(renderer,camera,{clipBias:.003,textureWidth:WIDTH,textureHeight:HEIGHT,color:7829367});var r=new THREE.SwitchNode(new THREE.TextureNode(decalDiffuse),"w"),o=(new THREE.Math1Node(r,THREE.Math1Node.INVERT),new THREE.MirrorNode(groundMirror)),a=new THREE.TextureNode(decalNormal),n=new THREE.SwitchNode(a,"xy"),t=new THREE.Math1Node(n,THREE.Math1Node.INVERT),i=new THREE.OperatorNode(t,new THREE.FloatNode(.5),THREE.OperatorNode.SUB);o.offset=new THREE.OperatorNode(i,new THREE.FloatNode(6),THREE.OperatorNode.MUL);var E=(new THREE.Math3Node(o,new THREE.ColorNode(16777215),r,THREE.Math3Node.MIX),new THREE.BlurNode(o));E.size=new THREE.Vector2(WIDTH,HEIGHT),E.coord=new THREE.FunctionNode("projCoord.xyz / projCoord.q","vec3"),E.coord.keywords.projCoord=new THREE.OperatorNode(o.offset,o.coord,THREE.OperatorNode.ADD),E.radius.x=E.radius.y=0,gui.add({blur:E.radius.x},"blur",0,25).onChange(function(e){E.radius.x=E.radius.y=e}),groundMirrorMaterial=new THREE.PhongNodeMaterial,groundMirrorMaterial.environment=E,groundMirrorMaterial.environmentAlpha=r,groundMirrorMaterial.normal=a,groundMirrorMaterial.build();var d=new THREE.Mesh(e,groundMirrorMaterial);d.add(groundMirror),d.rotateX(-Math.PI/2),scene.add(d),sphereGroup=new THREE.Object3D,scene.add(sphereGroup);var s=new THREE.CylinderGeometry(.1,15*Math.cos(Math.PI/180*30),.1,24,1),l=new THREE.MeshPhongMaterial({color:16777215,emissive:4473924}),M=new THREE.Mesh(s,l);M.position.y=-15*Math.sin(Math.PI/180*30)-.05,M.rotateX(-Math.PI);var s=new THREE.SphereGeometry(15,24,24,Math.PI/2,2*Math.PI,0,Math.PI/180*120),h=new THREE.Mesh(s,l);h.add(M),h.rotateX(-Math.PI/180*135),h.rotateZ(-Math.PI/180*20),h.position.y=7.5+15*Math.sin(Math.PI/180*30),sphereGroup.add(h);var s=new THREE.IcosahedronGeometry(5,0),l=new THREE.MeshPhongMaterial({color:16777215,emissive:3355443,shading:THREE.FlatShading});smallSphere=new THREE.Mesh(s,l),scene.add(smallSphere);var c=new THREE.Mesh(e,new THREE.MeshPhongMaterial({color:16777215}));c.position.y=100,c.rotateX(Math.PI/2),scene.add(c);var T=new THREE.Mesh(e,new THREE.MeshPhongMaterial({color:16777215}));T.position.z=-50,T.position.y=50,scene.add(T);var H=new THREE.Mesh(e,new THREE.MeshPhongMaterial({color:8355839}));H.position.z=50,H.position.y=50,H.rotateY(Math.PI),scene.add(H);var R=new THREE.Mesh(e,new THREE.MeshPhongMaterial({color:65280}));R.position.x=50,R.position.y=50,R.rotateY(-Math.PI/2),scene.add(R);var w=new THREE.Mesh(e,new THREE.MeshPhongMaterial({color:16711680}));w.position.x=-50,w.position.y=50,w.rotateY(Math.PI/2),scene.add(w);var p=new THREE.PointLight(13421772,1.5,250);p.position.y=60,scene.add(p);var u=new THREE.PointLight(65280,.25,1e3);u.position.set(550,50,0),scene.add(u);var m=new THREE.PointLight(16711680,.25,1e3);m.position.set(-550,50,0),scene.add(m);var g=new THREE.PointLight(8355839,.25,1e3);g.position.set(0,50,550),scene.add(g)}function render(){groundMirrorMaterial.visible=!1,groundMirror.render(),groundMirrorMaterial.visible=!0,renderer.render(scene,camera)}function update(){requestAnimationFrame(update);var e=clock.getDelta(),r=.01*Date.now();sphereGroup.rotation.y-=.002,smallSphere.position.set(30*Math.cos(.1*r),20*Math.abs(Math.cos(.2*r))+5,30*Math.sin(.1*r)),smallSphere.rotation.y=Math.PI/2-.1*r,smallSphere.rotation.z=.8*r,groundMirrorMaterial.updateFrame(e),cameraControls.update(),render()}var WIDTH=window.innerWidth,HEIGHT=window.innerHeight,VIEW_ANGLE=45,ASPECT=WIDTH/HEIGHT,NEAR=1,FAR=500,decalNormal=(new THREE.TextureLoader).load("textures/decal/decal-normal.jpg"),decalDiffuse=(new THREE.TextureLoader).load("textures/decal/decal-diffuse.png");decalDiffuse.wrapS=decalDiffuse.wrapT=THREE.RepeatWrapping;var camera,scene,renderer,clock=new THREE.Clock,cameraControls,gui=new dat.GUI,groundMirror,sphereGroup,smallSphere,groundMirrorMaterial;init(),fillScene(),update();</script>
+	
+
+</body></html>

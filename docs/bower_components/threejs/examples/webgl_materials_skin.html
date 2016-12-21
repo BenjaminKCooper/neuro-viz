@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - materials - skin [Lee Perry-Smith]</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background:#000;
+				color:#aaa;
+				padding:0;
+				margin:0;
+				font-weight: bold;
+				overflow:hidden;
+			}
+
+			a {	color: #eee;	}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #eee;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				z-index:1000;
+			}
+
+			#oldie {
+				background:rgb(200,100,0) !important;
+				color:#fff;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - webgl skin rendering demo.
+			<a href="http://graphics.cs.williams.edu/data/meshes.xml#14" target="_blank">Lee Perry-Smith</a> head.
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/ShaderSkin.js"></script>
+
+		<script src="js/shaders/BleachBypassShader.js"></script>
+		<script src="js/shaders/ConvolutionShader.js"></script>
+		<script src="js/shaders/CopyShader.js"></script>
+
+		<script src="js/postprocessing/EffectComposer.js"></script>
+		<script src="js/postprocessing/RenderPass.js"></script>
+		<script src="js/postprocessing/BloomPass.js"></script>
+		<script src="js/postprocessing/TexturePass.js"></script>
+		<script src="js/postprocessing/ShaderPass.js"></script>
+		<script src="js/postprocessing/MaskPass.js"></script>
+
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(35,window.innerWidth/window.innerHeight,1,1e4),camera.position.z=900,scene=new THREE.Scene,directionalLight=new THREE.DirectionalLight(16772829,1.5),directionalLight.position.set(1,.5,1),scene.add(directionalLight),directionalLight=new THREE.DirectionalLight(14540287,.5),directionalLight.position.set(-1,.5,-1),scene.add(directionalLight);var e=12303291,r=460551;r=5592405;var n=THREE.ShaderSkin.skin,a=THREE.UniformsUtils.clone(n.uniforms),t=new THREE.TextureLoader;a.tNormal.value=t.load("obj/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg"),a.uNormalScale.value=-1.5,a.tDiffuse.value=t.load("obj/leeperrysmith/Map-COL.jpg"),a.passID.value=0,a.diffuse.value.setHex(e),a.specular.value.setHex(r),a.uRoughness.value=.185,a.uSpecularBrightness.value=.7;var o=THREE.UniformsUtils.clone(a);o.tDiffuse.value=a.tDiffuse.value,o.tNormal.value=a.tNormal.value,o.passID.value=1;var i={fragmentShader:n.fragmentShader,vertexShader:n.vertexShader,uniforms:o,lights:!0},s={fragmentShader:n.fragmentShader,vertexShader:n.vertexShaderUV,uniforms:a,lights:!0};material=new THREE.ShaderMaterial(i),material.extensions.derivatives=!0;var d=new THREE.ShaderMaterial(s);d.extensions.derivatives=!0,loader=new THREE.JSONLoader,loader.load("obj/leeperrysmith/LeePerrySmith.js",function(e){createScene(e,100,material)}),renderer=new THREE.WebGLRenderer({antialias:!1}),renderer.setClearColor(328965),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),renderer.autoClear=!1,container.appendChild(renderer.domElement),statsEnabled&&(stats=new Stats,container.appendChild(stats.dom)),document.addEventListener("mousemove",onDocumentMouseMove,!1);var c=new THREE.RenderPass(scene,camera,d,new THREE.Color(5723991)),m=new THREE.ShaderPass(THREE.CopyShader),l=new THREE.BloomPass(1,15,2,512),E=new THREE.BloomPass(1,25,3,512),w=new THREE.BloomPass(1,25,4,512);l.clear=!0,E.clear=!0,w.clear=!0,m.renderToScreen=!0;var u={minFilter:THREE.LinearMipmapLinearFilter,magFilter:THREE.LinearFilter,format:THREE.RGBFormat,stencilBuffer:!1},p=512,h=512;composerScene=new THREE.EffectComposer(renderer,new THREE.WebGLRenderTarget(p,h,u)),composerScene.addPass(c),renderScene=new THREE.TexturePass(composerScene.renderTarget2.texture),composerUV1=new THREE.EffectComposer(renderer,new THREE.WebGLRenderTarget(p,h,u)),composerUV1.addPass(renderScene),composerUV1.addPass(l),composerUV2=new THREE.EffectComposer(renderer,new THREE.WebGLRenderTarget(p,h,u)),composerUV2.addPass(renderScene),composerUV2.addPass(E),composerUV3=new THREE.EffectComposer(renderer,new THREE.WebGLRenderTarget(p,h,u)),composerUV3.addPass(renderScene),composerUV3.addPass(w);var T=new THREE.ShaderPass(THREE.ShaderSkin.beckmann);composerBeckmann=new THREE.EffectComposer(renderer,new THREE.WebGLRenderTarget(p,h,u)),composerBeckmann.addPass(T),o.tBlur1.value=composerScene.renderTarget2.texture,o.tBlur2.value=composerUV1.renderTarget2.texture,o.tBlur3.value=composerUV2.renderTarget2.texture,o.tBlur4.value=composerUV3.renderTarget2.texture,o.tBeckmann.value=composerBeckmann.renderTarget1.texture,window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function createScene(e,r,n){mesh=new THREE.Mesh(e,n),mesh.position.y=-50,mesh.scale.set(r,r,r),scene.add(mesh)}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,mouseY=e.clientY-windowHalfY}function animate(){requestAnimationFrame(animate),render(),statsEnabled&&stats.update()}function render(){targetX=.001*mouseX,targetY=.001*mouseY,mesh&&(mesh.rotation.y+=.05*(targetX-mesh.rotation.y),mesh.rotation.x+=.05*(targetY-mesh.rotation.x)),renderer.clear(),firstPass&&(composerBeckmann.render(),firstPass=!1),composerScene.render(),composerUV1.render(),composerUV2.render(),composerUV3.render(),renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var statsEnabled=!0,container,stats,loader,camera,scene,renderer,mesh,composer,composerUV1,composerUV2,composerUV3,composerBeckmann,directionalLight,pointLight,ambientLight,mouseX=0,mouseY=0,targetX=0,targetY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,firstPass=!0;init(),animate();</script>
+
+	
+
+</body></html>

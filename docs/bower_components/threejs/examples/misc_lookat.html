@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js misc - lookAt</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #404040;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #ffffff;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			a {
+
+				color: #0080bb;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> - Object3D::lookAt() demo</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(40,window.innerWidth/window.innerHeight,1,15e3),camera.position.z=3200,scene=new THREE.Scene,sphere=new THREE.Mesh(new THREE.SphereGeometry(100,20,20),new THREE.MeshNormalMaterial),scene.add(sphere);var e=new THREE.CylinderGeometry(0,10,100,12);e.rotateX(Math.PI/2);for(var n=new THREE.MeshNormalMaterial,i=0;i<1e3;i++){var o=new THREE.Mesh(e,n);o.position.x=4e3*Math.random()-2e3,o.position.y=4e3*Math.random()-2e3,o.position.z=4e3*Math.random()-2e3,o.scale.x=o.scale.y=o.scale.z=4*Math.random()+2,scene.add(o)}scene.matrixAutoUpdate=!1,renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(16777215),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),renderer.sortObjects=!1,container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function onDocumentMouseMove(e){mouseX=10*(e.clientX-windowHalfX),mouseY=10*(e.clientY-windowHalfY)}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){var e=5e-4*Date.now();sphere.position.x=2e3*Math.sin(.7*e),sphere.position.y=2e3*Math.cos(.5*e),sphere.position.z=2e3*Math.cos(.3*e);for(var n=1,i=scene.children.length;n<i;n++)scene.children[n].lookAt(sphere.position);camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-mouseY-camera.position.y),camera.lookAt(scene.position),renderer.render(scene,camera)}var container,stats,camera,scene,renderer,mesh,geometry,sphere,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;document.addEventListener("mousemove",onDocumentMouseMove,!1),init(),animate();</script>
+
+	
+
+</body></html>

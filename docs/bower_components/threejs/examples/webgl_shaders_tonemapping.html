@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - adaptive tone-mapping</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background:#000;
+				color:#fff;
+				padding:0;
+				margin:0;
+				overflow:hidden;
+				font-family:georgia;
+				text-align:center;
+			}
+			h1 { }
+			a { color:skyblue; text-decoration:none }
+			canvas { pointer-events:none; z-index:0; position:relative; }
+			.label { background-color: black; position: absolute; z-index: 100; padding: 5px }
+
+		</style>
+	</head>
+
+	<body>
+		<div id="d">
+			<div id="info">
+				<a href="http://threejs.org" target="_blank">three.js</a> webgl demo :
+				Earth diffuse and city lights by <a href="http://seanward.org" target="_blank">Sean Ward</a> :
+
+			</div>
+			<div class="label" style="position: absolute;left: 12%;bottom: 10%">Low Dynamic Range</div>
+			<div class="label" style="position: absolute;left: 12%;bottom: 5%">Static Tone Mapping</div>
+			<div class="label" style="position: absolute;left: 45%;bottom: 10%">High Dynamic Range</div>
+			<div class="label" style="position: absolute;left: 45%;bottom: 5%">Static Tone Mapping</div>
+			<div class="label" style="position: absolute;left: 80%;bottom: 10%">High Dynamic Range</div>
+			<div class="label" style="position: absolute;left: 80%;bottom: 5%">Adaptive Tone Mapping</div>
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/dat.gui.min.js"></script>
+
+		<script src="js/shaders/CopyShader.js"></script>
+		<script src="js/shaders/LuminosityShader.js"></script>
+		<script src="js/shaders/ConvolutionShader.js"></script>
+		<script src="js/shaders/ToneMapShader.js"></script>
+		<script src="js/shaders/GammaCorrectionShader.js"></script>
+
+		<script src="js/postprocessing/EffectComposer.js"></script>
+		<script src="js/postprocessing/RenderPass.js"></script>
+		<script src="js/postprocessing/MaskPass.js"></script>
+		<script src="js/postprocessing/ShaderPass.js"></script>
+		<script src="js/postprocessing/BloomPass.js"></script>
+		<script src="js/postprocessing/AdaptiveToneMappingPass.js"></script>
+		<script src="js/controls/OrbitControls.js"></script>
+
+		<script>function init(){params={bloomAmount:1,sunLight:4,enabled:!0,avgLuminance:.7,middleGrey:.04,maxLuminance:16,adaptionRate:2},container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(70,windowThirdX/window.innerHeight,.1,1e5),camera.position.x=700,camera.position.y=400,camera.position.z=800,cameraCube=new THREE.PerspectiveCamera(70,windowThirdX/window.innerHeight,1,1e5),cameraBG=new THREE.OrthographicCamera(-windowHalfX,windowHalfX,windowHalfY,-windowHalfY,-1e4,1e4),cameraBG.position.z=100,orbitControls=new THREE.OrbitControls(camera,container),orbitControls.autoRotate=!0,orbitControls.autoRotateSpeed=1,scene=new THREE.Scene,sceneCube=new THREE.Scene,debugScene=new THREE.Scene;var e=new THREE.AmbientLight(328965);scene.add(e),directionalLight=new THREE.DirectionalLight(16777215,params.sunLight),directionalLight.position.set(2,0,10).normalize(),scene.add(directionalLight);var a={side:THREE.BackSide,transparent:!0,lights:!0,uniforms:THREE.UniformsUtils.merge([THREE.UniformsLib.common,THREE.UniformsLib.lights]),vertexShader:["varying vec3 vViewPosition;","varying vec3 vNormal;","void main() {",THREE.ShaderChunk.beginnormal_vertex,THREE.ShaderChunk.defaultnormal_vertex,"\tvNormal = normalize( transformedNormal );","vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );","vViewPosition = -mvPosition.xyz;","gl_Position = projectionMatrix * mvPosition;","}"].join("\n"),fragmentShader:[THREE.ShaderChunk.common,THREE.ShaderChunk.bsdfs,THREE.ShaderChunk.lights_pars,THREE.ShaderChunk.lights_phong_pars_fragment,"void main() {","vec3 normal = normalize( -vNormal );","vec3 viewPosition = normalize( vViewPosition );","#if NUM_DIR_LIGHTS > 0","vec3 dirDiffuse = vec3( 0.0 );","for( int i = 0; i < NUM_DIR_LIGHTS; i ++ ) {","vec4 lDirection = viewMatrix * vec4( directionalLights[i].direction, 0.0 );","vec3 dirVector = normalize( lDirection.xyz );","float dotProduct = dot( viewPosition, dirVector );","dotProduct = 1.0 * max( dotProduct, 0.0 ) + (1.0 - max( -dot( normal, dirVector ), 0.0 ));","dotProduct *= dotProduct;","dirDiffuse += max( 0.5 * dotProduct, 0.0 ) * directionalLights[i].color;","}","#endif","float viewDot = abs(dot( normal, viewPosition ));","viewDot = clamp( pow( viewDot + 0.6, 10.0 ), 0.0, 1.0);","vec3 colour = vec3( 0.05, 0.09, 0.13 ) * dirDiffuse;","gl_FragColor = vec4( colour, viewDot );","}"].join("\n")},n=new THREE.ShaderMaterial(a),r=new THREE.MeshPhongMaterial({color:16777215,shininess:200}),i=new THREE.TextureLoader,o=(i.load("textures/planets/earth_atmos_4096.jpg",function(e){r.map=e,r.needsUpdate=!0}),i.load("textures/planets/earth_specular_2048.jpg",function(e){r.specularMap=e,r.needsUpdate=!0}),new THREE.MeshBasicMaterial({color:16777215,blending:THREE.AdditiveBlending,transparent:!0,depthTest:!1})),d=(i.load("textures/planets/earth_lights_2048.png",function(e){o.map=e,o.needsUpdate=!0}),new THREE.MeshLambertMaterial({color:16777215,blending:THREE.NormalBlending,transparent:!0,depthTest:!1})),t=(i.load("textures/planets/earth_clouds_2048.png",function(e){d.map=e,d.needsUpdate=!0}),new THREE.SphereGeometry(600,24,24)),s=new THREE.Mesh(t,r);scene.add(s);var m=new THREE.Mesh(t,o);scene.add(m);var p=new THREE.Mesh(t,d);scene.add(p);var c=new THREE.Mesh(t,n);c.scale.set(1.05,1.05,1.05),scene.add(c);var l=["varying vec2 vUv;","void main() {","vUv = uv;","gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );","}"].join("\n"),w=["uniform sampler2D map;","varying vec2 vUv;","void main() {","vec2 sampleUV = vUv;","vec4 colour = texture2D( map, sampleUV, 0.0 );","gl_FragColor = vec4( colour.xyz, 1.0 );","}"].join("\n");adaptiveLuminanceMat=new THREE.ShaderMaterial({uniforms:{map:{value:null}},vertexShader:l,fragmentShader:w,depthTest:!1,blending:THREE.NoBlending}),currentLuminanceMat=new THREE.ShaderMaterial({uniforms:{map:{value:null}},vertexShader:l,fragmentShader:w,depthTest:!1});var E=new THREE.Mesh(new THREE.PlaneBufferGeometry(.1,.1),currentLuminanceMat);E.position.z=-500,E.position.x=.5*-window.innerWidth+.05*window.innerWidth,E.scale.set(window.innerWidth,window.innerHeight,1),debugScene.add(E),E=new THREE.Mesh(new THREE.PlaneBufferGeometry(.1,.1),adaptiveLuminanceMat),E.position.z=-500,E.position.x=.5*-window.innerWidth+.15*window.innerWidth,E.scale.set(window.innerWidth,window.innerHeight,1),debugScene.add(E);var h="textures/cube/MilkyWay/",u=[h+"dark-s_px.jpg",h+"dark-s_nx.jpg",h+"dark-s_py.jpg",h+"dark-s_ny.jpg",h+"dark-s_pz.jpg",h+"dark-s_nz.jpg"],T=(new THREE.CubeTextureLoader).load(u);T.format=THREE.RGBFormat;var g=THREE.ShaderLib.cube;g.uniforms.tCube.value=T;var f=new THREE.ShaderMaterial({fragmentShader:g.fragmentShader,vertexShader:g.vertexShader,uniforms:g.uniforms,depthWrite:!1,side:THREE.BackSide}),v=new THREE.Mesh(new THREE.BoxGeometry(100,100,100),f);sceneCube.add(v),renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),renderer.setFaceCulling(THREE.CullFaceNone),renderer.autoClear=!1,renderer.gammaInput=!0,renderer.gammaOutput=!1,container.appendChild(renderer.domElement);var H=window.innerHeight||1,R={minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter,format:THREE.RGBAFormat,stencilBuffer:!1},P=new THREE.WebGLRenderTarget(windowThirdX,H,R);ldrEffectComposer=new THREE.EffectComposer(renderer,P),renderer.extensions.get("OES_texture_half_float_linear")&&(R.type=THREE.FloatType);var M=new THREE.WebGLRenderTarget(windowThirdX,H,R);dynamicHdrEffectComposer=new THREE.EffectComposer(renderer,M),dynamicHdrEffectComposer.setSize(window.innerWidth,window.innerHeight),hdrEffectComposer=new THREE.EffectComposer(renderer,M);var C=new THREE.RenderPass(debugScene,cameraBG);C.clear=!1;var b=new THREE.RenderPass(scene,camera,void 0,void 0,void 0),L=new THREE.RenderPass(sceneCube,cameraCube);b.clear=!1,adaptToneMappingPass=new THREE.AdaptiveToneMappingPass(!0,256),adaptToneMappingPass.needsSwap=!0,ldrToneMappingPass=new THREE.AdaptiveToneMappingPass(!1,256),hdrToneMappingPass=new THREE.AdaptiveToneMappingPass(!1,256),bloomPass=new THREE.BloomPass;var x=new THREE.ShaderPass(THREE.GammaCorrectionShader);x.renderToScreen=!0,dynamicHdrEffectComposer.addPass(L),dynamicHdrEffectComposer.addPass(b),dynamicHdrEffectComposer.addPass(adaptToneMappingPass),dynamicHdrEffectComposer.addPass(bloomPass),dynamicHdrEffectComposer.addPass(x),hdrEffectComposer.addPass(L),hdrEffectComposer.addPass(b),hdrEffectComposer.addPass(hdrToneMappingPass),hdrEffectComposer.addPass(bloomPass),hdrEffectComposer.addPass(x),ldrEffectComposer.addPass(L),ldrEffectComposer.addPass(b),ldrEffectComposer.addPass(ldrToneMappingPass),ldrEffectComposer.addPass(bloomPass),ldrEffectComposer.addPass(x);var S=new dat.GUI,y=S.addFolder("Scenes"),_=S.addFolder("ToneMapping"),G=S.addFolder("StaticOnly"),W=S.addFolder("AdaptiveOnly");y.add(params,"bloomAmount",0,10),y.add(params,"sunLight",.1,12),_.add(params,"enabled"),_.add(params,"middleGrey",0,12),_.add(params,"maxLuminance",1,30),G.add(params,"avgLuminance",.001,2),W.add(params,"adaptionRate",0,10),S.open(),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,windowThirdX=window.innerWidth/3,windowThirdY=window.innerHeight/3,camera.aspect=windowThirdX/window.innerHeight,camera.updateProjectionMatrix(),cameraCube.aspect=windowThirdX/window.innerHeight,cameraCube.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function animate(){requestAnimationFrame(animate),bloomPass&&(bloomPass.copyUniforms.opacity.value=params.bloomAmount),adaptToneMappingPass&&(adaptToneMappingPass.setAdaptionRate(params.adaptionRate),adaptiveLuminanceMat.uniforms.map.value=adaptToneMappingPass.luminanceRT,currentLuminanceMat.uniforms.map.value=adaptToneMappingPass.currentLuminanceRT,adaptToneMappingPass.enabled=params.enabled,adaptToneMappingPass.setMaxLuminance(params.maxLuminance),adaptToneMappingPass.setMiddleGrey(params.middleGrey),hdrToneMappingPass.enabled=params.enabled,hdrToneMappingPass.setMaxLuminance(params.maxLuminance),hdrToneMappingPass.setMiddleGrey(params.middleGrey),hdrToneMappingPass.setAverageLuminance&&hdrToneMappingPass.setAverageLuminance(params.avgLuminance),ldrToneMappingPass.enabled=params.enabled,ldrToneMappingPass.setMaxLuminance(params.maxLuminance),ldrToneMappingPass.setMiddleGrey(params.middleGrey),ldrToneMappingPass.setAverageLuminance&&ldrToneMappingPass.setAverageLuminance(params.avgLuminance)),directionalLight.intensity=params.sunLight,orbitControls.update(),render()}function render(){camera.lookAt(scene.position),cameraCube.rotation.copy(camera.rotation),renderer.setViewport(0,0,windowThirdX,window.innerHeight),ldrEffectComposer.render(.017),renderer.setViewport(windowThirdX,0,windowThirdX,window.innerHeight),hdrEffectComposer.render(.017),renderer.setViewport(2*windowThirdX,0,windowThirdX,window.innerHeight),dynamicHdrEffectComposer.render(.017)}Detector.webgl||Detector.addGetWebGLMessage();var container,bloomPass,adaptToneMappingPass,params,camera,scene,renderer,dynamicHdrEffectComposer,hdrEffectComposer,ldrEffectComposer,cameraCube,sceneCube,cameraBG,debugScene,adaptiveLuminanceMat,currentLuminanceRT,previousLuminanceMat,directionalLight,orbitControls,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,windowThirdX=window.innerWidth/3,windowThirdY=window.innerHeight/3;init(),animate();</script>
+
+	
+
+</body></html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>threejs webgl - materials - hdr environment mapping</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #fff;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #000;
+
+				margin: 0px;
+				overflow: hidden;
+			}
+			a { color: #88f }
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="info"><a href="http://threejs.org" target="_blank">threejs</a> - Standard Material Reflectivity (reflectance at F0) example by <a href="http://clara.io/" target="_blank">Ben Houston</a>.</div>
+
+		<script src="../build/three.js"></script>
+		<script src="js/controls/OrbitControls.js"></script>
+		<script src="js/loaders/RGBELoader.js"></script>
+		<script src="js/loaders/HDRCubeTextureLoader.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script src="js/pmrem/PMREMGenerator.js"></script>
+		<script src="js/pmrem/PMREMCubeUVPacker.js"></script>
+		<script src="js/libs/dat.gui.min.js"></script>
+
+		<script src="js/postprocessing/EffectComposer.js"></script>
+		<script src="js/postprocessing/RenderPass.js"></script>
+		<script src="js/postprocessing/MaskPass.js"></script>
+		<script src="js/postprocessing/ShaderPass.js"></script>
+		<script src="js/shaders/CopyShader.js"></script>
+		<script src="js/shaders/FXAAShader.js"></script>
+		<script src="js/postprocessing/BloomPass.js"></script>
+		<script src="js/shaders/ConvolutionShader.js"></script>
+
+		<script src="js/loaders/OBJLoader.js"></script>
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(40,window.innerWidth/window.innerHeight,1,2e3),camera.position.set(0,-10,70),scene=new THREE.Scene,renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(new THREE.Color(0)),gemBackMaterial=new THREE.MeshPhysicalMaterial({map:null,color:255,metalness:1,roughness:0,opacity:.5,side:THREE.BackSide,transparent:!0,shading:THREE.SmoothShading,envMapIntensity:5,premultipliedAlpha:!0}),gemFrontMaterial=new THREE.MeshPhysicalMaterial({map:null,color:255,metalness:0,roughness:0,opacity:.15,side:THREE.FrontSide,transparent:!0,shading:THREE.SmoothShading,envMapIntensity:5,premultipliedAlpha:!0});var e=new THREE.LoadingManager;e.onProgress=function(e,a,r){console.log(e,a,r)};var a=new THREE.OBJLoader(e);a.load("models/obj/emerald.obj",function(e){e.traverse(function(e){if(e instanceof THREE.Mesh){e.material=gemBackMaterial;var a=e.clone();a.material=gemFrontMaterial;var r=new THREE.Group;r.add(a),r.add(e),scene.add(r),objects.push(r)}})});var r=function(e,a){return[e+"px"+a,e+"nx"+a,e+"py"+a,e+"ny"+a,e+"pz"+a,e+"nz"+a]},n=r("./textures/cube/pisaHDR/",".hdr");(new THREE.HDRCubeTextureLoader).load(THREE.UnsignedByteType,n,function(e){var a=new THREE.PMREMGenerator(e);a.update(renderer);var r=new THREE.PMREMCubeUVPacker(a.cubeLods);r.update(renderer),hdrCubeRenderTarget=r.CubeUVRenderTarget,gemFrontMaterial.envMap=gemBackMaterial.envMap=hdrCubeRenderTarget.texture,gemFrontMaterial.needsUpdate=gemBackMaterial.needsUpdate=!0}),scene.add(new THREE.AmbientLight(2236962));var t=new THREE.PointLight(16777215);t.position.set(150,10,0),t.castShadow=!1,scene.add(t);var o=new THREE.PointLight(16777215);o.position.set(-150,0,0),scene.add(o);var i=new THREE.PointLight(16777215);i.position.set(0,-10,-150),scene.add(i);var d=new THREE.PointLight(16777215);d.position.set(0,0,150),scene.add(d),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),renderer.shadowMap.enabled=!0,container.appendChild(renderer.domElement),renderer.gammaInput=!0,renderer.gammaOutput=!0,stats=new Stats,container.appendChild(stats.dom),controls=new THREE.OrbitControls(camera,renderer.domElement),controls.target.set(0,0,0),controls.update(),window.addEventListener("resize",onWindowResize,!1);var s=new dat.GUI;s.add(params,"reflectivity",0,1),s.add(params,"exposure",.1,2),s.add(params,"autoRotate"),s.add(params,"gemColor",["Blue","Green","Red","White","Black"]),s.open()}function onWindowResize(){var e=window.innerWidth,a=window.innerHeight;camera.aspect=e/a,camera.updateProjectionMatrix(),renderer.setSize(e,a)}function animate(){requestAnimationFrame(animate),stats.begin(),render(),stats.end()}function render(){if(void 0!==gemBackMaterial&&void 0!==gemFrontMaterial){gemFrontMaterial.reflectivity=gemBackMaterial.reflectivity=params.reflectivity;var e=gemBackMaterial.color;switch(params.gemColor){case"Blue":e=new THREE.Color(136);break;case"Red":e=new THREE.Color(8912896);break;case"Green":e=new THREE.Color(34816);break;case"White":e=new THREE.Color(8947848);break;case"Black":e=new THREE.Color(986895)}gemBackMaterial.color=gemFrontMaterial.color=e}renderer.toneMappingExposure=params.exposure;25e-5*Date.now();if(camera.lookAt(scene.position),params.autoRotate)for(var a=0,r=objects.length;a<r;a++){var n=objects[a];n.rotation.y+=.005}renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var container,stats,params={projection:"normal",autoRotate:!0,reflectivity:1,background:!1,exposure:1,gemColor:"Green"},camera,scene,renderer,controls,objects=[],hdrCubeMap,composer,gemBackMaterial,gemFrontMaterial,hdrCubeRenderTarget;init(),animate();</script>
+
+	
+
+</body></html>

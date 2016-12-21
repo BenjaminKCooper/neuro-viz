@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - materials - cube reflection [cars]</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background:#000;
+				color:#fff;
+				padding:0;
+				margin:0;
+				overflow:hidden;
+				font-family:georgia;
+				text-align:center;
+			}
+			a { color:skyblue; text-decoration:none }
+			#info {
+				position: absolute;
+				width: 100%;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/controls/OrbitControls.js"></script>
+
+		<script src="js/libs/dat.gui.min.js"></script>
+
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - webgl environment mapping example<br>
+			Equirectangular Map by <a href="http://gl.ict.usc.edu/Data/HighResProbes/">University of Southern California</a><br>
+			Spherical Map by <a href="http://www.pauldebevec.com/Probes/">Paul Debevec</a>
+		</div>
+
+		<script>function init(){camera=new THREE.PerspectiveCamera(70,window.innerWidth/window.innerHeight,1,1e5),camera.position.set(0,0,1e3),cameraCube=new THREE.PerspectiveCamera(70,window.innerWidth/window.innerHeight,1,1e5),controls=new THREE.OrbitControls(camera),controls.minDistance=500,controls.maxDistance=2500,scene=new THREE.Scene,sceneCube=new THREE.Scene;var e=new THREE.AmbientLight(16777215);scene.add(e);var r="textures/cube/Bridge2/",n=[r+"posx.jpg",r+"negx.jpg",r+"posy.jpg",r+"negy.jpg",r+"posz.jpg",r+"negz.jpg"];textureCube=(new THREE.CubeTextureLoader).load(n),textureCube.format=THREE.RGBFormat,textureCube.mapping=THREE.CubeReflectionMapping;var a=new THREE.TextureLoader;textureEquirec=a.load("textures/2294472375_24a3b8ef46_o.jpg"),textureEquirec.mapping=THREE.EquirectangularReflectionMapping,textureEquirec.magFilter=THREE.LinearFilter,textureEquirec.minFilter=THREE.LinearMipMapLinearFilter,textureSphere=a.load("textures/metal.jpg"),textureSphere.mapping=THREE.SphericalReflectionMapping;var t=THREE.ShaderLib.equirect,i=new THREE.ShaderMaterial({fragmentShader:t.fragmentShader,vertexShader:t.vertexShader,uniforms:t.uniforms,depthWrite:!1,side:THREE.BackSide});i.uniforms.tEquirect.value=textureEquirec;var u=THREE.ShaderLib.cube,d=new THREE.ShaderMaterial({fragmentShader:u.fragmentShader,vertexShader:u.vertexShader,uniforms:u.uniforms,depthWrite:!1,side:THREE.BackSide});d.uniforms.tCube.value=textureCube,cubeMesh=new THREE.Mesh(new THREE.BoxGeometry(100,100,100),d),sceneCube.add(cubeMesh);var c=new THREE.SphereGeometry(400,24,24);sphereMaterial=new THREE.MeshLambertMaterial({envMap:textureCube}),sphereMesh=new THREE.Mesh(c,sphereMaterial),scene.add(sphereMesh),renderer=new THREE.WebGLRenderer,renderer.autoClear=!1,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),renderer.setFaceCulling(THREE.CullFaceNone),document.body.appendChild(renderer.domElement);var o={Cube:function(){cubeMesh.material=d,cubeMesh.visible=!0,sphereMaterial.envMap=textureCube,sphereMaterial.needsUpdate=!0},Equirectangular:function(){cubeMesh.material=i,cubeMesh.visible=!0,sphereMaterial.envMap=textureEquirec,sphereMaterial.needsUpdate=!0},Spherical:function(){cubeMesh.visible=!1,sphereMaterial.envMap=textureSphere,sphereMaterial.needsUpdate=!0},Refraction:!1},p=new dat.GUI;p.add(o,"Cube"),p.add(o,"Equirectangular"),p.add(o,"Spherical"),p.add(o,"Refraction").onChange(function(e){e?(textureEquirec.mapping=THREE.EquirectangularRefractionMapping,textureCube.mapping=THREE.CubeRefractionMapping):(textureEquirec.mapping=THREE.EquirectangularReflectionMapping,textureCube.mapping=THREE.CubeReflectionMapping),sphereMaterial.needsUpdate=!0}),p.open(),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),cameraCube.aspect=window.innerWidth/window.innerHeight,cameraCube.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function animate(){requestAnimationFrame(animate),render(),controls.update()}function render(){-2e-4*Date.now();camera.lookAt(scene.position),cameraCube.rotation.copy(camera.rotation),renderer.render(sceneCube,cameraCube),renderer.render(scene,camera)}var controls,camera,scene,renderer,cameraCube,sceneCube,textureEquirec,textureCube,textureSphere,cubeMesh,sphereMesh,sphereMaterial,refract;init(),animate();</script>
+
+	
+
+</body></html>

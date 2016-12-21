@@ -1,0 +1,21 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - octree</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #f0f0f0;
+				margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script type="text/javascript" src="../build/three.js"></script>
+		<script type="text/javascript" src="js/Octree.js"></script>
+		<script>function init(){scene=new THREE.Scene,camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,1,100*radius),scene.add(camera),renderer=new THREE.WebGLRenderer,renderer.setClearColor(15790320),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),document.body.appendChild(renderer.domElement),octree=new THREE.Octree({undeferred:!1,depthMax:1/0,objectsThreshold:8,overlapPct:.15,scene:scene}),searchMesh=new THREE.Mesh(new THREE.SphereGeometry(radiusSearch),new THREE.MeshBasicMaterial({color:65280,transparent:!0,opacity:.4})),scene.add(searchMesh);var e=document.createElement("div");e.style.position="absolute",e.style.top="0",e.style.width="100%",e.style.textAlign="center",e.style.padding="10px",e.style.background="#FFFFFF",e.innerHTML='<a href="http://threejs.org" target="_blank">three.js</a> webgl - octree (sparse & dynamic) - by <a href="http://github.com/collinhover/threeoctree" target="_blank">collinhover</a>',document.body.appendChild(e)}function animate(){requestAnimationFrame(animate),modifyOctree(),searchOctree(),render(),octree.update()}function modifyOctree(){adding===!0?(mesh=new THREE.Line(geometry,new THREE.MeshBasicMaterial({color:new THREE.Color(base)})),mesh.position.set(Math.random()*radiusMax-radiusMaxHalf,Math.random()*radiusMax-radiusMaxHalf,Math.random()*radiusMax-radiusMaxHalf),octree.add(mesh),scene.add(mesh),meshes.push(mesh),meshes.length===meshCountMax&&(adding=!1)):(mesh=meshes.shift(),scene.remove(mesh),octree.remove(mesh),0===meshes.length&&(adding=!0))}function searchOctree(){var e,r;for(e=0,r=meshesSearch.length;e<r;e++)meshesSearch[e].object.material.color.copy(base);searchMesh.position.set(Math.random()*radiusMax-radiusMaxHalf,Math.random()*radiusMax-radiusMaxHalf,Math.random()*radiusMax-radiusMaxHalf);Date.now();origin.copy(searchMesh.position),direction.set(2*Math.random()-1,2*Math.random()-1,2*Math.random()-1).normalize(),rayCaster.set(origin,direction),meshesSearch=octree.search(rayCaster.ray.origin,radiusSearch,!0,rayCaster.ray.direction);rayCaster.intersectOctreeObjects(meshesSearch),Date.now();for(e=0,r=meshesSearch.length;e<r;e++)meshesSearch[e].object.material.color.copy(found)}function render(){var e=-Date.now()/5e3;camera.position.x=1e4*Math.cos(e),camera.position.z=1e4*Math.sin(e),camera.lookAt(scene.position),renderer.render(scene,camera)}var camera,scene,renderer,octree,geometry,material,mesh,meshes=[],meshesSearch=[],meshCountMax=1e3,radius=500,radiusMax=10*radius,radiusMaxHalf=.5*radiusMax,radiusSearch=400,searchMesh,base=new THREE.Color(16711935),found=new THREE.Color(65280),adding=!0,rayCaster=new THREE.Raycaster,origin=new THREE.Vector3,direction=new THREE.Vector3;init(),animate();var geometry=new THREE.BoxGeometry(50,50,50);</script>
+	
+
+</body></html>

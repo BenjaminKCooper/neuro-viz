@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - materials - anisotropic texture filtering</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #000;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #fff;
+				margin: 0px;
+				padding: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+				z-index:100;
+			}
+
+			.lbl { color:#fff; font-size:16px; font-weight:bold; position: absolute; bottom:0px; z-index:100; text-shadow:#000 1px 1px 1px; background-color:rgba(0,0,0,0.85); padding:1em }
+			#lbl_left { text-align:left; left:0px }
+			#lbl_right { text-align:left; right:0px }
+
+			.g { color:#aaa }
+			.c { color:#fa0 }
+
+			a { color:red }
+		</style>
+	</head>
+
+	<body>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - anisotropic texture filtering example
+		</div>
+
+		<div id="lbl_left" class="lbl">
+		anisotropy: <span class="c" id="val_left"></span><br>
+		</div>
+
+		<div id="lbl_right" class="lbl">
+		anisotropy: <span class="c" id="val_right"></span><br>
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),renderer=new THREE.WebGLRenderer({antialias:!0}),camera=new THREE.PerspectiveCamera(35,SCREEN_WIDTH/SCREEN_HEIGHT,1,25e3),camera.position.z=1500,scene1=new THREE.Scene,scene2=new THREE.Scene,scene1.fog=new THREE.Fog(15923199,1,25e3),scene2.fog=scene1.fog,scene1.add(new THREE.AmbientLight(15659263)),scene2.add(new THREE.AmbientLight(15659263));var e=new THREE.DirectionalLight(16777215,2);e.position.set(1,1,1),scene1.add(e);var n=new THREE.DirectionalLight(16777215,2);n.position.set(1,1,1),scene2.add(n);var r=new THREE.TextureLoader,t=renderer.getMaxAnisotropy(),a=r.load("textures/crate.gif"),o=new THREE.MeshPhongMaterial({color:16777215,map:a});a.anisotropy=t,a.wrapS=a.wrapT=THREE.RepeatWrapping,a.repeat.set(512,512);var i=r.load("textures/crate.gif"),s=new THREE.MeshPhongMaterial({color:16777215,map:i});i.anisotropy=1,i.wrapS=i.wrapT=THREE.RepeatWrapping,i.repeat.set(512,512),t>0?(document.getElementById("val_left").innerHTML=a.anisotropy,document.getElementById("val_right").innerHTML=i.anisotropy):(document.getElementById("val_left").innerHTML="not supported",document.getElementById("val_right").innerHTML="not supported");var d=new THREE.PlaneBufferGeometry(100,100),E=new THREE.Mesh(d,o);E.rotation.x=-Math.PI/2,E.scale.set(1e3,1e3,1e3);var c=new THREE.Mesh(d,s);c.rotation.x=-Math.PI/2,c.scale.set(1e3,1e3,1e3),scene1.add(E),scene2.add(c),renderer.setClearColor(scene1.fog.color),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),renderer.autoClear=!1,renderer.domElement.style.position="relative",container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),document.addEventListener("mousemove",onDocumentMouseMove,!1)}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,mouseY=e.clientY-windowHalfY}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y=THREE.Math.clamp(camera.position.y+.05*(-(mouseY-200)-camera.position.y),50,1e3),camera.lookAt(scene1.position),renderer.clear(),renderer.setScissorTest(!0),renderer.setScissor(0,0,SCREEN_WIDTH/2-2,SCREEN_HEIGHT),renderer.render(scene1,camera),renderer.setScissor(SCREEN_WIDTH/2,0,SCREEN_WIDTH/2-2,SCREEN_HEIGHT),renderer.render(scene2,camera),renderer.setScissorTest(!1)}Detector.webgl||Detector.addGetWebGLMessage();var SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,container,stats,camera,scene1,scene2,renderer,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;init(),animate();</script>
+
+	
+
+</body></html>

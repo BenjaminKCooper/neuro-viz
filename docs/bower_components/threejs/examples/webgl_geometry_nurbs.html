@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - geometry - NURBS</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #f0f0f0;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				position: absolute;
+				top: 0px;
+				width: 100%;
+				padding: 5px;
+				text-align:center;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="debug" style="position:absolute; left:100px"></canvas>
+
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> - NURBS curve and surface example</div>
+
+		<script src="../build/three.js"></script>
+		<script src="js/curves/NURBSCurve.js"></script>
+		<script src="js/curves/NURBSSurface.js"></script>
+		<script src="js/curves/NURBSUtils.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container);var e=document.createElement("div");e.style.position="absolute",e.style.top="30px",e.style.width="100%",e.style.textAlign="center",e.innerHTML="Drag to spin",container.appendChild(e),camera=new THREE.PerspectiveCamera(50,window.innerWidth/window.innerHeight,1,2e3),camera.position.set(0,150,750),scene=new THREE.Scene,scene.add(new THREE.AmbientLight(8421504));var n=new THREE.DirectionalLight(16777215,1);n.position.set(1,1,1),scene.add(n),group=new THREE.Group,group.position.y=50,scene.add(group);for(var o=[],t=[],r=3,i=0;i<=r;i++)t.push(0);for(var i=0,a=20;i<a;i++){o.push(new THREE.Vector4(400*Math.random()-200,400*Math.random(),400*Math.random()-200,1));var u=(i+1)/(a-r);t.push(THREE.Math.clamp(u,0,1))}var s=new THREE.NURBSCurve(r,t,o),c=new THREE.Geometry;c.vertices=s.getPoints(200);var d=new THREE.LineBasicMaterial({linewidth:10,color:3355443,transparent:!0}),w=new THREE.Line(c,d);w.position.set(200,-100,0),group.add(w);var m=new THREE.Geometry;m.vertices=s.controlPoints;var E=new THREE.LineBasicMaterial({linewidth:2,color:3355443,opacity:.25,transparent:!0}),p=new THREE.Line(m,E);p.position.copy(w.position),group.add(p);var R=[[new THREE.Vector4(-200,-200,100,1),new THREE.Vector4(-200,-100,-200,1),new THREE.Vector4(-200,100,250,1),new THREE.Vector4(-200,200,-100,1)],[new THREE.Vector4(0,-200,0,1),new THREE.Vector4(0,-100,-100,5),new THREE.Vector4(0,100,150,5),new THREE.Vector4(0,200,0,1)],[new THREE.Vector4(200,-200,-100,1),new THREE.Vector4(200,-100,200,1),new THREE.Vector4(200,100,-250,1),new THREE.Vector4(200,200,100,1)]],v=2,l=3,H=[0,0,0,1,1,1],h=[0,0,0,0,1,1,1,1],M=new THREE.NURBSSurface(v,l,H,h,R),T=(new THREE.TextureLoader).load("textures/UV_Grid_Sm.jpg");T.wrapS=T.wrapT=THREE.RepeatWrapping,T.anisotropy=16,getSurfacePoint=function(e,n){return M.getPoint(e,n)};var g=new THREE.ParametricBufferGeometry(getSurfacePoint,20,20),D=new THREE.MeshLambertMaterial({map:T,side:THREE.DoubleSide}),f=new THREE.Mesh(g,D);f.position.set(-200,100,0),f.scale.multiplyScalar(1),group.add(f),renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(15790320),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),document.addEventListener("mousedown",onDocumentMouseDown,!1),document.addEventListener("touchstart",onDocumentTouchStart,!1),document.addEventListener("touchmove",onDocumentTouchMove,!1),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function onDocumentMouseDown(e){e.preventDefault(),document.addEventListener("mousemove",onDocumentMouseMove,!1),document.addEventListener("mouseup",onDocumentMouseUp,!1),document.addEventListener("mouseout",onDocumentMouseOut,!1),mouseXOnMouseDown=e.clientX-windowHalfX,targetRotationOnMouseDown=targetRotation}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,targetRotation=targetRotationOnMouseDown+.02*(mouseX-mouseXOnMouseDown)}function onDocumentMouseUp(e){document.removeEventListener("mousemove",onDocumentMouseMove,!1),document.removeEventListener("mouseup",onDocumentMouseUp,!1),document.removeEventListener("mouseout",onDocumentMouseOut,!1)}function onDocumentMouseOut(e){document.removeEventListener("mousemove",onDocumentMouseMove,!1),document.removeEventListener("mouseup",onDocumentMouseUp,!1),document.removeEventListener("mouseout",onDocumentMouseOut,!1)}function onDocumentTouchStart(e){1==e.touches.length&&(e.preventDefault(),mouseXOnMouseDown=e.touches[0].pageX-windowHalfX,targetRotationOnMouseDown=targetRotation)}function onDocumentTouchMove(e){1==e.touches.length&&(e.preventDefault(),mouseX=e.touches[0].pageX-windowHalfX,targetRotation=targetRotationOnMouseDown+.05*(mouseX-mouseXOnMouseDown))}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){group.rotation.y+=.05*(targetRotation-group.rotation.y),renderer.render(scene,camera)}var container,stats,camera,scene,renderer,group,targetRotation=0,targetRotationOnMouseDown=0,mouseX=0,mouseXOnMouseDown=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;init(),animate();</script>
+
+	
+
+</body></html>

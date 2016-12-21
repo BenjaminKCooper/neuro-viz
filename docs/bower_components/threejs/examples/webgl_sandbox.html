@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js - webgl sandbox</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background:#000;
+				padding:0;
+				margin:0;
+				font-weight: bold;
+				overflow:hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				z-index:1000;
+			}
+
+			a {
+				color: #ffffff;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> - webgl sandbox.</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/shaders/BasicShader.js"></script>
+
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,2e4),camera.position.z=3200,scene=new THREE.Scene,scene.fog=new THREE.Fog(0,1,2e4);var e=new THREE.PointLight(16777215);scene.add(e);for(var n=THREE.BasicShader,a=n.uniforms,t=n.vertexShader,i=n.fragmentShader,r=new THREE.CanvasTexture(generateTexture(0,.5,1),THREE.UVMapping),o=(new THREE.TextureLoader).load("textures/land_ocean_ice_cloud_2048.jpg"),d=[new THREE.MeshNormalMaterial,new THREE.MeshDepthMaterial,new THREE.MeshBasicMaterial({color:26367,blending:THREE.AdditiveBlending,transparent:!0,depthWrite:!1}),new THREE.MeshBasicMaterial({color:16755200,wireframe:!0}),new THREE.MeshBasicMaterial({map:r,fog:!1}),new THREE.MeshBasicMaterial({map:o}),new THREE.ShaderMaterial({uniforms:a,vertexShader:t,fragmentShader:i,transparent:!0}),new THREE.MeshLambertMaterial({map:o}),new THREE.MeshLambertMaterial({color:14540253}),new THREE.MeshPhongMaterial({color:14540253,specular:39168,shininess:30,shading:THREE.FlatShading}),new THREE.MeshPhongMaterial({color:14540253,specular:39168,shininess:30,shading:THREE.SmoothShading})],s=new THREE.SphereGeometry(50,32,16),w=0;w<5e3;w++){var c=Math.floor(w/5e3*d.length),h=d[c],m=new THREE.Mesh(s,h);m.position.x=1e4*Math.random()-5e3,m.position.y=1e4*Math.random()-5e3,m.position.z=1e4*Math.random()-5e3,m.rotation.y=2*Math.random()*Math.PI,m.scale.x=m.scale.y=m.scale.z=4*Math.random()+1,scene.add(m)}renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),statsEnabled&&(stats=new Stats,container.appendChild(stats.dom)),document.addEventListener("mousemove",onDocumentMouseMove,!1),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function generateTexture(e,n,a){var t=document.createElement("canvas");t.width=256,t.height=256;for(var i,r=t.getContext("2d"),o=r.getImageData(0,0,256,256),d=0,s=0,w=0,c=0,h=o.data.length;w<h;w+=4,c++)d=c%256,s=0==d?s+1:s,i=Math.floor(d^s),o.data[w]=~~i*e,o.data[w+1]=~~i*n,o.data[w+2]=~~i*a,o.data[w+3]=255;return r.putImageData(o,0,0),t}function onDocumentMouseMove(e){mouseX=10*(e.clientX-windowHalfX),mouseY=10*(e.clientY-windowHalfY)}function animate(){requestAnimationFrame(animate),render(),statsEnabled&&stats.update()}function render(){camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-mouseY-camera.position.y),camera.lookAt(scene.position),renderer.render(scene,camera)}var statsEnabled=!0,container,stats,camera,scene,renderer,mesh,zmesh,lightMesh,geometry,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;init(),animate();</script>
+
+	
+
+</body></html>

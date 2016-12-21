@@ -1,0 +1,1 @@
+THREE.IntNode=function(t){THREE.InputNode.call(this,"iv1"),this.value=[Math.floor(t||0)]},THREE.IntNode.prototype=Object.create(THREE.InputNode.prototype),THREE.IntNode.prototype.constructor=THREE.IntNode,Object.defineProperties(THREE.IntNode.prototype,{number:{get:function(){return this.value[0]},set:function(t){this.value[0]=Math.floor(t)}}});

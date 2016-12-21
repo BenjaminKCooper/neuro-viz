@@ -1,0 +1,1 @@
+Sidebar.Animation=function(e){var a=(e.signals,new UI.CollapsiblePanel);a.setCollapsed(e.config.getKey("ui/sidebar/animation/collapsed")),a.onCollapsedChange(function(a){e.config.setKey("ui/sidebar/animation/collapsed",a)}),a.setDisplay("none"),a.addStatic(new UI.Text("Animation").setTextTransform("uppercase")),a.add(new UI.Break);var n=new UI.Row;return a.add(n),a};

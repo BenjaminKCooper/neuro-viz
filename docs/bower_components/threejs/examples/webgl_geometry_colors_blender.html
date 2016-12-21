@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - io blender - vertex colors</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #eee;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #000;
+				margin: 0px;
+				padding: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			a {
+				color: #0080ff;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> webgl - io blender - vertex colors</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.getElementById("container"),camera=new THREE.PerspectiveCamera(40,window.innerWidth/window.innerHeight,1,1e4),camera.position.z=1800,scene=new THREE.Scene,light=new THREE.DirectionalLight(16777215),light.position.set(0,0,1).normalize(),scene.add(light);var e=new THREE.JSONLoader;e.load("obj/cubecolors/cubecolors.js",createScene1),e.load("obj/cubecolors/cube_fvc.js",createScene2),renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),document.addEventListener("mousemove",onDocumentMouseMove,!1),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function createScene1(e,n){n[0].shading=THREE.FlatShading,mesh=new THREE.Mesh(e,new THREE.MultiMaterial(n)),mesh.position.x=400,mesh.scale.x=mesh.scale.y=mesh.scale.z=250,scene.add(mesh)}function createScene2(e,n){n[0].shading=THREE.FlatShading,mesh2=new THREE.Mesh(e,new THREE.MultiMaterial(n)),mesh2.position.x=-400,mesh2.scale.x=mesh2.scale.y=mesh2.scale.z=250,scene.add(mesh2)}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,mouseY=e.clientY-windowHalfY}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-mouseY-camera.position.y),camera.lookAt(scene.position),mesh&&(mesh.rotation.x+=.01,mesh.rotation.y+=.01),mesh2&&(mesh2.rotation.x+=.01,mesh2.rotation.y+=.01),renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var container,stats,camera,scene,renderer,mesh,mesh2,mesh3,light,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;init(),animate();</script>
+
+	
+
+</body></html>

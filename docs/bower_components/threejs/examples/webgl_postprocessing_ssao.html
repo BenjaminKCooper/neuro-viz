@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - postprocessing - Screen Space Ambient Occlusion</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+			}
+
+			a {
+				color:#00ff78;
+			}
+
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 0px;
+				width: 100%;
+				padding: 5px;
+			}
+			.dg.ac {
+				z-index: 1 !important; /* FIX DAT.GUI */
+			}
+		</style>
+	</head>
+	<body>
+		<script src="../build/three.js"></script>
+
+		<script src="js/shaders/SSAOShader.js"></script>
+		<script src="js/shaders/CopyShader.js"></script>
+
+		<script src="js/postprocessing/EffectComposer.js"></script>
+		<script src="js/postprocessing/RenderPass.js"></script>
+		<script src="js/postprocessing/ShaderPass.js"></script>
+		<script src="js/postprocessing/MaskPass.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+		<script src="js/libs/dat.gui.min.js"></script>
+
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - webgl screen space ambient occlusion example<br>
+			shader by <a href="http://alteredqualia.com">alteredq</a>
+		</div>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),renderer=new THREE.WebGLRenderer({antialias:!1}),renderer.setClearColor(10526880),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),document.body.appendChild(renderer.domElement),camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,100,700),camera.position.z=500,scene=new THREE.Scene,group=new THREE.Object3D,scene.add(group);for(var e=new THREE.IcosahedronGeometry(5,1),r=0;r<200;r++){var n=new THREE.MeshBasicMaterial;n.color.r=Math.random(),n.color.g=Math.random(),n.color.b=Math.random();var a=new THREE.Mesh(e,n);a.position.x=400*Math.random()-200,a.position.y=400*Math.random()-200,a.position.z=400*Math.random()-200,a.rotation.x=Math.random(),a.rotation.y=Math.random(),a.rotation.z=Math.random(),a.scale.x=a.scale.y=a.scale.z=10*Math.random()+1,group.add(a)}stats=new Stats,container.appendChild(stats.dom),initPostprocessing();var o=new dat.GUI;o.add(postprocessing,"enabled").onChange(),o.add(postprocessing,"renderMode",{framebuffer:0,onlyAO:1}).onChange(renderModeChange).listen(),window.addEventListener("resize",onWindowResize,!1)}function renderModeChange(e){0==e?ssaoPass.uniforms.onlyAO.value=!1:1==e?ssaoPass.uniforms.onlyAO.value=!0:console.error("Not define renderModeChange type: "+e)}function onWindowResize(){var e=window.innerWidth,r=window.innerHeight;camera.aspect=e/r,camera.updateProjectionMatrix(),renderer.setSize(e,r),ssaoPass.uniforms.size.value.set(e,r);var n=renderer.getPixelRatio(),a=Math.floor(e/n)||1,o=Math.floor(r/n)||1;depthRenderTarget.setSize(a,o),effectComposer.setSize(a,o)}function initPostprocessing(){var e=new THREE.RenderPass(scene,camera);depthMaterial=new THREE.MeshDepthMaterial,depthMaterial.depthPacking=THREE.RGBADepthPacking,depthMaterial.blending=THREE.NoBlending;var r={minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter};depthRenderTarget=new THREE.WebGLRenderTarget(window.innerWidth,window.innerHeight,r),ssaoPass=new THREE.ShaderPass(THREE.SSAOShader),ssaoPass.renderToScreen=!0,ssaoPass.uniforms.tDepth.value=depthRenderTarget.texture,ssaoPass.uniforms.size.value.set(window.innerWidth,window.innerHeight),ssaoPass.uniforms.cameraNear.value=camera.near,ssaoPass.uniforms.cameraFar.value=camera.far,ssaoPass.uniforms.onlyAO.value=1==postprocessing.renderMode,ssaoPass.uniforms.aoClamp.value=.3,ssaoPass.uniforms.lumInfluence.value=.5,effectComposer=new THREE.EffectComposer(renderer),effectComposer.addPass(e),effectComposer.addPass(ssaoPass)}function animate(){requestAnimationFrame(animate),stats.begin(),render(),stats.end()}function render(){var e=performance.now();group.rotation.x=2e-4*e,group.rotation.y=1e-4*e,postprocessing.enabled?(scene.overrideMaterial=depthMaterial,renderer.render(scene,camera,depthRenderTarget,!0),scene.overrideMaterial=null,effectComposer.render()):renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var container,stats,camera,scene,renderer,depthMaterial,effectComposer,depthRenderTarget,ssaoPass,group,depthScale=1,postprocessing={enabled:!0,renderMode:0};init(),animate();</script>
+	
+
+</body></html>

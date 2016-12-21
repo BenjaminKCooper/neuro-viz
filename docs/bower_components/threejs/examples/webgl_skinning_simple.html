@@ -1,0 +1,23 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js - skinning - simple</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #f0f0f0;
+				margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="../build/three.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+		<script src="js/controls/OrbitControls.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,1e4),camera.position.set(10,0,10),scene=new THREE.Scene,loader=new THREE.JSONLoader,clock=new THREE.Clock,renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),controls=new THREE.OrbitControls(camera,renderer.domElement),stats=new Stats,container.appendChild(stats.dom),groundMaterial=new THREE.MeshPhongMaterial({emissive:12303291}),planeGeometry=new THREE.PlaneBufferGeometry(16e3,16e3),ground=new THREE.Mesh(planeGeometry,groundMaterial),ground.position.set(0,-5,0),ground.rotation.x=-Math.PI/2,scene.add(ground),light=new THREE.HemisphereLight(16777215,13056,1),light.position.set(-80,500,50),scene.add(light),loader.load("./models/skinned/simple/simple.js",function(e,n){for(var i in n)n[i].skinning=!0;skinnedMesh=new THREE.SkinnedMesh(e,new THREE.MultiMaterial(n)),skinnedMesh.scale.set(1,1,1),skinnedMesh.skeleton.useVertexTexture=!1,scene.add(skinnedMesh),mixer=new THREE.AnimationMixer(skinnedMesh),mixer.clipAction(skinnedMesh.geometry.animations[0]).play()})}function animate(){requestAnimationFrame(animate),mixer&&mixer.update(clock.getDelta()),controls.update(),render(),stats.update()}function render(){renderer.render(scene,camera)}var container,stats,controls,camera,scene,renderer,loader,clock,light,skinnedMesh,animation,groundMaterial,planeGeometry,mixer;init(),animate();</script>
+	
+
+</body></html>

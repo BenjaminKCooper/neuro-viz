@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - materials - normal map [Lee Perry-Smith]</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background:#000;
+				color:#fff;
+				padding:0;
+				margin:0;
+				font-weight: bold;
+				overflow:hidden;
+			}
+
+			a {
+				color: #ffffff;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				z-index:1000;
+			}
+
+			#oldie {
+				background:rgb(200,100,0) !important;
+				color:#fff;
+			}
+
+			#vt { display:none }
+			#vt, #vt a { color:orange; }
+			.code { }
+
+		</style>
+	</head>
+
+	<body>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - webgl normalmap demo.
+			<a href="http://graphics.cs.williams.edu/data/meshes.xml#14" target="_blank">Lee Perry-Smith</a> head.
+
+			<div id="vt">displacement mapping needs vertex textures (GPU with Shader Model 3.0)<br>
+			on Windows use <span class="code">Chrome --use-gl=desktop</span> or Firefox 4<br>
+			please star this <a href="http://code.google.com/p/chromium/issues/detail?id=52497">Chrome issue</a> to get ANGLE support
+			</div>
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script src="js/shaders/BleachBypassShader.js"></script>
+		<script src="js/shaders/ColorCorrectionShader.js"></script>
+		<script src="js/shaders/CopyShader.js"></script>
+		<script src="js/shaders/FXAAShader.js"></script>
+
+		<script src="js/postprocessing/EffectComposer.js"></script>
+		<script src="js/postprocessing/RenderPass.js"></script>
+		<script src="js/postprocessing/ShaderPass.js"></script>
+		<script src="js/postprocessing/MaskPass.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(27,window.innerWidth/window.innerHeight,1,1e4),camera.position.z=1200,scene=new THREE.Scene,ambientLight=new THREE.AmbientLight(4473924),scene.add(ambientLight),pointLight=new THREE.PointLight(16777215,1.25,1e3),pointLight.position.set(0,0,600),scene.add(pointLight),directionalLight=new THREE.DirectionalLight(16777215),directionalLight.position.set(1,-.5,-1),scene.add(directionalLight);var e=new THREE.TextureLoader,n=new THREE.MeshPhongMaterial({color:14540253,specular:2236962,shininess:35,map:e.load("obj/leeperrysmith/Map-COL.jpg"),specularMap:e.load("obj/leeperrysmith/Map-SPEC.jpg"),normalMap:e.load("obj/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg"),normalScale:new THREE.Vector2(.8,.8)});loader=new THREE.JSONLoader,loader.load("obj/leeperrysmith/LeePerrySmith.js",function(e){createScene(e,100,n)}),renderer=new THREE.WebGLRenderer({antialias:!1}),renderer.setClearColor(1118481),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),renderer.gammaInput=!0,renderer.gammaOutput=!0,stats=new Stats,container.appendChild(stats.dom),renderer.autoClear=!1;var t=new THREE.RenderPass(scene,camera),r=new THREE.ShaderPass(THREE.BleachBypassShader),i=new THREE.ShaderPass(THREE.ColorCorrectionShader);effectFXAA=new THREE.ShaderPass(THREE.FXAAShader);renderer.context.canvas;effectFXAA.uniforms.resolution.value.set(1/window.innerWidth,1/window.innerHeight),r.uniforms.opacity.value=.4,i.uniforms.powRGB.value.set(1.4,1.45,1.45),i.uniforms.mulRGB.value.set(1.1,1.1,1.1),i.renderToScreen=!0,composer=new THREE.EffectComposer(renderer),composer.addPass(t),composer.addPass(effectFXAA),composer.addPass(r),composer.addPass(i),document.addEventListener("mousemove",onDocumentMouseMove,!1),window.addEventListener("resize",onWindowResize,!1)}function createScene(e,n,t){mesh=new THREE.Mesh(e,t),mesh.position.y=-50,mesh.scale.x=mesh.scale.y=mesh.scale.z=n,scene.add(mesh)}function onWindowResize(e){SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,camera.aspect=SCREEN_WIDTH/SCREEN_HEIGHT,camera.updateProjectionMatrix(),renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),composer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),effectFXAA.uniforms.resolution.value.set(1/SCREEN_WIDTH,1/SCREEN_HEIGHT)}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,mouseY=e.clientY-windowHalfY}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){targetX=.001*mouseX,targetY=.001*mouseY,mesh&&(mesh.rotation.y+=.05*(targetX-mesh.rotation.y),mesh.rotation.x+=.05*(targetY-mesh.rotation.x)),composer.render()}Detector.webgl||Detector.addGetWebGLMessage();var container,stats,loader,camera,scene,renderer,mesh,directionalLight,pointLight,ambientLight,mouseX=0,mouseY=0,targetX=0,targetY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,composer,effectFXAA;init(),animate();</script>
+
+	
+
+</body></html>

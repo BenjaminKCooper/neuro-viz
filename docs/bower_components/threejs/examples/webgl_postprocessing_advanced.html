@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - postprocessing</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #000;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				color:#fff;
+				background-color: rgba( 0, 0, 0, 0.5 );
+				position: relative;
+				margin: 0 auto -2.1em;
+				top: 0px;
+				width: 550px;
+				padding: 5px;
+				z-index:100;
+			}
+
+			a { color: red; }
+		</style>
+	</head>
+	<body>
+
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - webgl postprocessing example -
+			<a href="http://graphics.cs.williams.edu/data/meshes.xml#14" target="_blank">Lee Perry-Smith</a> head
+		</div>
+
+		<div id="container"></div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/shaders/BleachBypassShader.js"></script>
+		<script src="js/shaders/ColorifyShader.js"></script>
+		<script src="js/shaders/ConvolutionShader.js"></script>
+		<script src="js/shaders/CopyShader.js"></script>
+		<script src="js/shaders/DotScreenShader.js"></script>
+		<script src="js/shaders/FilmShader.js"></script>
+		<script src="js/shaders/HorizontalBlurShader.js"></script>
+		<script src="js/shaders/SepiaShader.js"></script>
+		<script src="js/shaders/VerticalBlurShader.js"></script>
+		<script src="js/shaders/VignetteShader.js"></script>
+
+		<script src="js/postprocessing/EffectComposer.js"></script>
+		<script src="js/postprocessing/RenderPass.js"></script>
+		<script src="js/postprocessing/BloomPass.js"></script>
+		<script src="js/postprocessing/FilmPass.js"></script>
+		<script src="js/postprocessing/DotScreenPass.js"></script>
+		<script src="js/postprocessing/TexturePass.js"></script>
+		<script src="js/postprocessing/ShaderPass.js"></script>
+		<script src="js/postprocessing/MaskPass.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.getElementById("container"),cameraOrtho=new THREE.OrthographicCamera(-halfWidth,halfWidth,halfHeight,-halfHeight,-1e4,1e4),cameraOrtho.position.z=100,cameraPerspective=new THREE.PerspectiveCamera(50,width/height,1,1e4),cameraPerspective.position.z=900,sceneModel=new THREE.Scene,sceneBG=new THREE.Scene,directionalLight=new THREE.DirectionalLight(16777215),directionalLight.position.set(0,-.1,1).normalize(),sceneModel.add(directionalLight),loader=new THREE.JSONLoader,loader.load("obj/leeperrysmith/LeePerrySmith.js",function(e){createMesh(e,sceneModel,100)});var e=new THREE.MeshBasicMaterial({map:(new THREE.TextureLoader).load("textures/cube/SwedishRoyalCastle/pz.jpg"),depthTest:!1});quadBG=new THREE.Mesh(new THREE.PlaneBufferGeometry(1,1),e),quadBG.position.z=-500,quadBG.scale.set(width,height,1),sceneBG.add(quadBG);var r=new THREE.Scene;quadMask=new THREE.Mesh(new THREE.PlaneBufferGeometry(1,1),new THREE.MeshBasicMaterial({color:16755200})),quadMask.position.z=-300,quadMask.scale.set(width/2,height/2,1),r.add(quadMask),renderer=new THREE.WebGLRenderer({antialias:!1}),renderer.setClearColor(0),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(width,height),renderer.autoClear=!1,renderer.gammaInput=!0,renderer.gammaOutput=!0,container.appendChild(renderer.domElement),stats=new Stats;var a=THREE.BleachBypassShader,n=THREE.SepiaShader,s=THREE.VignetteShader,o=THREE.CopyShader,t=new THREE.ShaderPass(a),d=new THREE.ShaderPass(n),i=new THREE.ShaderPass(s);new THREE.ShaderPass(o);t.uniforms.opacity.value=.95,d.uniforms.amount.value=.9,i.uniforms.offset.value=.95,i.uniforms.darkness.value=1.6;var h=new THREE.BloomPass(.5),c=new THREE.FilmPass(.35,.025,648,!1),E=new THREE.FilmPass(.35,.5,2048,!0),m=new THREE.DotScreenPass(new THREE.Vector2(0,0),.5,.8),l=new THREE.ShaderPass(THREE.HorizontalBlurShader),p=new THREE.ShaderPass(THREE.VerticalBlurShader);l.uniforms.h.value=2/(width/2),p.uniforms.v.value=2/(height/2);var w=new THREE.ShaderPass(THREE.ColorifyShader),H=new THREE.ShaderPass(THREE.ColorifyShader);w.uniforms.color=new THREE.Uniform(new THREE.Color(1,.8,.8)),H.uniforms.color=new THREE.Uniform(new THREE.Color(1,.75,.5));var f=new THREE.ClearMaskPass,T=new THREE.MaskPass(sceneModel,cameraPerspective),R=new THREE.MaskPass(sceneModel,cameraPerspective);R.inverse=!0,i.renderToScreen=!0;var u={minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter,format:THREE.RGBFormat,stencilBuffer:!0},g=width/2,P=height/2,S=new THREE.RenderPass(sceneBG,cameraOrtho),W=new THREE.RenderPass(sceneModel,cameraPerspective);W.clear=!1,composerScene=new THREE.EffectComposer(renderer,new THREE.WebGLRenderTarget(2*g,2*P,u)),composerScene.addPass(S),composerScene.addPass(W),composerScene.addPass(R),composerScene.addPass(l),composerScene.addPass(p),composerScene.addPass(f),renderScene=new THREE.TexturePass(composerScene.renderTarget2.texture),composer1=new THREE.EffectComposer(renderer,new THREE.WebGLRenderTarget(g,P,u)),composer1.addPass(renderScene),composer1.addPass(E),composer1.addPass(i),composer2=new THREE.EffectComposer(renderer,new THREE.WebGLRenderTarget(g,P,u)),composer2.addPass(renderScene),composer2.addPass(m),composer2.addPass(T),composer2.addPass(w),composer2.addPass(f),composer2.addPass(R),composer2.addPass(H),composer2.addPass(f),composer2.addPass(i),composer3=new THREE.EffectComposer(renderer,new THREE.WebGLRenderTarget(g,P,u)),composer3.addPass(renderScene),composer3.addPass(d),composer3.addPass(c),composer3.addPass(i),composer4=new THREE.EffectComposer(renderer,new THREE.WebGLRenderTarget(g,P,u)),composer4.addPass(renderScene),composer4.addPass(h),composer4.addPass(c),composer4.addPass(t),composer4.addPass(i),renderScene.uniforms.tDiffuse.value=composerScene.renderTarget2.texture,window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(e){halfWidth=window.innerWidth/2,halfHeight=window.innerHeight/2,cameraPerspective.aspect=window.innerWidth/window.innerHeight,cameraPerspective.updateProjectionMatrix(),cameraOrtho.left=-halfWidth,cameraOrtho.right=halfWidth,cameraOrtho.top=halfHeight,cameraOrtho.bottom=-halfHeight,cameraOrtho.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight),composerScene.setSize(2*halfWidth,2*halfHeight),composer1.setSize(halfWidth,halfHeight),composer2.setSize(halfWidth,halfHeight),composer3.setSize(halfWidth,halfHeight),composer4.setSize(halfWidth,halfHeight),renderScene.uniforms.tDiffuse.value=composerScene.renderTarget2.texture,quadBG.scale.set(window.innerWidth,window.innerHeight,1),quadMask.scale.set(window.innerWidth/2,window.innerHeight/2,1)}function getText(e){return document.getElementById(e).textContent}function createMesh(e,r,a){var n=new THREE.MeshPhongMaterial({color:10066329,specular:526344,shininess:20,map:(new THREE.TextureLoader).load("obj/leeperrysmith/Map-COL.jpg"),normalMap:(new THREE.TextureLoader).load("obj/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg"),normalScale:new THREE.Vector2(.75,.75)});mesh=new THREE.Mesh(e,n),mesh.position.set(0,-50,0),mesh.scale.set(a,a,a),r.add(mesh)}function animate(){requestAnimationFrame(animate),stats.begin(),render(),stats.end()}function render(){var e=4e-4*Date.now();mesh&&(mesh.rotation.y=-e),renderer.setViewport(0,0,halfWidth,halfHeight),composerScene.render(delta),renderer.setViewport(0,0,halfWidth,halfHeight),composer1.render(delta),renderer.setViewport(halfWidth,0,halfWidth,halfHeight),composer2.render(delta),renderer.setViewport(0,halfHeight,halfWidth,halfHeight),composer3.render(delta),renderer.setViewport(halfWidth,halfHeight,halfWidth,halfHeight),composer4.render(delta)}Detector.webgl||Detector.addGetWebGLMessage();var container,stats,composerScene,composer1,composer2,composer3,composer4,cameraOrtho,cameraPerspective,sceneModel,sceneBG,renderer,mesh,directionalLight,width=window.innerWidth||2,height=window.innerHeight||2,halfWidth=width/2,halfHeight=height/2,materialColor,material2D,quadBG,quadMask,renderScene,delta=.01;init(),animate();</script>
+	
+
+</body></html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js canvas - materials</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #202020;
+				margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/renderers/Projector.js"></script>
+		<script src="js/renderers/CanvasRenderer.js"></script>
+
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,2e3),camera.position.set(0,200,800),scene=new THREE.Scene;for(var e=500,n=100,t=new THREE.Geometry,a=-e;a<=e;a+=n)t.vertices.push(new THREE.Vector3(-e,-120,a)),t.vertices.push(new THREE.Vector3(e,-120,a)),t.vertices.push(new THREE.Vector3(a,-120,-e)),t.vertices.push(new THREE.Vector3(a,-120,e));var i=new THREE.LineBasicMaterial({color:16777215,opacity:.2}),r=new THREE.LineSegments(t,i);scene.add(r);var t=new THREE.SphereGeometry(100,14,7),o=new THREE.TextureLoader,s=o.load("textures/land_ocean_ice_cloud_2048.jpg"),d=o.load("textures/envmap.png");d.mapping=THREE.SphericalReflectionMapping;for(var c=[new THREE.MeshBasicMaterial({color:65535,wireframe:!0,side:THREE.DoubleSide}),new THREE.MeshBasicMaterial({color:16711680,blending:THREE.AdditiveBlending}),new THREE.MeshLambertMaterial({color:16777215,overdraw:.5}),new THREE.MeshLambertMaterial({color:16777215,overdraw:.5}),new THREE.MeshNormalMaterial({overdraw:.5}),new THREE.MeshBasicMaterial({map:s}),new THREE.MeshBasicMaterial({envMap:d,overdraw:.5})],a=0,E=t.faces.length;a<E;a++){var h=t.faces[a];Math.random()>.5&&(h.materialIndex=Math.floor(Math.random()*c.length))}c.push(new THREE.MultiMaterial(c)),objects=[];for(var a=0,E=c.length;a<E;a++){var p=new THREE.Mesh(t,c[a]);p.position.x=a%5*200-400,p.position.z=200*Math.floor(a/5)-200,p.rotation.x=200*Math.random()-100,p.rotation.y=200*Math.random()-100,p.rotation.z=200*Math.random()-100,objects.push(p),scene.add(p)}var l=2*Math.PI,w=function(e){e.beginPath(),e.arc(0,0,.5,0,l,!0),e.fill()};scene.add(new THREE.AmbientLight(2105376*Math.random()));var m=new THREE.DirectionalLight(16777215*Math.random());m.position.x=Math.random()-.5,m.position.y=Math.random()-.5,m.position.z=Math.random()-.5,m.position.normalize(),scene.add(m),pointLight=new THREE.PointLight(16777215,1),scene.add(pointLight);var M=new THREE.Sprite(new THREE.SpriteCanvasMaterial({color:16777215,program:w}));M.scale.set(8,8,8),pointLight.add(M),renderer=new THREE.CanvasRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement);var R=document.createElement("canvas");R.width=512,R.height=512,R.style.position="absolute",R.style.top="0px",R.style.left="0px",container.appendChild(R),debugContext=R.getContext("2d"),debugContext.setTransform(1,0,0,1,256,256),debugContext.strokeStyle="#000000",stats=new Stats,container.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function loadImage(e){var n=document.createElement("img"),t=new THREE.Texture(n,THREE.UVMapping);return n.onload=function(){t.needsUpdate=!0},n.src=e,t}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){var e=1e-4*Date.now();camera.position.x=1e3*Math.cos(e),camera.position.z=1e3*Math.sin(e),camera.lookAt(scene.position);for(var n=0,t=objects.length;n<t;n++){var a=objects[n];a.rotation.x+=.01,a.rotation.y+=.005}pointLight.position.x=300*Math.sin(7*e),pointLight.position.y=400*Math.cos(5*e),pointLight.position.z=300*Math.cos(3*e),renderer.render(scene,camera)}var container,stats,camera,scene,renderer,objects,pointLight;init(),animate();</script>
+
+	
+
+</body></html>

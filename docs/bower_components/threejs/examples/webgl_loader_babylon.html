@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - loaders - Babylon loader</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #000;
+				color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+			}
+			#info a, .button { color: #f00; font-weight: bold; text-decoration: underline; cursor: pointer }
+		</style>
+	</head>
+
+	<body>
+		<div id="info">
+		<a href="http://threejs.org" target="_blank">three.js</a> - BabylonLoader test
+		</div>
+
+		<script src="../build/three.js"></script>
+		<script src="js/loaders/BabylonLoader.js"></script>
+		<script src="js/controls/TrackballControls.js"></script>
+
+		<script>function init(){camera=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,2e3),camera.position.z=100,controls=new THREE.TrackballControls(camera),scene=new THREE.Scene;var e=new THREE.LoadingManager;e.onProgress=function(e,n,r){console.log(e,n,r)};var n=(new THREE.Texture,new THREE.MeshBasicMaterial({color:"red"}),function(e){if(e.lengthComputable){var n=e.loaded/e.total*100;console.log(Math.round(n,2)+"% downloaded")}}),r=function(e){},i=new THREE.BabylonLoader(e);i.load("models/babylon/skull.babylon",function(e){e.traverse(function(e){e instanceof THREE.Mesh&&(e.material=new THREE.MeshPhongMaterial({color:16777215*Math.random()}))}),scene=e,animate()},n,r),renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),document.body.appendChild(renderer.domElement),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight),controls.handleResize()}function animate(){requestAnimationFrame(animate),render()}function render(){controls.update(),renderer.render(scene,camera)}var camera,controls,scene,renderer;init();</script>
+
+	
+
+</body></html>

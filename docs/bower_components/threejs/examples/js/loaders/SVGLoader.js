@@ -1,0 +1,1 @@
+THREE.SVGLoader=function(a){this.manager=void 0!==a?a:THREE.DefaultLoadingManager},THREE.SVGLoader.prototype={constructor:THREE.SVGLoader,load:function(a,e,o,r){var n=this,t=new DOMParser,E=new THREE.FileLoader(n.manager);E.load(a,function(a){var o=t.parseFromString(a,"image/svg+xml");e(o.documentElement)},o,r)}};

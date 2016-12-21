@@ -1,0 +1,25 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webvr - panorama</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+		<style>
+			html, body {
+				background-color: #000;
+				margin: 0px;
+				padding: 0px;
+				overflow: hidden;
+			}
+		</style>
+
+	</head>
+	<body>
+		<script src="../build/three.js"></script>
+
+		<script src="js/controls/VRControls.js"></script>
+		<script src="js/effects/VREffect.js"></script>
+		<script src="js/vr/WebVR.js"></script>
+
+		<script>function init(){renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),document.body.appendChild(renderer.domElement),scene=new THREE.Scene,camera=new THREE.PerspectiveCamera(90,window.innerWidth/window.innerHeight,.1,100),camera.layers.enable(1),controls=new THREE.VRControls(camera),effect=new THREE.VREffect(renderer),WEBVR.isAvailable()===!0&&document.body.appendChild(WEBVR.getButton(effect));for(var e=getTexturesFromAtlasFile("textures/cube/sun_temple_stripe_stereo.jpg",12),n=[],a=0;a<6;a++)n.push(new THREE.MeshBasicMaterial({map:e[a]}));var t=new THREE.Mesh(new THREE.CubeGeometry(1,1,1),new THREE.MeshFaceMaterial(n));t.applyMatrix((new THREE.Matrix4).makeScale(1,1,-1)),t.layers.set(1),scene.add(t);for(var r=[],a=6;a<12;a++)r.push(new THREE.MeshBasicMaterial({map:e[a]}));var i=new THREE.Mesh(new THREE.CubeGeometry(1,1,1),new THREE.MeshFaceMaterial(r));i.applyMatrix((new THREE.Matrix4).makeScale(1,1,-1)),i.layers.set(2),scene.add(i),window.addEventListener("resize",onWindowResize,!1)}function getTexturesFromAtlasFile(e,n){for(var a=[],t=0;t<n;t++)a[t]=new THREE.Texture;var r=new Image;return r.onload=function(){for(var e,n,t=r.height,i=0;i<a.length;i++)e=document.createElement("canvas"),n=e.getContext("2d"),e.height=t,e.width=t,n.drawImage(r,t*i,0,t,t,0,0,t,t),a[i].image=e,a[i].needsUpdate=!0},r.src=e,a}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),effect.setSize(window.innerWidth,window.innerHeight)}function animate(){controls.update(),effect.render(scene,camera),effect.requestAnimationFrame(animate)}WEBVR.isAvailable()===!1&&document.body.appendChild(WEBVR.getMessage());var camera,effect,controls,renderer,scene;init(),animate();</script>
+	
+
+</body></html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - clipping planes</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				margin: 0px;
+				background-color: #000000;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="../build/three.js"></script>
+		<script src="js/controls/OrbitControls.js"></script>
+
+		<script src="js/libs/dat.gui.min.js"></script>
+
+		<script>function init(){camera=new THREE.PerspectiveCamera(36,window.innerWidth/window.innerHeight,.25,16),camera.position.set(0,1.3,3),scene=new THREE.Scene,scene.add(new THREE.AmbientLight(5263440));var e=new THREE.SpotLight(16777215);e.angle=Math.PI/5,e.penumbra=.2,e.position.set(2,3,3),e.castShadow=!0,e.shadow.camera.near=3,e.shadow.camera.far=10,e.shadow.mapSize.width=1024,e.shadow.mapSize.height=1024,scene.add(e);var n=new THREE.DirectionalLight(5591130,1);n.position.set(0,3,0),n.castShadow=!0,n.shadow.camera.near=1,n.shadow.camera.far=10,n.shadow.camera.right=1,n.shadow.camera.left=-1,n.shadow.camera.top=1,n.shadow.camera.bottom=-1,n.shadow.mapSize.width=1024,n.shadow.mapSize.height=1024,scene.add(n);var t=new THREE.Plane(new THREE.Vector3(0,-1,0),.8),a=new THREE.Plane(new THREE.Vector3(-1,0,0),.1),r=new THREE.MeshPhongMaterial({color:8449552,shininess:100,side:THREE.DoubleSide,clippingPlanes:[t],clipShadows:!0}),i=new THREE.TorusKnotGeometry(.4,.08,95,20);object=new THREE.Mesh(i,r),object.castShadow=!0,scene.add(object);var o=new THREE.Mesh(new THREE.PlaneBufferGeometry(9,9,1,1),new THREE.MeshPhongMaterial({color:10530223,shininess:150}));o.rotation.x=-Math.PI/2,o.receiveShadow=!0,scene.add(o),renderer=new THREE.WebGLRenderer,renderer.shadowMap.enabled=!0,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),window.addEventListener("resize",onWindowResize,!1),document.body.appendChild(renderer.domElement);var d=[a],c=Object.freeze([]);renderer.clippingPlanes=c,renderer.localClippingEnabled=!0;var s=new THREE.OrbitControls(camera,renderer.domElement);s.target.set(0,1,0),s.update();var w=new dat.GUI,l=w.addFolder("Local Clipping"),h={get"Enabled"(){return renderer.localClippingEnabled},set"Enabled"(e){renderer.localClippingEnabled=e},get"Shadows"(){return r.clipShadows},set"Shadows"(e){r.clipShadows=e},get"Plane"(){return t.constant},set"Plane"(e){t.constant=e}},E=w.addFolder("Global Clipping"),b={get"Enabled"(){return renderer.clippingPlanes!==c},set"Enabled"(e){renderer.clippingPlanes=e?d:c},get"Plane"(){return a.constant},set"Plane"(e){a.constant=e}};l.add(h,"Enabled"),l.add(h,"Shadows"),l.add(h,"Plane",.3,1.25),E.add(b,"Enabled"),E.add(b,"Plane",-.4,3),startTime=Date.now()}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function animate(){var e=Date.now(),n=(e-startTime)/1e3;requestAnimationFrame(animate),object.position.y=.8,object.rotation.x=.5*n,object.rotation.y=.2*n,object.scale.setScalar(.125*Math.cos(n)+.875),renderer.render(scene,camera)}var camera,scene,renderer,startTime,object;init(),animate();</script>
+
+	
+
+</body></html>

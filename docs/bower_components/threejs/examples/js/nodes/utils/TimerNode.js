@@ -1,0 +1,1 @@
+THREE.TimerNode=function(e,t){THREE.FloatNode.call(this,e),this.requestUpdate=!0,this.scale=void 0!==t?t:1},THREE.TimerNode.prototype=Object.create(THREE.FloatNode.prototype),THREE.TimerNode.prototype.constructor=THREE.TimerNode,THREE.TimerNode.prototype.updateFrame=function(e){this.number+=e*this.scale};

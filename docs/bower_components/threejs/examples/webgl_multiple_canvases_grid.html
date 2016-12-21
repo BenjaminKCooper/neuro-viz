@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - multiple canvases - grid</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			html, body {
+				color: #808080;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #fff;
+				margin: 0px;
+				overflow: hidden;
+				width: 100%;
+				height: 100%;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			#centerer {
+				display: table;
+				width: 100%;
+				height: 100%;
+			}
+
+			#centerer-cell {
+				display: table-cell;
+				vertical-align: middle;
+			}
+
+			#container {
+				margin-left: auto;
+				margin-right: auto;
+				width: 604px;  // 300*2 + border;
+			}
+
+			#container div {
+				float: left;
+			}
+			#container1, #container2, #container3, #container4 {
+				width: 300px;
+				height: 200px;
+				position: relative;
+				border: 1px solid red;
+				float:left;
+			}
+
+			a {
+
+				color: #0080ff;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div id="centerer">
+			<div id="centerer-cell">
+				<div id="container">
+					<div class="container-row">
+						<div id="container1"></div>
+						<div id="container2"></div>
+					</div>
+					<div class="container-row">
+						<div id="container3"></div>
+						<div id="container4"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> webgl -  multiple canvases - grid</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){var e=300,t=200,i=2*e,n=2*t;apps.push(new App("container1",i,n,0*e,0*t,e,t)),apps.push(new App("container2",i,n,1*e,0*t,e,t)),apps.push(new App("container3",i,n,0*e,1*t,e,t)),apps.push(new App("container4",i,n,1*e,1*t,e,t))}function animate(){for(var e=0;e<apps.length;++e)apps[e].animate();requestAnimationFrame(animate)}function App(e,t,i,n,a,o,r){function s(){c=document.getElementById(e),E=new THREE.PerspectiveCamera(20,c.clientWidth/c.clientHeight,1,1e4),E.setViewOffset(t,i,n,a,o,r),E.position.z=1800,h=new THREE.Scene,g=new THREE.DirectionalLight(16777215),g.position.set(0,0,1).normalize(),h.add(g);var s=document.createElement("canvas");s.width=128,s.height=128;var l=s.getContext("2d"),u=l.createRadialGradient(s.width/2,s.height/2,0,s.width/2,s.height/2,s.width/2);u.addColorStop(.1,"rgba(210,210,210,1)"),u.addColorStop(1,"rgba(255,255,255,1)"),l.fillStyle=u,l.fillRect(0,0,s.width,s.height);var v=new THREE.CanvasTexture(s),x=new THREE.MeshBasicMaterial({map:v}),f=new THREE.PlaneBufferGeometry(300,300,1,1);H=new THREE.Mesh(f,x),H.position.y=-250,H.rotation.x=-Math.PI/2,h.add(H),H=new THREE.Mesh(f,x),H.position.x=-400,H.position.y=-250,H.rotation.x=-Math.PI/2,h.add(H),H=new THREE.Mesh(f,x),H.position.x=400,H.position.y=-250,H.rotation.x=-Math.PI/2,h.add(H);for(var M,C,S,y,b,G,P=["a","b","c"],A=200,I=new THREE.IcosahedronGeometry(A,1),L=new THREE.IcosahedronGeometry(A,1),W=new THREE.IcosahedronGeometry(A,1),B=0;B<I.faces.length;B++){C=I.faces[B],S=L.faces[B],y=W.faces[B];for(var O=0;O<3;O++)G=C[P[O]],b=I.vertices[G],M=new THREE.Color(16777215),M.setHSL((b.y/A+1)/2,1,.5),C.vertexColors[O]=M,M=new THREE.Color(16777215),M.setHSL(0,(b.y/A+1)/2,.5),S.vertexColors[O]=M,M=new THREE.Color(16777215),M.setHSL(.125*G/I.vertices.length,1,.5),y.vertexColors[O]=M}var j=[new THREE.MeshPhongMaterial({color:16777215,shading:THREE.FlatShading,vertexColors:THREE.VertexColors,shininess:0}),new THREE.MeshBasicMaterial({color:0,shading:THREE.FlatShading,wireframe:!0,transparent:!0})];R=THREE.SceneUtils.createMultiMaterialObject(I,j),R.position.x=-400,R.rotation.x=-1.87,h.add(R),m=THREE.SceneUtils.createMultiMaterialObject(L,j),m.position.x=400,m.rotation.x=0,h.add(m),T=THREE.SceneUtils.createMultiMaterialObject(W,j),T.position.x=0,T.rotation.x=0,h.add(T),w=new THREE.WebGLRenderer({antialias:!0}),w.setClearColor(16777215),w.setPixelRatio(window.devicePixelRatio),w.setSize(c.clientWidth,c.clientHeight),c.appendChild(w.domElement),p=new Stats,c.appendChild(p.dom),document.addEventListener("mousemove",d,!1)}function d(e){u=e.clientX-x,v=e.clientY-f}function l(){E.position.x+=.05*(u-E.position.x),E.position.y+=.05*(-v-E.position.y),E.lookAt(h.position),w.render(h,E)}var c,p,E,h,w,H,R,m,T,g,u=0,v=0,x=window.innerWidth/2,f=window.innerHeight/2;s(),this.animate=function(){l(),p.update()}}Detector.webgl||Detector.addGetWebGLMessage();var apps=[];init(),animate();</script>
+
+	
+
+</body></html>

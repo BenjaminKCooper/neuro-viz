@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - msgpack loader</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				margin: 0px;
+				overflow: hidden;
+			}
+			#viewport {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background: #1b1c1e;
+				background-image: linear-gradient(#7d8fa3, #1b1c1e);
+			}
+
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+			}
+
+			a { color: orange }
+		</style>
+		<script src="../build/three.js"></script>
+		<script src="js/controls/OrbitControls.js"></script>
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/msgpack-js.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+	</head>
+	<body>
+		<div id="info">
+			<p>Robo Pigeon, from <a href="http://www.tearsofsteel.org" target="_blank">Tears of Steel</a>, is licensed under
+			<a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">Creative Commons Attribution 3.0</a>.
+			</p>
+		</div>
+		<div id="viewport"></div>
+		<script>function render(){void 0!==scene&&renderer.render(scene,camera)}function threePointLight(){var e=new THREE.DirectionalLight(12105912);e.position.set(1,1,1).normalize(),e.intensity=1,scene.add(e),e=new THREE.DirectionalLight(12105912),e.position.set(-1,.6,.5).normalize(),e.intensity=.5,scene.add(e),e=new THREE.DirectionalLight,e.position.set(-.3,.6,-.8).normalize(12105912),e.intensity=.45,scene.add(e)}function setupScene(e){scene=e,scene.add(new THREE.GridHelper(10,8)),threePointLight(),render()}function loadMSGPack(){var e=new THREE.FileLoader;e.setResponseType("arraybuffer"),e.load("scenes/robo_pigeon.pack",function(e){var n=msgpack.decode(e),r=new THREE.ObjectLoader;setupScene(r.parse(n))})}function onWindowResize(){camera.aspect=container.offsetWidth/container.offsetHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight),render()}function init(){container=document.getElementById("viewport"),renderer=new THREE.WebGLRenderer({antialias:!0,alpha:!0}),renderer.setClearColor(0,0),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement);var e=container.offsetWidth/container.offsetHeight;camera=new THREE.PerspectiveCamera(60,e,.01,50),orbit=new THREE.OrbitControls(camera,container),orbit.addEventListener("change",render),camera.position.z=5,camera.position.x=5,camera.position.y=5;var n=new THREE.Vector3(0,1,0);camera.lookAt(n),orbit.target=n,camera.updateProjectionMatrix(),window.addEventListener("resize",onWindowResize,!1),loadMSGPack()}Detector.webgl||Detector.addGetWebGLMessage();var container,scene,camera,renderer;init();</script>
+	
+
+</body></html>

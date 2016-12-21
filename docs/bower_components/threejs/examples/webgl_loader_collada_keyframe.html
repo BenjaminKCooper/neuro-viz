@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - collada</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+
+			body {
+				font-family: Monospace;
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+
+			}
+
+			a { color: skyblue }
+
+		</style>
+	</head>
+	<body>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> -
+			pump by <a href="http://code.google.com/p/kuda" target="_blank">Kuda</a>
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/loaders/collada/Animation.js"></script>
+		<script src="js/loaders/collada/AnimationHandler.js"></script>
+		<script src="js/loaders/collada/KeyFrameAnimation.js"></script>
+
+		<script src="js/loaders/ColladaLoader.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){var e=document.createElement("div");document.body.appendChild(e),camera=new THREE.PerspectiveCamera(40,window.innerWidth/window.innerHeight,.01,1e3),camera.position.set(-5.00181875,3.42631375,11.3102925),camera.lookAt(new THREE.Vector3(-1.224774125,2.18410625,4.57969125)),scene=new THREE.Scene;for(var n=0;n<kfAnimationsLength;++n){var a=animations[n],t=new THREE.KeyFrameAnimation(a);t.timeScale=1,kfAnimations.push(t)}for(var i=new THREE.LineBasicMaterial({color:3158064}),r=new THREE.Geometry,o=-.04,s=1,d=14,n=0;n<=d/s*2;n++)r.vertices.push(new THREE.Vector3(-d,o,n*s-d)),r.vertices.push(new THREE.Vector3(d,o,n*s-d)),r.vertices.push(new THREE.Vector3(n*s-d,o,-d)),r.vertices.push(new THREE.Vector3(n*s-d,o,d));var m=new THREE.LineSegments(r,i);scene.add(m),model.getObjectByName("camEye_camera",!0).visible=!1,model.getObjectByName("camTarget_camera",!0).visible=!1,scene.add(model),pointLight=new THREE.PointLight(16777215,1.75),scene.add(pointLight),renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),e.appendChild(renderer.domElement),stats=new Stats,e.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function start(){for(var e=0;e<kfAnimationsLength;++e){for(var n=kfAnimations[e],a=0,t=n.hierarchy.length;a<t;a++){var i=n.data.hierarchy[a].keys,r=n.data.hierarchy[a].sids,o=n.hierarchy[a];if(i.length&&r){for(var s=0;s<r.length;s++){var d=r[s],m=n.getNextKeyWith(d,a,0);m&&m.apply(d)}o.matrixAutoUpdate=!1,n.data.hierarchy[a].node.updateMatrix(),o.matrixWorldNeedsUpdate=!0}}n.loop=!1,n.play()}}function animate(e){var n=.001*(e-lastTimestamp);if(progress>=0&&progress<48)for(var a=0;a<kfAnimationsLength;++a)kfAnimations[a].update(n);else if(progress>=48){for(var a=0;a<kfAnimationsLength;++a)kfAnimations[a].stop();progress=0,start()}pointLight.position.copy(camera.position),progress+=n,lastTimestamp=e,renderer.render(scene,camera),stats.update(),requestAnimationFrame(animate)}Detector.webgl||Detector.addGetWebGLMessage();var stats,scene,pointLight,camera,renderer,model,animations,kfAnimations=[],kfAnimationsLength=0,loader=new THREE.ColladaLoader,lastTimestamp=0,progress=0;loader.load("./models/collada/pump/pump.dae",function(e){model=e.scene,animations=e.animations,kfAnimationsLength=animations.length,model.scale.x=model.scale.y=model.scale.z=.125,init(),start(),animate(lastTimestamp)});</script>
+	
+
+</body></html>

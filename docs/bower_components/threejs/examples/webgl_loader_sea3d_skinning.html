@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - sea3d / skinning</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+
+			}
+
+			a { color: white }
+		</style>
+	</head>
+	<body>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">Three.JS</a> - Exported by <a href="https://github.com/sunag/sea3d" style="color:#FFFFFF" target="_blank">SEA3D Exporter</a>. Asset by <a href="http://www.turbosquid.com/3d-models/soccer-player-max-free/307330" style="color:#FFFFFF" target="_blank">Trivision</a>
+			<br>
+			<br>BoneObject: Object3D attached in a Bone
+			<br>Left Click to hidden/show the hat - Right click to run
+			<br><div id="playercount"></div>
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/controls/OrbitControls.js"></script>
+
+		<script src="js/postprocessing/EffectComposer.js"></script>
+		<script src="js/postprocessing/RenderPass.js"></script>
+		<script src="js/postprocessing/ShaderPass.js"></script>
+		<script src="js/postprocessing/MaskPass.js"></script>
+		<script src="js/shaders/CopyShader.js"></script>
+		<script src="js/shaders/ColorCorrectionShader.js"></script>
+		<script src="js/shaders/VignetteShader.js"></script>
+
+		<script src="js/loaders/sea3d/SEA3D.js"></script>
+		<script src="js/loaders/sea3d/SEA3DLZMA.js"></script>
+		<script src="js/loaders/sea3d/SEA3DLoader.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function updatePlayerCountDescription(e){document.getElementById("playercount").innerText="Numbers of players "+e+" | Middle click to clone"}function init(){scene=new THREE.Scene,container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,2e4),camera.position.set(1e3,-300,1e3),renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),renderer.setClearColor(3355443,1),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),composer=new THREE.EffectComposer(renderer);var e=new THREE.RenderPass(scene,camera),n=new THREE.ShaderPass(THREE.CopyShader);composer.addPass(e);var o=1.4,t=1.2,r=new THREE.ShaderPass(THREE.ColorCorrectionShader);r.uniforms.powRGB.value=new THREE.Vector3(o,o,o),r.uniforms.mulRGB.value=new THREE.Vector3(t,t,t),composer.addPass(r);var a=new THREE.ShaderPass(THREE.VignetteShader);a.uniforms.darkness.value=1,composer.addPass(a),composer.addPass(n),n.renderToScreen=!0,window.addEventListener("resize",onWindowResize,!1)}function onRightClick(e){"idle"==player.currentAnimation.name?player.play("run",.5):player.play("idle",.5),e.preventDefault()}function onMouseClick(e){0===e.button?hat.visible=!hat.visible:1===e.button&&cloneAsset()}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),composer.setSize(window.innerWidth,window.innerHeight),renderer.setSize(window.innerWidth,window.innerHeight)}function animate(){var e=clock.getDelta();requestAnimationFrame(animate),THREE.SEA3D.AnimationHandler.update(e),render(e),stats.update()}function render(e){composer.render(e)}Detector.webgl||Detector.addGetWebGLMessage(),console.log("Visit https://github.com/sunag/sea3d to all codes and builds under development.");var container,stats,camera,scene,renderer,composer,controls,player,hat,loader;init(),loader=new THREE.SEA3D({autoPlay:!0,container:scene,multiplier:.6}),loader.onComplete=function(e){var n=loader.cameras[0];camera.position.copy(n.position),camera.rotation.copy(n.rotation),controls=new THREE.OrbitControls(camera),player=loader.getMesh("Player"),hat=loader.getMesh("Hat"),player.animation["pass#1"].addEventListener(THREE.SEA3D.Animation.COMPLETE,function(e){console.log("Animation completed!",e)}),window.addEventListener("click",onMouseClick),window.addEventListener("contextmenu",onRightClick),animate(),updatePlayerCountDescription(1)},loader.load("./models/sea3d/skin.tjs.sea");var cloneAsset=function(){var e=2,n=25;return function(){updatePlayerCountDescription(e);var o=2*Math.PI*(Math.sqrt(5)+1)/2,t=o*e++,r=new THREE.Object3D;r.position.z=n*e*Math.cos(t),r.position.x=n*e*Math.sin(t),scene.add(r);loader.clone({autoPlay:!0,container:r,lights:!1})}}(),clock=new THREE.Clock;</script>
+	
+
+</body></html>

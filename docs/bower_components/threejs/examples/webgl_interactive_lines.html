@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - interactive lines</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #f0f0f0;
+				margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container);var e=document.createElement("div");e.style.position="absolute",e.style.top="10px",e.style.width="100%",e.style.textAlign="center",e.innerHTML='<a href="http://threejs.org" target="_blank">three.js</a> webgl - interactive lines',container.appendChild(e),camera=new THREE.PerspectiveCamera(70,window.innerWidth/window.innerHeight,1,1e4),scene=new THREE.Scene;var n=new THREE.SphereGeometry(5),r=new THREE.MeshBasicMaterial({color:16711680});sphereInter=new THREE.Mesh(n,r),sphereInter.visible=!1,scene.add(sphereInter);for(var n=new THREE.Geometry,t=new THREE.Vector3,a=new THREE.Vector3,o=0;o<50;o++)a.x+=Math.random()-.5,a.y+=Math.random()-.5,a.z+=Math.random()-.5,a.normalize().multiplyScalar(10),t.add(a),n.vertices.push(t.clone());parentTransform=new THREE.Object3D,parentTransform.position.x=40*Math.random()-20,parentTransform.position.y=40*Math.random()-20,parentTransform.position.z=40*Math.random()-20,parentTransform.rotation.x=2*Math.random()*Math.PI,parentTransform.rotation.y=2*Math.random()*Math.PI,parentTransform.rotation.z=2*Math.random()*Math.PI,parentTransform.scale.x=Math.random()+.5,parentTransform.scale.y=Math.random()+.5,parentTransform.scale.z=Math.random()+.5;for(var o=0;o<50;o++){var i;i=Math.random()>.5?new THREE.Line(n):new THREE.LineSegments(n),i.position.x=400*Math.random()-200,i.position.y=400*Math.random()-200,i.position.z=400*Math.random()-200,i.rotation.x=2*Math.random()*Math.PI,i.rotation.y=2*Math.random()*Math.PI,i.rotation.z=2*Math.random()*Math.PI,i.scale.x=Math.random()+.5,i.scale.y=Math.random()+.5,i.scale.z=Math.random()+.5,parentTransform.add(i)}scene.add(parentTransform),raycaster=new THREE.Raycaster,raycaster.linePrecision=3,renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(15790320),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),document.addEventListener("mousemove",onDocumentMouseMove,!1),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function onDocumentMouseMove(e){e.preventDefault(),mouse.x=e.clientX/window.innerWidth*2-1,mouse.y=2*-(e.clientY/window.innerHeight)+1}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){theta+=.1,camera.position.x=radius*Math.sin(THREE.Math.degToRad(theta)),camera.position.y=radius*Math.sin(THREE.Math.degToRad(theta)),camera.position.z=radius*Math.cos(THREE.Math.degToRad(theta)),camera.lookAt(scene.position),camera.updateMatrixWorld(),raycaster.setFromCamera(mouse,camera);var e=raycaster.intersectObjects(parentTransform.children,!0);e.length>0?(void 0!==currentIntersected&&(currentIntersected.material.linewidth=1),currentIntersected=e[0].object,currentIntersected.material.linewidth=5,sphereInter.visible=!0,sphereInter.position.copy(e[0].point)):(void 0!==currentIntersected&&(currentIntersected.material.linewidth=1),currentIntersected=void 0,sphereInter.visible=!1),renderer.render(scene,camera)}var container,stats,camera,scene,raycaster,renderer,parentTransform,sphereInter,mouse=new THREE.Vector2,radius=100,theta=0,currentIntersected;init(),animate();</script>
+
+	
+
+</body></html>

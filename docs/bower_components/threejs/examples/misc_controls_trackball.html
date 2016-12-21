@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - trackball controls</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #000;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+
+				background-color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				color:#000;
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+
+			}
+
+			a {
+				color: red;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="container"></div>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - trackball controls example<br>
+			MOVE mouse &amp; press LEFT/A: rotate, MIDDLE/S: zoom, RIGHT/D: pan
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/controls/TrackballControls.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1e3),camera.position.z=500,controls=new THREE.TrackballControls(camera),controls.rotateSpeed=1,controls.zoomSpeed=1.2,controls.panSpeed=.8,controls.noZoom=!1,controls.noPan=!1,controls.staticMoving=!0,controls.dynamicDampingFactor=.3,controls.keys=[65,83,68],controls.addEventListener("change",render),scene=new THREE.Scene,scene.fog=new THREE.FogExp2(13421772,.002);for(var e=new THREE.CylinderGeometry(0,10,30,4,1),n=new THREE.MeshPhongMaterial({color:16777215,shading:THREE.FlatShading}),t=0;t<500;t++){var i=new THREE.Mesh(e,n);i.position.x=1e3*(Math.random()-.5),i.position.y=1e3*(Math.random()-.5),i.position.z=1e3*(Math.random()-.5),i.updateMatrix(),i.matrixAutoUpdate=!1,scene.add(i)}light=new THREE.DirectionalLight(16777215),light.position.set(1,1,1),scene.add(light),light=new THREE.DirectionalLight(8840),light.position.set(-1,-1,-1),scene.add(light),light=new THREE.AmbientLight(2236962),scene.add(light),renderer=new THREE.WebGLRenderer({antialias:!1}),renderer.setClearColor(scene.fog.color),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container=document.getElementById("container"),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1),render()}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight),controls.handleResize(),render()}function animate(){requestAnimationFrame(animate),controls.update()}function render(){renderer.render(scene,camera),stats.update()}Detector.webgl||Detector.addGetWebGLMessage();var container,stats,camera,controls,scene,renderer,cross;init(),animate();</script>
+
+	
+
+</body></html>

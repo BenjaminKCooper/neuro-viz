@@ -1,0 +1,44 @@
+<html lang="en"><head>
+        <title>Ammo.js softbody cloth demo</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+        <style>
+            body {
+                color: #61443e;
+                font-family:Monospace;
+                font-size:13px;
+                text-align:center;
+
+                background-color: #bfd1e5;
+                margin: 0px;
+                overflow: hidden;
+            }
+
+            #info {
+                position: absolute;
+                top: 0px; width: 100%;
+                padding: 5px;
+            }
+
+            a {
+
+                color: #a06851;
+            }
+
+        </style>
+    </head>
+    <body>
+	<div id="info">Ammo.js physics soft body cloth demo<br>Press Q or A to move the arm.</div>
+        <div id="container"><br><br><br><br><br>Loading...</div>
+
+	<script src="../build/three.js"></script>
+	<script src="js/libs/ammo.js"></script>
+	<script src="js/controls/OrbitControls.js"></script>
+        <script src="js/Detector.js"></script>
+	<script src="js/libs/stats.min.js"></script>
+
+        <script>function init(){initGraphics(),initPhysics(),createObjects(),initInput()}function initGraphics(){container=document.getElementById("container"),camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,.2,2e3),scene=new THREE.Scene,camera.position.x=-12,camera.position.y=7,camera.position.z=4,controls=new THREE.OrbitControls(camera),controls.target.y=2,renderer=new THREE.WebGLRenderer,renderer.setClearColor(12571109),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),renderer.shadowMap.enabled=!0,textureLoader=new THREE.TextureLoader;var e=new THREE.AmbientLight(4210752);scene.add(e);var t=new THREE.DirectionalLight(16777215,1);t.position.set(-7,10,15),t.castShadow=!0;var o=10;t.shadow.camera.left=-o,t.shadow.camera.right=o,t.shadow.camera.top=o,t.shadow.camera.bottom=-o,t.shadow.camera.near=2,t.shadow.camera.far=50,t.shadow.mapSize.x=1024,t.shadow.mapSize.y=1024,t.shadow.bias=-.003,scene.add(t),container.innerHTML="",container.appendChild(renderer.domElement),stats=new Stats,stats.domElement.style.position="absolute",stats.domElement.style.top="0px",container.appendChild(stats.domElement),window.addEventListener("resize",onWindowResize,!1)}function initPhysics(){collisionConfiguration=new Ammo.btSoftBodyRigidBodyCollisionConfiguration,dispatcher=new Ammo.btCollisionDispatcher(collisionConfiguration),broadphase=new Ammo.btDbvtBroadphase,solver=new Ammo.btSequentialImpulseConstraintSolver,softBodySolver=new Ammo.btDefaultSoftBodySolver,physicsWorld=new Ammo.btSoftRigidDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration,softBodySolver),physicsWorld.setGravity(new Ammo.btVector3(0,gravityConstant,0)),physicsWorld.getWorldInfo().set_m_gravity(new Ammo.btVector3(0,gravityConstant,0))}function createObjects(){var e=new THREE.Vector3,t=new THREE.Quaternion;e.set(0,-.5,0),t.set(0,0,0,1);var o=createParalellepiped(40,1,40,0,e,t,new THREE.MeshPhongMaterial({color:16777215}));o.castShadow=!0,o.receiveShadow=!0,textureLoader.load("textures/grid.png",function(e){e.wrapS=THREE.RepeatWrapping,e.wrapT=THREE.RepeatWrapping,e.repeat.set(40,40),o.material.map=e,o.material.needsUpdate=!0});var a=.5,r=1.2,n=.6,i=.5*r,s=6,d=8,c=-s*r*.5;e.set(0,.5*i,c),t.set(0,0,0,1);for(var m=0;m<d;m++){var l=m%2==1;e.z=c,l&&(e.z-=.25*r);for(var p=l?s+1:s,h=0;h<p;h++){var w=r,y=a;!l||0!=h&&h!=p-1||(w*=.5,y*=.5);var u=createParalellepiped(n,i,w,y,e,t,createMaterial());u.castShadow=!0,u.receiveShadow=!0,!l||0!=h&&h!=p-2?e.z+=r:e.z+=.75*r}e.y+=i}var g=4,v=3,E=5*g,b=5*v,f=new THREE.Vector3(-3,3,2),R=new THREE.PlaneBufferGeometry(g,v,E,b);R.rotateY(.5*Math.PI),R.translate(f.x,f.y+.5*v,f.z-.5*g);var A=new THREE.MeshLambertMaterial({color:16777215,side:THREE.DoubleSide});cloth=new THREE.Mesh(R,A),cloth.castShadow=!0,cloth.receiveShadow=!0,scene.add(cloth),textureLoader.load("textures/grid.png",function(e){e.wrapS=THREE.RepeatWrapping,e.wrapT=THREE.RepeatWrapping,e.repeat.set(E,b),cloth.material.map=e,cloth.material.needsUpdate=!0});var S=new Ammo.btSoftBodyHelpers,x=new Ammo.btVector3(f.x,f.y+v,f.z),T=new Ammo.btVector3(f.x,f.y+v,f.z-g),H=new Ammo.btVector3(f.x,f.y,f.z),M=new Ammo.btVector3(f.x,f.y,f.z-g),B=S.CreatePatch(physicsWorld.getWorldInfo(),x,T,H,M,E+1,b+1,0,!0),C=B.get_m_cfg();C.set_viterations(10),C.set_piterations(10),B.setTotalMass(.9,!1),Ammo.castObject(B,Ammo.btCollisionObject).getCollisionShape().setMargin(3*margin),physicsWorld.addSoftBody(B,1,-1),cloth.userData.physicsBody=B,B.setActivationState(4);var z=2,W=3+g,P=f.y+v,D=new THREE.MeshPhongMaterial({color:6316128});e.set(f.x,.1,f.z-W),t.set(0,0,0,1);var L=createParalellepiped(1,.2,1,0,e,t,D);L.castShadow=!0,L.receiveShadow=!0,e.set(f.x,.5*P,f.z-W);var V=createParalellepiped(.4,P,.4,0,e,t,D);V.castShadow=!0,V.receiveShadow=!0,e.set(f.x,P+.2,f.z-.5*W);var I=createParalellepiped(.4,.4,W+.4,z,e,t,D);I.castShadow=!0,I.receiveShadow=!0;var _=.5;B.appendAnchor(0,I.userData.physicsBody,!1,_),B.appendAnchor(E,I.userData.physicsBody,!1,_);var G=new Ammo.btVector3(0,.5*P,0),k=new Ammo.btVector3(0,-.2,.5*-W),O=new Ammo.btVector3(0,1,0);hinge=new Ammo.btHingeConstraint(V.userData.physicsBody,I.userData.physicsBody,G,k,O,O,!0),physicsWorld.addConstraint(hinge,!0)}function createParalellepiped(e,t,o,a,r,n,i){var s=new THREE.Mesh(new THREE.BoxGeometry(e,t,o,1,1,1),i),d=new Ammo.btBoxShape(new Ammo.btVector3(.5*e,.5*t,.5*o));return d.setMargin(margin),createRigidBody(s,d,a,r,n),s}function createRigidBody(e,t,o,a,r){e.position.copy(a),e.quaternion.copy(r);var n=new Ammo.btTransform;n.setIdentity(),n.setOrigin(new Ammo.btVector3(a.x,a.y,a.z)),n.setRotation(new Ammo.btQuaternion(r.x,r.y,r.z,r.w));var i=new Ammo.btDefaultMotionState(n),s=new Ammo.btVector3(0,0,0);t.calculateLocalInertia(o,s);var d=new Ammo.btRigidBodyConstructionInfo(o,i,t,s),c=new Ammo.btRigidBody(d);e.userData.physicsBody=c,scene.add(e),o>0&&(rigidBodies.push(e),c.setActivationState(4)),physicsWorld.addRigidBody(c)}function createRandomColor(){return Math.floor(Math.random()*(1<<24))}function createMaterial(){return new THREE.MeshPhongMaterial({color:createRandomColor()})}function initInput(){window.addEventListener("keydown",function(e){switch(e.keyCode){case 81:armMovement=1;break;case 65:armMovement=-1}},!1),window.addEventListener("keyup",function(e){armMovement=0},!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){var e=clock.getDelta();updatePhysics(e),controls.update(e),renderer.render(scene,camera),time+=e}function updatePhysics(e){hinge.enableAngularMotor(!0,.8*armMovement,50),physicsWorld.stepSimulation(e,10);for(var t=cloth.userData.physicsBody,o=cloth.geometry.attributes.position.array,a=o.length/3,r=t.get_m_nodes(),n=0,i=0;i<a;i++){var s=r.at(i),d=s.get_m_x();o[n++]=d.x(),o[n++]=d.y(),o[n++]=d.z()}cloth.geometry.computeVertexNormals(),cloth.geometry.attributes.position.needsUpdate=!0,cloth.geometry.attributes.normal.needsUpdate=!0;for(var i=0,c=rigidBodies.length;i<c;i++){var m=rigidBodies[i],l=m.userData.physicsBody,p=l.getMotionState();if(p){p.getWorldTransform(transformAux1);var h=transformAux1.getOrigin(),w=transformAux1.getRotation();m.position.set(h.x(),h.y(),h.z()),m.quaternion.set(w.x(),w.y(),w.z(),w.w())}}}Detector.webgl||(Detector.addGetWebGLMessage(),document.getElementById("container").innerHTML="");var container,stats,camera,controls,scene,renderer,textureLoader,clock=new THREE.Clock,gravityConstant=-9.8,collisionConfiguration,dispatcher,broadphase,solver,physicsWorld,rigidBodies=[],margin=.05,hinge,cloth,transformAux1=new Ammo.btTransform,time=0,armMovement=0;init(),animate();</script>
+
+    
+
+</body></html>

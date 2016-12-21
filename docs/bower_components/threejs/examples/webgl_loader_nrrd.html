@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - loaders - vtk loader</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #000;
+				color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 5;
+				display:block;
+			}
+			.dg {
+				z-index: 10 !important;
+			}
+			#info a, .button { color: #f00; font-weight: bold; text-decoration: underline; cursor: pointer }
+			#inset  {
+				width: 150px;
+				height: 150px;
+				background-color: transparent; /* or transparent; will show through only if renderer alpha: true */
+				border: none; /* or none; */
+				margin: 0;
+				padding: 0px;
+				position: absolute;
+				left: 20px;
+				bottom: 20px;
+				z-index: 100;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> -
+			nrrd format loader test
+		</div>
+		<div id="inset"></div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/controls/TrackballControls.js"></script>
+
+		<script src="js/Volume.js"></script>
+		<script src="js/VolumeSlice.js"></script>
+		<script src="js/loaders/NRRDLoader.js"></script>
+		<script src="js/loaders/VTKLoader.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+		<script src="js/libs/zlib_and_gzip.min.js"></script>
+		<script src="js/libs/dat.gui.min.js"></script>
+
+		<script>function init(){camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,.01,1e10),camera.position.z=300,scene=new THREE.Scene,scene.add(camera);var e=new THREE.DirectionalLight(16777215);e.position.set(200,200,1e3).normalize(),camera.add(e),camera.add(e.target);var n=new THREE.NRRDLoader;n.load("models/nrrd/I.nrrd",function(e){var n,a,r,o,t,n=new THREE.BoxGeometry(e.xLength,e.yLength,e.zLength),a=new THREE.MeshBasicMaterial({color:65280}),d=new THREE.Mesh(n,a);d.visible=!1;var s=new THREE.BoxHelper(d);scene.add(s),s.applyMatrix(e.matrix),scene.add(d);r=e.extractSlice("z",Math.floor(e.RASDimensions[2]/4)),scene.add(r.mesh);o=e.extractSlice("y",Math.floor(e.RASDimensions[1]/2)),scene.add(o.mesh);t=e.extractSlice("x",Math.floor(e.RASDimensions[0]/2)),scene.add(t.mesh),i.add(t,"index",0,e.RASDimensions[0],1).name("indexX").onChange(function(){t.repaint.call(t)}),i.add(o,"index",0,e.RASDimensions[1],1).name("indexY").onChange(function(){o.repaint.call(o)}),i.add(r,"index",0,e.RASDimensions[2],1).name("indexZ").onChange(function(){r.repaint.call(r)}),i.add(e,"lowerThreshold",e.min,e.max,1).name("Lower Threshold").onChange(function(){e.repaintAllSlices()}),i.add(e,"upperThreshold",e.min,e.max,1).name("Upper Threshold").onChange(function(){e.repaintAllSlices()}),i.add(e,"windowLow",e.min,e.max,1).name("Window Low").onChange(function(){e.repaintAllSlices()}),i.add(e,"windowHigh",e.min,e.max,1).name("Window High").onChange(function(){e.repaintAllSlices()})});var a=new THREE.MeshLambertMaterial({wireframe:!1,morphTargets:!1,side:THREE.DoubleSide,color:16711680}),r=new THREE.VTKLoader;r.load("models/vtk/liver.vtk",function(e){e.computeVertexNormals();var n=new THREE.Mesh(e,a);scene.add(n);var r={visible:!0};i.add(r,"visible").name("Model Visible").onChange(function(){n.visible=r.visible,renderer.render(scene,camera)})}),renderer=new THREE.WebGLRenderer({antialias:!1,alpha:!0}),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container=document.createElement("div"),document.body.appendChild(container),container.appendChild(renderer.domElement),controls=new THREE.TrackballControls(camera,renderer.domElement),controls.rotateSpeed=5,controls.zoomSpeed=5,controls.panSpeed=2,controls.noZoom=!1,controls.noPan=!1,controls.staticMoving=!0,controls.dynamicDampingFactor=.3,stats=new Stats,container.appendChild(stats.dom);var i=new dat.GUI;setupInset(),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight),controls.handleResize()}function animate(){requestAnimationFrame(animate),controls.update(),camera2.position.copy(camera.position),camera2.position.sub(controls.target),camera2.position.setLength(300),camera2.lookAt(scene2.position),renderer.render(scene,camera),renderer2.render(scene2,camera2),stats.update()}function rotateAroundWorldAxis(e,n,a){var r=new THREE.Matrix4;r.makeRotationAxis(n.normalize(),a),e.applyMatrix(r)}function setupInset(){var e=150,n=150;container2=document.getElementById("inset"),container2.width=e,container2.height=n,renderer2=new THREE.WebGLRenderer({alpha:!0}),renderer2.setClearColor(0,0),renderer2.setSize(e,n),container2.appendChild(renderer2.domElement),scene2=new THREE.Scene,camera2=new THREE.PerspectiveCamera(50,e/n,1,1e3),camera2.up=camera.up,axes2=new THREE.AxisHelper(100),scene2.add(axes2)}Detector.webgl||Detector.addGetWebGLMessage();var container,stats,camera,controls,scene,renderer,gui,container2,renderer2,camera2,axes2,scene2;init(),animate();</script>
+
+	
+
+</body></html>

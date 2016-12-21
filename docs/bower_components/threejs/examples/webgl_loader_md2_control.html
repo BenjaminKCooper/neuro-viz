@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - morphtargets - MD2 controls</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #000;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+
+				background-color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				padding: 10px;
+				width: 100%;
+				text-align: center;
+				color: #000;
+			}
+
+			a { color: skyblue; }
+		</style>
+	</head>
+
+	<body>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - MD2 Loader -
+			Ogro by <a href="http://planetquake.gamespy.com/View.php?view=Quake2.Detail&amp;id=556">Magarnigal</a><br>
+			use arrows to control characters, mouse for camera
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/controls/OrbitControls.js"></script>
+
+		<script src="js/loaders/MD2Loader.js"></script>
+		<script src="js/MD2CharacterComplex.js"></script>
+		<script src="js/Gyroscope.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,4e3),camera.position.set(0,150,1300),scene=new THREE.Scene,scene.fog=new THREE.Fog(16777215,1e3,4e3),scene.add(camera),scene.add(new THREE.AmbientLight(2236962));var e=new THREE.DirectionalLight(16777215,2.25);e.position.set(200,450,500),e.castShadow=!0,e.shadow.mapSize.width=1024,e.shadow.mapSize.height=512,e.shadow.camera.near=100,e.shadow.camera.far=1200,e.shadow.camera.left=-1e3,e.shadow.camera.right=1e3,e.shadow.camera.top=350,e.shadow.camera.bottom=-350,scene.add(e);var a=(new THREE.TextureLoader).load("textures/terrain/grasslight-big.jpg"),r=new THREE.PlaneBufferGeometry(16e3,16e3),o=new THREE.MeshPhongMaterial({color:16777215,map:a}),n=new THREE.Mesh(r,o);n.rotation.x=-Math.PI/2,n.material.map.repeat.set(64,64),n.material.map.wrapS=THREE.RepeatWrapping,n.material.map.wrapT=THREE.RepeatWrapping,n.receiveShadow=!0,scene.add(n),renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(scene.fog.color),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),container.appendChild(renderer.domElement),renderer.gammaInput=!0,renderer.gammaOutput=!0,renderer.shadowMap.enabled=!0,renderer.shadowMap.type=THREE.PCFSoftShadowMap,stats=new Stats,container.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1),document.addEventListener("keydown",onKeyDown,!1),document.addEventListener("keyup",onKeyUp,!1),cameraControls=new THREE.OrbitControls(camera,renderer.domElement),cameraControls.target.set(0,50,0);var t={baseUrl:"models/md2/ogro/",body:"ogro.md2",skins:["grok.jpg","ogrobase.png","arboshak.png","ctf_r.png","ctf_b.png","darkam.png","freedom.png","gib.png","gordogh.png","igdosh.png","khorne.png","nabogro.png","sharokh.png"],weapons:[["weapon.md2","weapon.jpg"]],animations:{move:"run",idle:"stand",jump:"jump",attack:"attack",crouchMove:"cwalk",crouchIdle:"cstand",crouchAttach:"crattack"},walkSpeed:350,crouchSpeed:175},c=1,s=t.skins.length;nCharacters=s*c;for(var d=0;d<nCharacters;d++){var i=new THREE.MD2CharacterComplex;i.scale=3,i.controls=controls,characters.push(i)}var m=new THREE.MD2CharacterComplex;m.scale=3,m.onLoadComplete=function(){for(var a=0,r=0;r<c;r++)for(var o=0;o<s;o++){var n=characters[a];n.shareParts(m),n.enableShadows(!0),n.setWeapon(0),n.setSkin(o),n.root.position.x=150*(o-s/2),n.root.position.z=250*r,scene.add(n.root),a++}var t=new THREE.Gyroscope;t.add(camera),t.add(e,e.target),characters[Math.floor(s/2)].root.add(t)},m.loadParts(t)}function onWindowResize(e){SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),camera.aspect=SCREEN_WIDTH/SCREEN_HEIGHT,camera.updateProjectionMatrix()}function onKeyDown(e){switch(e.stopPropagation(),e.keyCode){case 38:case 87:controls.moveForward=!0;break;case 40:case 83:controls.moveBackward=!0;break;case 37:case 65:controls.moveLeft=!0;break;case 39:case 68:controls.moveRight=!0}}function onKeyUp(e){switch(e.stopPropagation(),e.keyCode){case 38:case 87:controls.moveForward=!1;break;case 40:case 83:controls.moveBackward=!1;break;case 37:case 65:controls.moveLeft=!1;break;case 39:case 68:controls.moveRight=!1}}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){var e=clock.getDelta();cameraControls.update(e);for(var a=0;a<nCharacters;a++)characters[a].update(e);renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,container,camera,scene,renderer,characters=[],nCharacters=0,cameraControls,controls={moveForward:!1,moveBackward:!1,moveLeft:!1,moveRight:!1},clock=new THREE.Clock;init(),animate();</script>
+
+	
+
+</body></html>

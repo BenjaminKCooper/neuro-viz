@@ -1,0 +1,21 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - sprites</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				padding:0;
+				margin:0;
+				font-weight: bold;
+				overflow:hidden;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script src="../build/three.js"></script>
+
+		<script>function init(){var e=window.innerWidth,r=window.innerHeight;camera=new THREE.PerspectiveCamera(60,e/r,1,2100),camera.position.z=1500,cameraOrtho=new THREE.OrthographicCamera(-e/2,e/2,r/2,-r/2,1,10),cameraOrtho.position.z=10,scene=new THREE.Scene,scene.fog=new THREE.Fog(0,1500,2100),sceneOrtho=new THREE.Scene;var t=200,i=500,a=new THREE.TextureLoader,n=(a.load("textures/sprite0.png",createHUDSprites),a.load("textures/sprite1.png"));mapC=a.load("textures/sprite2.png"),group=new THREE.Group;for(var o=new THREE.SpriteMaterial({map:mapC,color:16777215,fog:!0}),p=new THREE.SpriteMaterial({map:n,color:16777215,fog:!0}),s=0;s<t;s++){var d=Math.random()-.5,m=Math.random()-.5,c=Math.random()-.5;c<0?material=p.clone():(material=o.clone(),material.color.setHSL(.5*Math.random(),.75,.5),material.map.offset.set(-.5,-.5),material.map.repeat.set(2,2));var h=new THREE.Sprite(material);h.position.set(d,m,c),h.position.normalize(),h.position.multiplyScalar(i),group.add(h)}scene.add(group),renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),renderer.autoClear=!1,document.body.appendChild(renderer.domElement),window.addEventListener("resize",onWindowResize,!1)}function createHUDSprites(e){var r=new THREE.SpriteMaterial({map:e}),t=r.map.image.width,i=r.map.image.height;spriteTL=new THREE.Sprite(r),spriteTL.scale.set(t,i,1),sceneOrtho.add(spriteTL),spriteTR=new THREE.Sprite(r),spriteTR.scale.set(t,i,1),sceneOrtho.add(spriteTR),spriteBL=new THREE.Sprite(r),spriteBL.scale.set(t,i,1),sceneOrtho.add(spriteBL),spriteBR=new THREE.Sprite(r),spriteBR.scale.set(t,i,1),sceneOrtho.add(spriteBR),spriteC=new THREE.Sprite(r),spriteC.scale.set(t,i,1),sceneOrtho.add(spriteC),updateHUDSprites()}function updateHUDSprites(){var e=window.innerWidth/2,r=window.innerHeight/2,t=spriteTL.material,i=t.map.image.width/2,a=t.map.image.height/2;spriteTL.position.set(-e+i,r-a,1),spriteTR.position.set(e-i,r-a,1),spriteBL.position.set(-e+i,-r+a,1),spriteBR.position.set(e-i,-r+a,1),spriteC.position.set(0,0,1)}function onWindowResize(){var e=window.innerWidth,r=window.innerHeight;camera.aspect=e/r,camera.updateProjectionMatrix(),cameraOrtho.left=-e/2,cameraOrtho.right=e/2,cameraOrtho.top=r/2,cameraOrtho.bottom=-r/2,cameraOrtho.updateProjectionMatrix(),updateHUDSprites(),renderer.setSize(window.innerWidth,window.innerHeight)}function animate(){requestAnimationFrame(animate),render()}function render(){for(var e=Date.now()/1e3,r=0,t=group.children.length;r<t;r++){var i=group.children[r],a=i.material,n=.3*Math.sin(e+.01*i.position.x)+1,o=1,p=1;a.map&&a.map.image&&a.map.image.width&&(o=a.map.image.width,p=a.map.image.height),i.material.rotation+=.1*(r/t),i.scale.set(n*o,n*p,1),a.map!==mapC&&(a.opacity=.4*Math.sin(e+.01*i.position.x)+.6)}group.rotation.x=.5*e,group.rotation.y=.75*e,group.rotation.z=1*e,renderer.clear(),renderer.render(scene,camera),renderer.clearDepth(),renderer.render(sceneOrtho,cameraOrtho)}var camera,scene,renderer,cameraOrtho,sceneOrtho,spriteTL,spriteTR,spriteBL,spriteBR,spriteC,mapC,group;init(),animate();</script>
+	
+
+</body></html>
