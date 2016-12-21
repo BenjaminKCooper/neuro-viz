@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - lights - spot light</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family: Monospace;
+				font-size: 13px;
+				text-align: center;
+			}
+
+			a {
+				color: #ff0080;
+				text-decoration: none;
+			}
+
+			a:hover {
+				color: #0080ff;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - This animates 3 Spot Lights - by <a href="http://master-domain.com" target="_blank">Master James</a><br>
+			Orbit Controls are available to navigate.<br>
+			Where the lights converge to make white light the shadows will appear as C M Y from light color pairing.
+		</div>
+
+		<script src="../build/three.js"></script>
+		<script src="js/libs/dat.gui.min.js"></script>
+		<script src="js/libs/tween.min.js"></script>
+		<script src="js/controls/OrbitControls.js"></script>
+		<script src="js/Detector.js"></script>
+
+		<script>function init(){renderer.shadowMap.enabled=!0,renderer.shadowMap.type=THREE.PCFSoftShadowMap,renderer.gammaInput=!0,renderer.gammaOutput=!0,camera.position.set(46,22,-21),spotLight1.position.set(15,40,45),spotLight2.position.set(0,40,35),spotLight3.position.set(-15,40,45),lightHelper1=new THREE.SpotLightHelper(spotLight1),lightHelper2=new THREE.SpotLightHelper(spotLight2),lightHelper3=new THREE.SpotLightHelper(spotLight3),matFloor.color.set(8421504),mshFloor.receiveShadow=!0,mshFloor.position.set(0,-.05,0),mshBox.castShadow=!0,mshBox.receiveShadow=!0,mshBox.position.set(0,5,0),scene.add(mshFloor),scene.add(mshBox),scene.add(ambient),scene.add(spotLight1,spotLight2,spotLight3),scene.add(lightHelper1,lightHelper2,lightHelper3),document.body.appendChild(renderer.domElement),onResize(),window.addEventListener("resize",onResize,!1),controls.target.set(0,7,0),controls.maxPolarAngle=Math.PI/2,controls.update()}function createSpotlight(e){var t=new THREE.SpotLight(e,2);return t.castShadow=!0,t.angle=.3,t.penumbra=.2,t.decay=2,t.distance=50,t.shadow.mapSize.width=1024,t.shadow.mapSize.height=1024,t}function onResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function tween(e){new TWEEN.Tween(e).to({angle:.7*Math.random()+.1,penumbra:Math.random()+1},3e3*Math.random()+2e3).easing(TWEEN.Easing.Quadratic.Out).start(),new TWEEN.Tween(e.position).to({x:30*Math.random()-15,y:10*Math.random()+15,z:30*Math.random()-15},3e3*Math.random()+2e3).easing(TWEEN.Easing.Quadratic.Out).start()}function animate(){tween(spotLight1),tween(spotLight2),tween(spotLight3),setTimeout(animate,5e3)}function render(){TWEEN.update(),lightHelper1&&lightHelper1.update(),lightHelper2&&lightHelper2.update(),lightHelper3&&lightHelper3.update(),renderer.render(scene,camera),requestAnimationFrame(render)}Detector.webgl||Detector.addGetWebGLMessage();var renderer=new THREE.WebGLRenderer,camera=new THREE.PerspectiveCamera(35,window.innerWidth/window.innerHeight,1,2e3),controls=new THREE.OrbitControls(camera,renderer.domElement),scene=new THREE.Scene,matFloor=new THREE.MeshPhongMaterial,matBox=new THREE.MeshPhongMaterial({color:11184810}),geoFloor=new THREE.BoxGeometry(2e3,1,2e3),geoBox=new THREE.BoxGeometry(3,1,2),mshFloor=new THREE.Mesh(geoFloor,matFloor),mshBox=new THREE.Mesh(geoBox,matBox),ambient=new THREE.AmbientLight(1118481),spotLight1=createSpotlight(16744192),spotLight2=createSpotlight(65407),spotLight3=createSpotlight(8323327),lightHelper1,lightHelper2,lightHelper3;init(),render(),animate();</script>
+	
+
+</body></html>

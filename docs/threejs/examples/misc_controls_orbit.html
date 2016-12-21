@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - orbit controls</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #000;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+
+				background-color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				color:#000;
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+
+			}
+
+			a {
+				color: red;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="container"></div>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - orbit controls example
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/controls/OrbitControls.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){scene=new THREE.Scene,scene.fog=new THREE.FogExp2(13421772,.002),renderer=new THREE.WebGLRenderer,renderer.setClearColor(scene.fog.color),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight);var e=document.getElementById("container");e.appendChild(renderer.domElement),camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1e3),camera.position.z=500,controls=new THREE.OrbitControls(camera,renderer.domElement),controls.enableDamping=!0,controls.dampingFactor=.25,controls.enableZoom=!1;for(var n=new THREE.CylinderGeometry(0,10,30,4,1),t=new THREE.MeshPhongMaterial({color:16777215,shading:THREE.FlatShading}),i=0;i<500;i++){var r=new THREE.Mesh(n,t);r.position.x=1e3*(Math.random()-.5),r.position.y=1e3*(Math.random()-.5),r.position.z=1e3*(Math.random()-.5),r.updateMatrix(),r.matrixAutoUpdate=!1,scene.add(r)}light=new THREE.DirectionalLight(16777215),light.position.set(1,1,1),scene.add(light),light=new THREE.DirectionalLight(8840),light.position.set(-1,-1,-1),scene.add(light),light=new THREE.AmbientLight(2236962),scene.add(light),stats=new Stats,e.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function animate(){requestAnimationFrame(animate),controls.update(),stats.update(),render()}function render(){renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var stats,camera,controls,scene,renderer;init(),animate();</script>
+
+	
+
+</body></html>

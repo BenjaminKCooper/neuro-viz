@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - dashed lines</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #ffffff;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+				z-index:100;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> - dashed lines example</div>
+		<div id="container"></div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/geometries/hilbert3D.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){camera=new THREE.PerspectiveCamera(60,WIDTH/HEIGHT,1,200),camera.position.z=150,scene=new THREE.Scene,scene.fog=new THREE.Fog(1118481,150,200),root=new THREE.Object3D;for(var e=6,n=1,t=hilbert3D(new THREE.Vector3(0,0,0),25,n,0,1,2,3,4,5,6,7),r=new THREE.Spline(t),o=new THREE.Geometry,E=0;E<t.length*e;E++){var i=E/(t.length*e),a=r.getPoint(i);o.vertices[E]=new THREE.Vector3(a.x,a.y,a.z)}var c=cube(50);c.computeLineDistances(),o.computeLineDistances();var w=new THREE.Line(o,new THREE.LineDashedMaterial({color:16777215,dashSize:1,gapSize:.5}));objects.push(w),scene.add(w);var w=new THREE.LineSegments(c,new THREE.LineDashedMaterial({color:16755200,dashSize:3,gapSize:1,linewidth:2}));objects.push(w),scene.add(w),renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(1118481),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(WIDTH,HEIGHT);var H=document.getElementById("container");H.appendChild(renderer.domElement),stats=new Stats,H.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1)}function cube(e){var n=.5*e,t=new THREE.Geometry;return t.vertices.push(new THREE.Vector3(-n,-n,-n),new THREE.Vector3(-n,n,-n),new THREE.Vector3(-n,n,-n),new THREE.Vector3(n,n,-n),new THREE.Vector3(n,n,-n),new THREE.Vector3(n,-n,-n),new THREE.Vector3(n,-n,-n),new THREE.Vector3(-n,-n,-n),new THREE.Vector3(-n,-n,n),new THREE.Vector3(-n,n,n),new THREE.Vector3(-n,n,n),new THREE.Vector3(n,n,n),new THREE.Vector3(n,n,n),new THREE.Vector3(n,-n,n),new THREE.Vector3(n,-n,n),new THREE.Vector3(-n,-n,n),new THREE.Vector3(-n,-n,-n),new THREE.Vector3(-n,-n,n),new THREE.Vector3(-n,n,-n),new THREE.Vector3(-n,n,n),new THREE.Vector3(n,n,-n),new THREE.Vector3(n,n,n),new THREE.Vector3(n,-n,-n),new THREE.Vector3(n,-n,n)),t}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){for(var e=.001*Date.now(),n=0;n<objects.length;n++){var t=objects[n];t.rotation.x=.25*e,t.rotation.y=.25*e}renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var renderer,scene,camera,stats,objects=[],WIDTH=window.innerWidth,HEIGHT=window.innerHeight;init(),animate();</script>
+
+
+
+
+</body></html>

@@ -1,0 +1,1 @@
+!function(){"use strict";var e,t={radius:10,detail:void 0};QUnit.module("Extras - Geometries - OctahedronGeometry",{beforeEach:function(){e=[new THREE.OctahedronGeometry,new THREE.OctahedronGeometry(t.radius),new THREE.OctahedronGeometry(t.radius,t.detail)]}}),QUnit.test("standard geometry tests",function(t){runStdGeometryTests(t,e)})}();

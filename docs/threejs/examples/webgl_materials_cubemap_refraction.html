@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - materials - cube refraction [Lucy]</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background:#000;
+				color:#fff;
+				padding:0;
+				margin:0;
+				overflow:hidden;
+				font-family:georgia;
+				text-align:center;
+			}
+			a {	color: #ff0080;	text-decoration: none; }
+			a:hover { color: #0080ff; }
+
+			canvas { pointer-events:none; z-index:10; }
+
+			#d { text-align:center; margin:1em auto -9.5em; z-index:200; position:relative; display:block;
+				background:rgba(0,0,0,0.5); padding:0.5em; width:400px; border-radius:15px; -webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.5) }
+
+			#oldie { margin-top:15em !important }
+		</style>
+	</head>
+
+	<body>
+		<div id="d">
+			<p><a href="http://threejs.org">Three.js</a> cube map refraction demo
+
+			</p><p>Lucy model from <a href="http://graphics.stanford.edu/data/3Dscanrep/">Stanford 3d scanning repository</a>
+			</p><p>Texture by <a href="http://www.humus.name/index.php?page=Textures" target="_blank">Humus</a>
+		</p></div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/loaders/PLYLoader.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(50,window.innerWidth/window.innerHeight,1,1e5),camera.position.z=-4e3;var e="textures/cube/Park3Med/",n=[e+"px.jpg",e+"nx.jpg",e+"py.jpg",e+"ny.jpg",e+"pz.jpg",e+"nz.jpg"],i=(new THREE.CubeTextureLoader).load(n);i.mapping=THREE.CubeRefractionMapping,scene=new THREE.Scene,scene.background=i;var o=new THREE.AmbientLight(16777215);scene.add(o),pointLight=new THREE.PointLight(16777215,2),scene.add(pointLight);var t=new THREE.SphereBufferGeometry(100,16,8),a=new THREE.Mesh(t,new THREE.MeshBasicMaterial({color:16777215}));a.scale.set(.05,.05,.05),pointLight.add(a);var r=new THREE.MeshPhongMaterial({color:13426175,envMap:i,refractionRatio:.98,reflectivity:.9}),d=new THREE.MeshPhongMaterial({color:13434877,envMap:i,refractionRatio:.985}),c=new THREE.MeshPhongMaterial({color:16777215,envMap:i,refractionRatio:.98});renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),loader=new THREE.PLYLoader,loader.load("models/ply/binary/Lucy100k.ply",function(e){createScene(e,c,d,r)}),document.addEventListener("mousemove",onDocumentMouseMove,!1),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function createScene(e,n,i,o){e.computeVertexNormals();var t=1.5,a=new THREE.Mesh(e,n);a.scale.x=a.scale.y=a.scale.z=t,scene.add(a);var a=new THREE.Mesh(e,i);a.position.x=-1500,a.scale.x=a.scale.y=a.scale.z=t,scene.add(a);var a=new THREE.Mesh(e,o);a.position.x=1500,a.scale.x=a.scale.y=a.scale.z=t,scene.add(a)}function onDocumentMouseMove(e){mouseX=4*(e.clientX-windowHalfX),mouseY=4*(e.clientY-windowHalfY)}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){var e=-2e-4*Date.now();camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-mouseY-camera.position.y),camera.lookAt(scene.position),pointLight.position.x=1500*Math.cos(e),pointLight.position.z=1500*Math.sin(e),renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var FLOOR=-250,container,stats,camera,scene,renderer,mesh,zmesh,geometry,loader,directionalLight,pointLight,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;init(),animate();</script>
+
+	
+
+</body></html>

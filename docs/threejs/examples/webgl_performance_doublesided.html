@@ -1,0 +1,26 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - performance</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background:#fff;
+				padding:0;
+				margin:0;
+				font-weight: bold;
+				overflow:hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(50,SCREEN_WIDTH/SCREEN_HEIGHT,1,2e4),camera.position.z=3200,scene=new THREE.Scene,scene.add(new THREE.AmbientLight(328965));var e=new THREE.PointLight(4607,1,5500);e.position.set(4e3,0,0),scene.add(e);var e=new THREE.PointLight(16716032,1,5500);e.position.set(-4e3,0,0),scene.add(e);var e=new THREE.PointLight(16755200,2,3e3);e.position.set(0,0,0),scene.add(e);var n="textures/cube/SwedishRoyalCastle/",t=".jpg",a=[n+"px"+t,n+"nx"+t,n+"py"+t,n+"ny"+t,n+"pz"+t,n+"nz"+t],i=(new THREE.CubeTextureLoader).load(a);i.format=THREE.RGBFormat;for(var o=new THREE.MeshPhongMaterial({specular:1052688,shininess:100,envMap:i,combine:THREE.MixOperation,reflectivity:.1,side:THREE.DoubleSide}),r=new THREE.SphereGeometry(1,32,16,0,Math.PI),d=0;d<5e3;d++){var E=new THREE.Mesh(r,o);E.position.x=1e4*Math.random()-5e3,E.position.y=1e4*Math.random()-5e3,E.position.z=1e4*Math.random()-5e3,E.rotation.x=2*Math.random()*Math.PI,E.rotation.y=2*Math.random()*Math.PI,E.scale.x=E.scale.y=E.scale.z=50*Math.random()+100,E.matrixAutoUpdate=!1,E.updateMatrix(),scene.add(E)}renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(328965),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),renderer.gammaInput=!0,renderer.gammaOutput=!0,container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),document.addEventListener("mousemove",onDocumentMouseMove,!1),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(e){SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),camera.aspect=SCREEN_WIDTH/SCREEN_HEIGHT,camera.updateProjectionMatrix(),windowHalfX=SCREEN_WIDTH/2,windowHalfY=SCREEN_HEIGHT/2}function onDocumentMouseMove(e){mouseX=10*(e.clientX-windowHalfX),mouseY=10*(e.clientY-windowHalfY)}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-mouseY-camera.position.y),camera.lookAt(scene.position),renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var container,stats,camera,scene,renderer,mesh,geometry,mouseX=0,mouseY=0,SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,windowHalfX=SCREEN_WIDTH/2,windowHalfY=SCREEN_HEIGHT/2;init(),animate();</script>
+
+	
+
+</body></html>

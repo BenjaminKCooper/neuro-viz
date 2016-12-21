@@ -1,0 +1,88 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - custom attributes</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #ffffff;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+				z-index:100;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> - custom attributes example</div>
+		<div id="container"></div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script type="x-shader/x-vertex" id="vertexshader">
+
+			uniform float amplitude;
+
+			attribute float displacement;
+
+			varying vec3 vNormal;
+			varying vec2 vUv;
+
+			void main() {
+
+				vNormal = normal;
+				vUv = ( 0.5 + amplitude ) * uv + vec2( amplitude );
+
+				vec3 newPosition = position + amplitude * normal * vec3( displacement );
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+
+			}
+
+		</script>
+
+		<script type="x-shader/x-fragment" id="fragmentshader">
+
+			varying vec3 vNormal;
+			varying vec2 vUv;
+
+			uniform vec3 color;
+			uniform sampler2D texture;
+
+			void main() {
+
+				vec3 light = vec3( 0.5, 0.2, 1.0 );
+				light = normalize( light );
+
+				float dProd = dot( vNormal, light ) * 0.5 + 0.5;
+
+				vec4 tcolor = texture2D( texture, vUv );
+				vec4 gray = vec4( vec3( tcolor.r * 0.3 + tcolor.g * 0.59 + tcolor.b * 0.11 ), 1.0 );
+
+				gl_FragColor = gray * vec4( vec3( dProd ) * vec3( color ), 1.0 );
+
+			}
+
+		</script>
+
+
+		<script>function init(){camera=new THREE.PerspectiveCamera(30,window.innerWidth/window.innerHeight,1,1e4),camera.position.z=300,scene=new THREE.Scene,uniforms={amplitude:{value:1},color:{value:new THREE.Color(16720384)},texture:{value:(new THREE.TextureLoader).load("textures/water.jpg")}},uniforms.texture.value.wrapS=uniforms.texture.value.wrapT=THREE.RepeatWrapping;var e=new THREE.ShaderMaterial({uniforms:uniforms,vertexShader:document.getElementById("vertexshader").textContent,fragmentShader:document.getElementById("fragmentshader").textContent}),n=50,t=128,r=64,a=new THREE.SphereBufferGeometry(n,t,r);displacement=new Float32Array(a.attributes.position.count),noise=new Float32Array(a.attributes.position.count);for(var i=0;i<displacement.length;i++)noise[i]=5*Math.random();a.addAttribute("displacement",new THREE.BufferAttribute(displacement,1)),sphere=new THREE.Mesh(a,e),scene.add(sphere),renderer=new THREE.WebGLRenderer,renderer.setClearColor(328965),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight);var o=document.getElementById("container");o.appendChild(renderer.domElement),stats=new Stats,o.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){var e=.01*Date.now();sphere.rotation.y=sphere.rotation.z=.01*e,uniforms.amplitude.value=2.5*Math.sin(.125*sphere.rotation.y),uniforms.color.value.offsetHSL(5e-4,0,0);for(var n=0;n<displacement.length;n++)displacement[n]=Math.sin(.1*n+e),noise[n]+=.5*(.5-Math.random()),noise[n]=THREE.Math.clamp(noise[n],-5,5),displacement[n]+=noise[n];sphere.geometry.attributes.displacement.needsUpdate=!0,renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var renderer,scene,camera,stats,sphere,uniforms,displacement,noise;init(),animate();</script>
+
+
+
+
+</body></html>

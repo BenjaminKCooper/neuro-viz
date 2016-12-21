@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js - pointerlock controls</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			html, body {
+				width: 100%;
+				height: 100%;
+			}
+
+			body {
+				background-color: #ffffff;
+				margin: 0;
+				overflow: hidden;
+				font-family: arial;
+			}
+
+			#blocker {
+
+				position: absolute;
+
+				width: 100%;
+				height: 100%;
+
+				background-color: rgba(0,0,0,0.5);
+
+			}
+
+			#instructions {
+
+				width: 100%;
+				height: 100%;
+
+				display: -webkit-box;
+				display: -moz-box;
+				display: box;
+
+				-webkit-box-orient: horizontal;
+				-moz-box-orient: horizontal;
+				box-orient: horizontal;
+
+				-webkit-box-pack: center;
+				-moz-box-pack: center;
+				box-pack: center;
+
+				-webkit-box-align: center;
+				-moz-box-align: center;
+				box-align: center;
+
+				color: #ffffff;
+				text-align: center;
+
+				cursor: pointer;
+
+			}
+
+		</style>
+	</head>
+	<body>
+		<script src="../build/three.js"></script>
+		<script src="js/controls/PointerLockControls.js"></script>
+
+		<div id="blocker">
+
+			<div id="instructions">
+				<span style="font-size:40px">Click to play</span>
+				<br>
+				(W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
+			</div>
+
+		</div>
+
+		<script>function init(){camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,1,1e3),scene=new THREE.Scene,scene.fog=new THREE.Fog(16777215,0,750);var e=new THREE.HemisphereLight(15658751,7829384,.75);e.position.set(.5,1,.75),scene.add(e),controls=new THREE.PointerLockControls(camera),scene.add(controls.getObject());var o=function(e){switch(e.keyCode){case 38:case 87:moveForward=!0;break;case 37:case 65:moveLeft=!0;break;case 40:case 83:moveBackward=!0;break;case 39:case 68:moveRight=!0;break;case 32:canJump===!0&&(velocity.y+=350),canJump=!1}},t=function(e){switch(e.keyCode){case 38:case 87:moveForward=!1;break;case 37:case 65:moveLeft=!1;break;case 40:case 83:moveBackward=!1;break;case 39:case 68:moveRight=!1}};document.addEventListener("keydown",o,!1),document.addEventListener("keyup",t,!1),raycaster=new THREE.Raycaster(new THREE.Vector3,new THREE.Vector3(0,-1,0),0,10),geometry=new THREE.PlaneGeometry(2e3,2e3,100,100),geometry.rotateX(-Math.PI/2);for(var r=0,n=geometry.vertices.length;r<n;r++){var a=geometry.vertices[r];a.x+=20*Math.random()-10,a.y+=2*Math.random(),a.z+=20*Math.random()-10}for(var r=0,n=geometry.faces.length;r<n;r++){var i=geometry.faces[r];i.vertexColors[0]=(new THREE.Color).setHSL(.3*Math.random()+.5,.75,.25*Math.random()+.75),i.vertexColors[1]=(new THREE.Color).setHSL(.3*Math.random()+.5,.75,.25*Math.random()+.75),i.vertexColors[2]=(new THREE.Color).setHSL(.3*Math.random()+.5,.75,.25*Math.random()+.75)}material=new THREE.MeshBasicMaterial({vertexColors:THREE.VertexColors}),c=new THREE.Mesh(geometry,material),scene.add(c),geometry=new THREE.BoxGeometry(20,20,20);for(var r=0,n=geometry.faces.length;r<n;r++){var i=geometry.faces[r];i.vertexColors[0]=(new THREE.Color).setHSL(.3*Math.random()+.5,.75,.25*Math.random()+.75),i.vertexColors[1]=(new THREE.Color).setHSL(.3*Math.random()+.5,.75,.25*Math.random()+.75),i.vertexColors[2]=(new THREE.Color).setHSL(.3*Math.random()+.5,.75,.25*Math.random()+.75)}for(var r=0;r<500;r++){material=new THREE.MeshPhongMaterial({specular:16777215,shading:THREE.FlatShading,vertexColors:THREE.VertexColors});var c=new THREE.Mesh(geometry,material);c.position.x=20*Math.floor(20*Math.random()-10),c.position.y=20*Math.floor(20*Math.random())+10,c.position.z=20*Math.floor(20*Math.random()-10),scene.add(c),material.color.setHSL(.2*Math.random()+.5,.75,.25*Math.random()+.75),objects.push(c)}renderer=new THREE.WebGLRenderer,renderer.setClearColor(16777215),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),document.body.appendChild(renderer.domElement),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function animate(){if(requestAnimationFrame(animate),controlsEnabled){raycaster.ray.origin.copy(controls.getObject().position),raycaster.ray.origin.y-=10;var e=raycaster.intersectObjects(objects),o=e.length>0,t=performance.now(),r=(t-prevTime)/1e3;velocity.x-=10*velocity.x*r,velocity.z-=10*velocity.z*r,velocity.y-=9.8*100*r,moveForward&&(velocity.z-=400*r),moveBackward&&(velocity.z+=400*r),moveLeft&&(velocity.x-=400*r),moveRight&&(velocity.x+=400*r),o===!0&&(velocity.y=Math.max(0,velocity.y),canJump=!0),controls.getObject().translateX(velocity.x*r),controls.getObject().translateY(velocity.y*r),controls.getObject().translateZ(velocity.z*r),controls.getObject().position.y<10&&(velocity.y=0,controls.getObject().position.y=10,canJump=!0),prevTime=t}renderer.render(scene,camera)}var camera,scene,renderer,geometry,material,mesh,controls,objects=[],raycaster,blocker=document.getElementById("blocker"),instructions=document.getElementById("instructions"),havePointerLock="pointerLockElement"in document||"mozPointerLockElement"in document||"webkitPointerLockElement"in document;if(havePointerLock){var element=document.body,pointerlockchange=function(e){document.pointerLockElement===element||document.mozPointerLockElement===element||document.webkitPointerLockElement===element?(controlsEnabled=!0,controls.enabled=!0,blocker.style.display="none"):(controls.enabled=!1,blocker.style.display="-webkit-box",blocker.style.display="-moz-box",blocker.style.display="box",instructions.style.display="")},pointerlockerror=function(e){instructions.style.display=""};document.addEventListener("pointerlockchange",pointerlockchange,!1),document.addEventListener("mozpointerlockchange",pointerlockchange,!1),document.addEventListener("webkitpointerlockchange",pointerlockchange,!1),document.addEventListener("pointerlockerror",pointerlockerror,!1),document.addEventListener("mozpointerlockerror",pointerlockerror,!1),document.addEventListener("webkitpointerlockerror",pointerlockerror,!1),instructions.addEventListener("click",function(e){instructions.style.display="none",element.requestPointerLock=element.requestPointerLock||element.mozRequestPointerLock||element.webkitRequestPointerLock,element.requestPointerLock()},!1)}else instructions.innerHTML="Your browser doesn't seem to support Pointer Lock API";init(),animate();var controlsEnabled=!1,moveForward=!1,moveBackward=!1,moveLeft=!1,moveRight=!1,canJump=!1,prevTime=performance.now(),velocity=new THREE.Vector3;</script>
+	
+
+</body></html>

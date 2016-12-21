@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - collada - blender</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+
+			}
+
+			a { color: red }
+		</style>
+	</head>
+
+	<body>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> -
+			monster by <a href="http://www.3drt.com/downloads.htm" target="_blank">3drt</a>
+		</div>
+
+		<script src="../build/three.js"></script>
+		<script src="js/loaders/collada/Animation.js"></script>
+		<script src="js/loaders/collada/AnimationHandler.js"></script>
+		<script src="js/loaders/collada/KeyFrameAnimation.js"></script>
+
+		<script src="js/loaders/ColladaLoader.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(50,window.innerWidth/window.innerHeight,1,2e3),camera.position.set(2,4,5),scene=new THREE.Scene,scene.fog=new THREE.FogExp2(0,.035),mixer=new THREE.AnimationMixer(scene);var e=new THREE.JSONLoader;e.load("models/animated/monster/monster.js",function(e,n){var a=n[0];a.morphTargets=!0,a.color.setHex(16755370);for(var t=new THREE.MultiMaterial(n),i=0;i<729;i++){var r=2*(i%27-13.5)+THREE.Math.randFloatSpread(1),o=2*(Math.floor(i/27)-13.5)+THREE.Math.randFloatSpread(1);if(!(Math.abs(r)<2&&Math.abs(o)<2)){mesh=new THREE.Mesh(e,t);var d=THREE.Math.randFloat(75e-5,.001);mesh.scale.set(d,d,d),mesh.position.set(r,0,o),mesh.rotation.y=THREE.Math.randFloat(-.25,.25),mesh.matrixAutoUpdate=!1,mesh.updateMatrix(),scene.add(mesh),mixer.clipAction(e.animations[0],mesh).setDuration(1).startAt(-Math.random()).play()}}}),scene.add(dae),scene.add(new THREE.AmbientLight(13421772)),pointLight=new THREE.PointLight(16729088,5,30),pointLight.position.set(5,0,0),scene.add(pointLight),renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(e){renderer.setSize(window.innerWidth,window.innerHeight),camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix()}function animate(){requestAnimationFrame(animate);var e=clock.getDelta();THREE.AnimationHandler.update(e),mixer.update(e),render(),stats.update()}function render(){var e=5e-4*Date.now();camera.position.x=10*Math.cos(e),camera.position.y=4,camera.position.z=10*Math.sin(e),camera.lookAt(scene.position),renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var container,stats,camera,scene,renderer,objects,particleLight,pointLight,dae,clock=new THREE.Clock,mixer,loader=new THREE.ColladaLoader;loader.options.convertUpAxis=!0,loader.load("models/collada/monster/monster.dae",function(e){dae=e.scene,dae.traverse(function(e){if(e instanceof THREE.SkinnedMesh){var n=new THREE.Animation(e,e.geometry.animation);n.play()}}),dae.scale.x=dae.scale.y=dae.scale.z=.002,dae.position.x=-1,dae.updateMatrix(),init(),animate()});</script>
+	
+
+</body></html>

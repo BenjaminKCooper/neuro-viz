@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - scenes transition</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #f0f0f0;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			.info {
+				position: absolute;
+				background-color: black;
+				opacity: 0.8;
+				color: white;
+				text-align: center;
+				top: 0px;
+				width: 100%;
+			}
+
+			.info a {
+				color: #00ffff;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div class="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> webgl scene transitions - by <a href="https://twitter.com/fernandojsg">fernandojsg</a> - <a href="https://github.com/kile/three.js-demos">github</a>
+		</div>
+
+		<div id="container"></div>
+
+		<script src="../build/three.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+		<script src="js/libs/dat.gui.min.js"></script>
+		<script src="js/crossfade/scenes.js"></script>
+		<script src="js/crossfade/gui.js"></script>
+		<script src="js/crossfade/transition.js"></script>
+		
+		<script>function init(){initGUI(),container=document.getElementById("container"),renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),renderer.sortObjects=!1,container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),sceneA=new Scene("cube",5e3,1200,120,new THREE.Vector3(0,-.4,0),16777215),sceneB=new Scene("sphere",500,2e3,50,new THREE.Vector3(0,.2,.1),0),transition=new Transition(sceneA,sceneB)}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){transition.render(clock.getDelta())}var container,stats,renderer,transition,clock=new THREE.Clock;init(),animate();</script>
+
+	
+	
+
+</body></html>

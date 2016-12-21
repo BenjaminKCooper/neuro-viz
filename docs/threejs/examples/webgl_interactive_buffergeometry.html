@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - interactive - buffergeometry</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #cccccc;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #050505;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			a {
+
+				color: #0080ff;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> webgl - interactive - buffergeometry</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.getElementById("container"),camera=new THREE.PerspectiveCamera(27,window.innerWidth/window.innerHeight,1,3500),camera.position.z=2750,scene=new THREE.Scene,scene.fog=new THREE.Fog(328965,2e3,3500),scene.add(new THREE.AmbientLight(4473924));var e=new THREE.DirectionalLight(16777215,.5);e.position.set(1,1,1),scene.add(e);var n=new THREE.DirectionalLight(16777215,1.5);n.position.set(0,-1,0),scene.add(n);for(var t=5e3,r=new THREE.BufferGeometry,a=new Float32Array(3*t*3),i=new Float32Array(3*t*3),o=new Float32Array(3*t*3),s=new THREE.Color,d=800,c=d/2,m=120,w=m/2,E=new THREE.Vector3,l=new THREE.Vector3,h=new THREE.Vector3,u=new THREE.Vector3,R=new THREE.Vector3,H=0;H<a.length;H+=9){var p=Math.random()*d-c,T=Math.random()*d-c,b=Math.random()*d-c,g=p+Math.random()*m-w,v=T+Math.random()*m-w,M=b+Math.random()*m-w,f=p+Math.random()*m-w,y=T+Math.random()*m-w,A=b+Math.random()*m-w,x=p+Math.random()*m-w,B=T+Math.random()*m-w,C=b+Math.random()*m-w;a[H]=g,a[H+1]=v,a[H+2]=M,a[H+3]=f,a[H+4]=y,a[H+5]=A,a[H+6]=x,a[H+7]=B,a[H+8]=C,E.set(g,v,M),l.set(f,y,A),h.set(x,B,C),u.subVectors(h,l),R.subVectors(E,l),u.cross(R),u.normalize();var D=u.x,L=u.y,V=u.z;i[H]=D,i[H+1]=L,i[H+2]=V,i[H+3]=D,i[H+4]=L,i[H+5]=V,i[H+6]=D,i[H+7]=L,i[H+8]=V;var W=p/d+.5,z=T/d+.5,F=b/d+.5;s.setRGB(W,z,F),o[H]=s.r,o[H+1]=s.g,o[H+2]=s.b,o[H+3]=s.r,o[H+4]=s.g,o[H+5]=s.b,o[H+6]=s.r,o[H+7]=s.g,o[H+8]=s.b}r.addAttribute("position",new THREE.BufferAttribute(a,3)),r.addAttribute("normal",new THREE.BufferAttribute(i,3)),r.addAttribute("color",new THREE.BufferAttribute(o,3)),r.computeBoundingSphere();var G=new THREE.MeshPhongMaterial({color:11184810,specular:16777215,shininess:250,side:THREE.DoubleSide,vertexColors:THREE.VertexColors});mesh=new THREE.Mesh(r,G),scene.add(mesh),raycaster=new THREE.Raycaster,mouse=new THREE.Vector2;var r=new THREE.BufferGeometry;r.addAttribute("position",new THREE.BufferAttribute(new Float32Array(12),3));var G=new THREE.LineBasicMaterial({color:16777215,linewidth:2,transparent:!0});line=new THREE.Line(r,G),scene.add(line),renderer=new THREE.WebGLRenderer({antialias:!1}),renderer.setClearColor(scene.fog.color),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1),document.addEventListener("mousemove",onDocumentMouseMove,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function onDocumentMouseMove(e){e.preventDefault(),mouse.x=e.clientX/window.innerWidth*2-1,mouse.y=2*-(e.clientY/window.innerHeight)+1}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){var e=.001*Date.now();mesh.rotation.x=.15*e,mesh.rotation.y=.25*e,raycaster.setFromCamera(mouse,camera);var n=raycaster.intersectObject(mesh);if(n.length>0){var t=n[0],r=t.face,a=line.geometry.attributes.position,i=mesh.geometry.attributes.position;a.copyAt(0,i,r.a),a.copyAt(1,i,r.b),a.copyAt(2,i,r.c),a.copyAt(3,i,r.a),mesh.updateMatrix(),line.geometry.applyMatrix(mesh.matrix),line.visible=!0}else line.visible=!1;renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var container,stats,camera,scene,renderer,raycaster,mouse,mesh,line;init(),animate();</script>
+
+	
+
+</body></html>

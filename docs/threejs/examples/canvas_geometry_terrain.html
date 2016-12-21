@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js canvas - geometry - terrain</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #71544e;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #bfd1e5;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			a {
+
+				color: #b07861;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="container"><br><br><br><br><br>Generating...</div>
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> - terrain demo. <a href="canvas_geometry_terrain.html">generate another</a></div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/renderers/Projector.js"></script>
+		<script src="js/renderers/CanvasRenderer.js"></script>
+
+		<script src="js/libs/stats.min.js"></script>
+
+		<script src="js/ImprovedNoise.js"></script>
+
+		<script>function init(){container=document.getElementById("container"),camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1e4),camera.position.z=500,scene=new THREE.Scene;var e=generateHeight(1024,1024),n=new THREE.CanvasTexture(generateTexture(e,1024,1024)),t=new THREE.MeshBasicMaterial({map:n,overdraw:.5}),i=16,r=1024/i,a=new THREE.PlaneGeometry(2e3,2e3,i-1,i-1);a.rotateX(-Math.PI/2);for(var o=0,d=a.vertices.length;o<d;o++){var w=o%i,s=Math.floor(o/i);a.vertices[o].y=2*e[w*r+s*r*1024]-128}mesh=new THREE.Mesh(a,t),scene.add(mesh),renderer=new THREE.CanvasRenderer,renderer.setClearColor(12571109),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.innerHTML="",container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),document.addEventListener("mousemove",onDocumentMouseMove,!1),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function generateHeight(e,n){for(var t=new Uint8Array(e*n),i=new ImprovedNoise,r=e*n,a=2,o=100*Math.random(),d=0;d<4;d++){a*=4;for(var w=0;w<r;w++){var s=w%e,c=~~(w/e);t[w]+=Math.abs(.5*i.noise(s/a,c/a,o))*a+10}}return t}function generateTexture(e,n,t){var i,r,a,o,d,w,s;d=new THREE.Vector3(0,0,0),w=new THREE.Vector3(1,1,1),w.normalize(),i=document.createElement("canvas"),i.width=n,i.height=t,r=i.getContext("2d"),r.fillStyle="#000",r.fillRect(0,0,n,t),a=r.getImageData(0,0,n,t),o=a.data;for(var c=0,m=0,h=o.length;c<h;c+=4,m++)d.x=e[m-1]-e[m+1],d.y=2,d.z=e[m-n]-e[m+n],d.normalize(),s=d.dot(w),o[c]=(96+128*s)*(.007*e[m]),o[c+1]=(32+96*s)*(.007*e[m]),o[c+2]=96*s*(.007*e[m]);return r.putImageData(a,0,0),i}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,mouseY=e.clientY-windowHalfY}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-mouseY-camera.position.y)+15,camera.lookAt(scene.position),renderer.render(scene,camera)}var container,stats,camera,scene,renderer,mesh,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;init(),animate();</script>
+
+	
+
+</body></html>

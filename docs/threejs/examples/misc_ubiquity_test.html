@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js misc - ubiquity - test</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background-color: #ffffff;
+				margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/renderers/Projector.js"></script>
+		<script src="js/renderers/CanvasRenderer.js"></script>
+		<script src="js/renderers/SVGRenderer.js"></script>
+		<script src="js/renderers/SoftwareRenderer.js"></script>
+
+		<script src="js/libs/stats.min.js"></script>
+
+		<script src="obj/Qrcode.js"></script>
+
+		<script>function init(){var e=window.innerWidth/2,a=window.innerHeight/2;camera=new THREE.PerspectiveCamera(75,e/a,1,1e4),camera.position.z=500,scene=new THREE.Scene,scene.autoUpdate=!1,mesh=new THREE.Mesh(new Qrcode,new THREE.MeshLambertMaterial({vertexColors:THREE.FaceColors})),mesh.scale.x=mesh.scale.y=mesh.scale.z=2,scene.add(mesh);var r=new THREE.BoxGeometry(100,100,100);mesh=new THREE.Mesh(r,new THREE.MeshBasicMaterial({color:255,opacity:.5,transparent:!0})),mesh.position.x=500,mesh.rotation.x=Math.random(),mesh.rotation.y=Math.random(),mesh.scale.x=mesh.scale.y=mesh.scale.z=2,scene.add(mesh),mesh=new THREE.Mesh(r,new THREE.MeshBasicMaterial({color:16777215*Math.random()})),mesh.position.x=500,mesh.position.y=500,mesh.rotation.x=Math.random(),mesh.rotation.y=Math.random(),mesh.scale.x=mesh.scale.y=mesh.scale.z=2,scene.add(mesh),mesh=new THREE.Mesh(new THREE.PlaneBufferGeometry(100,100),new THREE.MeshBasicMaterial({color:16777215*Math.random(),side:THREE.DoubleSide})),mesh.position.y=-500,mesh.scale.x=mesh.scale.y=mesh.scale.z=2,scene.add(mesh),mesh=new THREE.Mesh(new THREE.CylinderGeometry(20,100,200,10),new THREE.MeshBasicMaterial({color:16777215*Math.random()})),mesh.position.x=-500,mesh.rotation.x=-Math.PI/2,mesh.scale.x=mesh.scale.y=mesh.scale.z=2,scene.add(mesh);for(var n=new THREE.Geometry,s=new THREE.MeshBasicMaterial({vertexColors:THREE.FaceColors,side:THREE.DoubleSide}),t=0;t<100;t++){var o=new THREE.Vector3(1e3*Math.random()-500,1e3*Math.random()-500,1e3*Math.random()-500),d=new THREE.Vector3(100*Math.random()-50,100*Math.random()-50,100*Math.random()-50),i=new THREE.Vector3(100*Math.random()-50,100*Math.random()-50,100*Math.random()-50),m=new THREE.Vector3(100*Math.random()-50,100*Math.random()-50,100*Math.random()-50);d.add(o),i.add(o),m.add(o);var c=new THREE.Face3(n.vertices.push(d)-1,n.vertices.push(i)-1,n.vertices.push(m)-1,null,new THREE.Color(16777215*Math.random()));n.faces.push(c)}n.computeFaceNormals(),group=new THREE.Mesh(n,s),group.scale.set(2,2,2),scene.add(group);var h=new THREE.TextureLoader;h.load("textures/sprite.png",function(e){for(var a=new THREE.SpriteMaterial({map:e,transparent:!0}),r=0;r<50;r++){var n=new THREE.Sprite(a);n.position.x=1e3*Math.random()-500,n.position.y=1e3*Math.random()-500,n.position.z=1e3*Math.random()-500,n.scale.set(64,64,1),scene.add(n)}});for(var t=0;t<50;t++){var s=new THREE.SpriteMaterial({color:16777215*Math.random()}),E=new THREE.Sprite(s);E.position.x=1e3*Math.random()-500,E.position.y=1e3*Math.random()-500,E.position.z=1e3*Math.random()-500,E.scale.set(64,64,1),scene.add(E)}var R=new THREE.AmbientLight(8454143);scene.add(R);var l=new THREE.DirectionalLight(16776960);l.position.set(-1,.5,0),scene.add(l),canvasRenderer=new THREE.CanvasRenderer,canvasRenderer.setClearColor(15790320),canvasRenderer.setPixelRatio(window.devicePixelRatio),canvasRenderer.setSize(e,a),document.body.appendChild(canvasRenderer.domElement),svgRenderer=new THREE.SVGRenderer,svgRenderer.setClearColor(15790320),svgRenderer.setSize(e,a),svgRenderer.setQuality("low"),document.body.appendChild(svgRenderer.domElement),softwareRenderer=new THREE.SoftwareRenderer,softwareRenderer.setClearColor(15790320),softwareRenderer.setSize(e,a),document.body.appendChild(softwareRenderer.domElement),webglRenderer=new THREE.WebGLRenderer({antialias:!0}),webglRenderer.setClearColor(15790320),webglRenderer.setPixelRatio(window.devicePixelRatio),webglRenderer.setSize(e,a),document.body.appendChild(webglRenderer.domElement),stats=new Stats,document.body.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){var e=window.innerWidth/2,a=window.innerHeight/2;camera.aspect=e/a,camera.updateProjectionMatrix(),canvasRenderer.setSize(e,a),svgRenderer.setSize(e,a),softwareRenderer.setSize(e,a),webglRenderer.setSize(e,a)}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){var e=2e-4*Date.now();camera.position.x=500*Math.sin(e),camera.position.z=500*Math.cos(e),camera.lookAt(scene.position),group.rotation.x+=.01,scene.updateMatrixWorld(),canvasRenderer.render(scene,camera),svgRenderer.render(scene,camera),softwareRenderer.render(scene,camera),webglRenderer.render(scene,camera)}var AMOUNT=100,stats,camera,scene,canvasRenderer,svgRenderer,softwareRenderer,webglRenderer,mesh,group;init(),animate();</script>
+
+	
+
+</body></html>

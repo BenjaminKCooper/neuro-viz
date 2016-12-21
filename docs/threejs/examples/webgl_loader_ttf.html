@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - loader - ttf</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body
+			{
+				font-family: Monospace;
+				background-color: #000;
+				color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info
+			{
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+			}
+			#info a, .button
+			{
+				color: #f00;
+				font-weight: bold;
+				text-decoration: underline;
+				cursor: pointer
+			}
+		</style>
+	</head>
+	<body>
+		<script src="../build/three.js"></script>
+		<script src="js/utils/GeometryUtils.js"></script>
+		<script src="js/Detector.js"></script>
+		<script src="js/loaders/TTFLoader.js"></script>
+		<script src="js/libs/opentype.min.js"></script>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - TTFLoader using opentype by gero3
+			<br>type to enter new text, drag to spin the text
+			<br><span class="button" id="color">change color</span>,
+			<span class="button" id="bevel">change bevel</span>
+		</div>
+
+
+		<script>function decimalToHex(e){var t=Number(e).toString(16);return t="000000".substr(0,6-t.length)+t,t.toUpperCase()}function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(30,window.innerWidth/window.innerHeight,1,1500),camera.position.set(0,400,700),cameraTarget=new THREE.Vector3(0,150,0),scene=new THREE.Scene,scene.fog=new THREE.Fog(0,250,1400);var e=new THREE.DirectionalLight(16777215,.125);e.position.set(0,0,1).normalize(),scene.add(e);var t=new THREE.PointLight(16777215,1.5);t.position.set(0,100,90),scene.add(t);var o=document.location.hash.substr(1);if(0!==o.length){var n=o.substring(0,6),r=o.substring(6,7),i=o.substring(7,8),a=o.substring(8,9),s=o.substring(10);hex=n,t.color.setHex(parseInt(n,16)),fontName=reverseFontMap[parseInt(r)],fontWeight=reverseWeightMap[parseInt(i)],bevelEnabled=parseInt(a),text=decodeURI(s)}else t.color.setHSL(Math.random(),1,.5),hex=decimalToHex(t.color.getHex());material=new THREE.MeshPhongMaterial({color:16777215,shading:THREE.FlatShading}),group=new THREE.Group,group.position.y=100,scene.add(group);var u=new THREE.TTFLoader;u.load("fonts/ttf/kenpixel.ttf",function(e){font=new THREE.Font(e),createText()});var c=new THREE.Mesh(new THREE.PlaneBufferGeometry(1e4,1e4),new THREE.MeshBasicMaterial({color:16777215,opacity:.5,transparent:!0}));c.position.y=100,c.rotation.x=-Math.PI/2,scene.add(c),renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(scene.fog.color),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),document.addEventListener("mousedown",onDocumentMouseDown,!1),document.addEventListener("touchstart",onDocumentTouchStart,!1),document.addEventListener("touchmove",onDocumentTouchMove,!1),document.addEventListener("keypress",onDocumentKeyPress,!1),document.addEventListener("keydown",onDocumentKeyDown,!1),document.getElementById("color").addEventListener("click",function(){t.color.setHSL(Math.random(),1,.5),hex=decimalToHex(t.color.getHex())},!1),document.getElementById("bevel").addEventListener("click",function(){bevelEnabled=!bevelEnabled,refreshText()},!1),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function onDocumentKeyDown(e){firstLetter&&(firstLetter=!1,text="");var t=e.keyCode;if(8==t)return e.preventDefault(),text=text.substring(0,text.length-1),refreshText(),!1}function onDocumentKeyPress(e){var t=e.which;if(8==t)e.preventDefault();else{var o=String.fromCharCode(t);text+=o,refreshText()}}function createText(){if(textGeo=new THREE.TextGeometry(text,{font:font,size:size,height:height,curveSegments:curveSegments,bevelThickness:bevelThickness,bevelSize:bevelSize,bevelEnabled:bevelEnabled,material:0,extrudeMaterial:1}),textGeo.computeBoundingBox(),textGeo.computeVertexNormals(),!bevelEnabled)for(var e=.1*(height*size),t=0;t<textGeo.faces.length;t++){var o=textGeo.faces[t];if(1==o.materialIndex){for(var n=0;n<o.vertexNormals.length;n++)o.vertexNormals[n].z=0,o.vertexNormals[n].normalize();var r=textGeo.vertices[o.a],i=textGeo.vertices[o.b],a=textGeo.vertices[o.c],s=THREE.GeometryUtils.triangleArea(r,i,a);if(s>e)for(var n=0;n<o.vertexNormals.length;n++)o.vertexNormals[n].copy(o.normal)}}var u=-.5*(textGeo.boundingBox.max.x-textGeo.boundingBox.min.x);textMesh1=new THREE.Mesh(textGeo,material),textMesh1.position.x=u,textMesh1.position.y=hover,textMesh1.position.z=0,textMesh1.rotation.x=0,textMesh1.rotation.y=2*Math.PI,group.add(textMesh1),mirror&&(textMesh2=new THREE.Mesh(textGeo,material),textMesh2.position.x=u,textMesh2.position.y=-hover,textMesh2.position.z=height,textMesh2.rotation.x=Math.PI,textMesh2.rotation.y=2*Math.PI,group.add(textMesh2))}function refreshText(){group.remove(textMesh1),mirror&&group.remove(textMesh2),text&&createText()}function onDocumentMouseDown(e){e.preventDefault(),document.addEventListener("mousemove",onDocumentMouseMove,!1),document.addEventListener("mouseup",onDocumentMouseUp,!1),document.addEventListener("mouseout",onDocumentMouseOut,!1),mouseXOnMouseDown=e.clientX-windowHalfX,targetRotationOnMouseDown=targetRotation}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,targetRotation=targetRotationOnMouseDown+.02*(mouseX-mouseXOnMouseDown)}function onDocumentMouseUp(e){document.removeEventListener("mousemove",onDocumentMouseMove,!1),document.removeEventListener("mouseup",onDocumentMouseUp,!1),document.removeEventListener("mouseout",onDocumentMouseOut,!1)}function onDocumentMouseOut(e){document.removeEventListener("mousemove",onDocumentMouseMove,!1),document.removeEventListener("mouseup",onDocumentMouseUp,!1),document.removeEventListener("mouseout",onDocumentMouseOut,!1)}function onDocumentTouchStart(e){1==e.touches.length&&(e.preventDefault(),mouseXOnMouseDown=e.touches[0].pageX-windowHalfX,targetRotationOnMouseDown=targetRotation)}function onDocumentTouchMove(e){1==e.touches.length&&(e.preventDefault(),mouseX=e.touches[0].pageX-windowHalfX,targetRotation=targetRotationOnMouseDown+.05*(mouseX-mouseXOnMouseDown))}function animate(){requestAnimationFrame(animate),group.rotation.y+=.05*(targetRotation-group.rotation.y),camera.lookAt(cameraTarget),renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage(),THREE.Cache.enabled=!0;var container,hex,color,camera,cameraTarget,scene,renderer,group,textMesh1,textMesh2,textGeo,material,firstLetter=!0,text="three.js",height=20,size=70,hover=30,curveSegments=4,bevelThickness=2,bevelSize=1.5,bevelSegments=3,bevelEnabled=!0,font=null,mirror=!0,targetRotation=0,targetRotationOnMouseDown=0,mouseX=0,mouseXOnMouseDown=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;init(),animate();</script>
+
+	
+
+</body></html>

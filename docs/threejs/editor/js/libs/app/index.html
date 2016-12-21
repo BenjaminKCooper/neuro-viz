@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js</title>
+		<meta charset="utf-8">
+		<meta name="generator" content="Three.js Editor">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+		body {
+			font-family: Helvetica, Arial, sans-serif;
+			font-size: 12px;
+			background-color: #000;
+			margin: 0px;
+			overflow: hidden;
+		}
+		#edit {
+			position: absolute;
+			bottom: 20px;
+			right: 20px;
+			padding: 8px;
+			color: #555;
+			background-color: #fff;
+			opacity: 0.5;
+		}
+		#edit:hover {
+			cursor: pointer;
+			opacity: 1;
+		}
+		</style>
+	</head>
+	<body ontouchstart="">
+		<script src="js/three.min.js"></script>
+		<script src="js/app.js"></script>
+		
+		<script>var loader=new THREE.FileLoader;loader.load("app.json",function(e){var n=JSON.parse(e),i=new APP.Player;if(i.load(n),i.setSize(window.innerWidth,window.innerHeight),i.play(),document.body.appendChild(i.dom),n.project.editable===!0){var d=document.createElement("div");d.id="edit",d.textContent="EDIT",d.addEventListener("click",function(e){var n=location.href.split("/").slice(0,-1).join("/");window.open("http://threejs.org/editor/#file="+n+"/app.json")},!1),document.body.appendChild(d)}window.addEventListener("resize",function(){i.setSize(window.innerWidth,window.innerHeight)})});</script>
+	
+
+</body></html>

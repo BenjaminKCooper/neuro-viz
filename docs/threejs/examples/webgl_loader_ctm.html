@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - io - CTM loader</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #000;
+				color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+			}
+
+			#info a, .button { color: #f00; font-weight: bold; text-decoration: underline; cursor: pointer }
+		</style>
+	</head>
+
+	<body>
+		<div id="info">
+		<a href="http://threejs.org" target="_blank">three.js</a> -
+		<a href="http://openctm.sourceforge.net/" target="_blank">CTM format</a> loader test -
+		using <a href="http://code.google.com/p/js-openctm/">js-openctm</a> -
+		models from <a href="http://www.sci.utah.edu/~wald/animrep/" target="_blank">The Utah 3D Animation Repository</a>,
+		<a href="http://graphics.cs.williams.edu/data/meshes.xml#14" target="_blank">Lee Perry-Smith</a>,
+		<a href="http://davidoreilly.com/post/18087489343/disneyhead" target="_blank">David OReilly</a>
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/loaders/ctm/lzma.js"></script>
+		<script src="js/loaders/ctm/ctm.js"></script>
+		<script src="js/loaders/ctm/CTMLoader.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){function e(){if(i++,3===i){var e=Date.now();console.log("Total parse time: "+(e-d)+" ms")}}container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(20,SCREEN_WIDTH/SCREEN_HEIGHT,1,2e3),camera.position.z=800,scene=new THREE.Scene,scene.fog=new THREE.Fog(328965,800,2e3);var n="textures/cube/SwedishRoyalCastle/",a=".jpg",o=[n+"px"+a,n+"nx"+a,n+"py"+a,n+"ny"+a,n+"pz"+a,n+"nz"+a];reflectionCube=cubeTextureLoader.load(o);var r=new THREE.AmbientLight(263172);scene.add(r);var t=new THREE.SpotLight(16772829,1.2,650,Math.PI/6);t.position.set(0,-100,500),t.castShadow=!0,t.shadow.mapWidth=1024,t.shadow.mapHeight=1024,scene.add(t),renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(scene.fog.color),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),renderer.domElement.style.position="relative",container.appendChild(renderer.domElement),renderer.gammaInput=!0,renderer.gammaOutput=!0,renderer.shadowMap.enabled=!0,stats=new Stats,container.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1);var i=0,d=Date.now(),s=new THREE.CTMLoader;s.load("models/ctm/ben.ctm",function(n){var a=new THREE.MeshLambertMaterial({color:16755200,map:textureLoader.load("textures/UV_Grid_Sm.jpg"),envMap:reflectionCube,combine:THREE.MixOperation,reflectivity:.3});callbackModel(n,450,a,0,-200,0,0,0),e()},{useWorker:!0}),s.load("models/ctm/WaltHead.ctm",function(n){var a=new THREE.MeshLambertMaterial({color:16777215}),o=new THREE.MeshPhongMaterial({color:16729088,specular:3355443,shininess:100}),r=new THREE.MeshPhongMaterial({color:65348,specular:3355443,shininess:100});callbackModel(n,5,a,-200,0,-50,0,0),callbackModel(n,2,o,100,0,125,0,0),callbackModel(n,2,r,-100,0,125,0,0),e()},{useWorker:!0}),s.load("models/ctm/LeePerry.ctm",function(n){var a=new THREE.MeshPhongMaterial({specular:3158064,shininess:50,map:textureLoader.load("obj/leeperrysmith/Map-COL.jpg"),specularMap:textureLoader.load("obj/leeperrysmith/Map-SPEC.jpg"),normalMap:textureLoader.load("obj/leeperrysmith/Infinite-Level_02_Tangent_SmoothUV.jpg"),normalScale:new THREE.Vector2(.8,.8)});callbackModel(n,1300,a,200,50,0,0,0),e()},{useWorker:!0})}function callbackModel(e,n,a,o,r,t,i,d){var s=new THREE.Mesh(e,a);s.position.set(o,r,t),s.scale.set(n,n,n),s.rotation.x=i,s.rotation.z=d,s.castShadow=!0,s.receiveShadow=!0,scene.add(s)}function onWindowResize(e){SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),camera.aspect=SCREEN_WIDTH/SCREEN_HEIGHT,camera.updateProjectionMatrix()}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,mouseY=e.clientY-windowHalfY}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-mouseY-camera.position.y),camera.lookAt(scene.position),renderer.render(scene,camera)}var SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,container,stats,camera,scene,renderer,mesh,zmesh,geometry,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,textureLoader=new THREE.TextureLoader,cubeTextureLoader=new THREE.CubeTextureLoader;document.addEventListener("mousemove",onDocumentMouseMove,!1),init(),animate();</script>
+
+	
+
+</body></html>

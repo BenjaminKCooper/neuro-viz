@@ -1,0 +1,133 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - glTF</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #222222;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				color: #808080;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+			}
+
+			#container {
+				position: absolute;
+				top: 0px;
+				width:100%;
+				height:100%;
+				z-index: -1;
+			}
+
+			#controls {
+				position:absolute;
+				width:250px;
+				bottom:0%;
+				right:0%;
+				height:132px;
+				background-color:White;
+				opacity:.9;
+				font: 13px/1.231 "Lucida Grande", Lucida, Verdana, sans-serif;
+			}
+
+			#status {
+				position:absolute;
+				width:25%;
+				left:2%;
+				top:95%;
+				height:5%;
+				opacity:.9;
+				font: 13px/1.231 "Lucida Grande", Lucida, Verdana, sans-serif;
+			}
+
+			.control {
+				position:absolute;
+				margin-left:12px;
+				width:100%;
+				font-weight:bold;
+			}
+
+			.controlValue {
+				position:absolute;
+				left:36%;
+				top:0%;
+			}
+
+			#scenes_control {
+				position:absolute;
+				top:8px;
+			}
+
+			#cameras_control {
+				position:absolute;
+				top:40px;
+			}
+
+			#animations_control {
+				position:absolute;
+				top:72px;
+			}
+
+			#materials_extension_control {
+				position:absolute;
+				top:104px;
+			}
+
+			#info a, .button { color: #f00; font-weight: bold; text-decoration: underline; cursor: pointer }
+		</style>
+	</head>
+
+	<body>
+		<div id="info">
+		<a href="http://threejs.org" target="_blank">three.js</a> -
+		<a href="https://github.com/KhronosGroup/glTF" target="_blank">glTF</a> loader -
+		<br>
+		monster by <a href="http://www.3drt.com/downloads.htm" target="_blank">3drt</a> -
+		COLLADA duck by Sony - other models courtesy <a href="http://cesiumjs.org/" target="_blank">Cesium</a>
+		</div>
+	<div id="container">
+	</div>
+	<div id="status">
+	</div>
+	<div id="controls">
+		<div class="control" id="scenes_control">
+		Model
+		<select class="controlValue" id="scenes_list" size="1" onchange="selectScene();" ondblclick="selectScene();">
+		</select>
+		</div>
+
+		<div class="control" id="cameras_control">
+		Camera
+		<select class="controlValue" id="cameras_list" size="1" onchange="selectCamera();" ondblclick="selectCamera();">
+		</select>
+		</div>
+		<div class="control" id="animations_control">
+		Animations
+		<div class="controlValue"><input type="checkbox" checked="" onclick="toggleAnimations();">Play</div>
+		</div>
+		<div class="control" id="materials_extension_control">
+			Shaders
+			<div class="controlValue">
+			<input type="checkbox" id="materials_extension_checkbox" checked="" onclick="toggleMaterialsExtension();">Use built-in
+			</div>
+		</div>
+
+	</div>
+		<script src="../build/three.js"></script>
+		<script src="js/controls/OrbitControls.js"></script>
+		<script src="js/loaders/GLTFLoader.js"></script>
+
+		<script>function onload(){window.addEventListener("resize",onWindowResize,!1),document.addEventListener("keydown",function(e){onKeyDown(e)},!1),buildSceneList(),switchScene(0),animate()}function initScene(index){container=document.getElementById("container"),scene=new THREE.Scene,defaultCamera=new THREE.PerspectiveCamera(45,container.offsetWidth/container.offsetHeight,1,2e4),scene.add(defaultCamera),camera=defaultCamera;var sceneInfo=sceneList[index],spot1=null;if(sceneInfo.addLights){var ambient=new THREE.AmbientLight(2236962);scene.add(ambient);var directionalLight=new THREE.DirectionalLight(14540253);directionalLight.position.set(0,0,1).normalize(),scene.add(directionalLight),spot1=new THREE.SpotLight(16777215,1),spot1.position.set(10,20,10),spot1.angle=.25,spot1.distance=1024,spot1.penumbra=.75,sceneInfo.shadows&&(spot1.castShadow=!0,spot1.shadow.bias=1e-4,spot1.shadow.mapSize.width=2048,spot1.shadow.mapSize.height=2048),scene.add(spot1)}renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(2236962),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),sceneInfo.shadows&&(renderer.shadowMap.enabled=!0,renderer.shadowMap.type=THREE.PCFSoftShadowMap),container.appendChild(renderer.domElement);var ground=null;if(sceneInfo.addGround){var groundMaterial=new THREE.MeshPhongMaterial({color:16777215,shading:THREE.SmoothShading});ground=new THREE.Mesh(new THREE.PlaneBufferGeometry(512,512),groundMaterial),sceneInfo.shadows&&(ground.receiveShadow=!0),sceneInfo.groundPos?ground.position.copy(sceneInfo.groundPos):ground.position.z=-70,ground.rotation.x=-Math.PI/2,scene.add(ground)}THREE.GLTFLoader.Shaders.removeAll(),loader=new THREE.GLTFLoader;var loadStartTime=Date.now(),status=document.getElementById("status");status.innerHTML="Loading...";var url=sceneInfo.url,r=eval("/%s/g"),dir=useMaterialsExtension?"glTF-MaterialsCommon":"glTF";url=url.replace(r,dir);var loadStartTime=Date.now(),status=document.getElementById("status");status.innerHTML="Loading...",loader.load(url,function(e){gltf=e;var n=gltf.scene,t=Date.now(),a=(t-loadStartTime)/1e3;if(status.innerHTML="Load time: "+a.toFixed(2)+" seconds.",sceneInfo.cameraPos&&defaultCamera.position.copy(sceneInfo.cameraPos),sceneInfo.center&&orbitControls.target.copy(sceneInfo.center),sceneInfo.objectPosition&&(n.position.copy(sceneInfo.objectPosition),spot1&&(spot1.position.set(sceneInfo.objectPosition.x-100,sceneInfo.objectPosition.y+200,sceneInfo.objectPosition.z-100),spot1.target.position.copy(sceneInfo.objectPosition))),sceneInfo.objectRotation&&n.rotation.copy(sceneInfo.objectRotation),sceneInfo.objectScale&&n.scale.copy(sceneInfo.objectScale),cameraIndex=0,cameras=[],cameraNames=[],gltf.cameras&&gltf.cameras.length){var o,r=gltf.cameras.length;for(o=0;o<r;o++){var i=!0,s=gltf.cameras[o].parent.name;!sceneInfo.cameras||s in sceneInfo.cameras||(i=!1),i&&(cameraNames.push(s),cameras.push(gltf.cameras[o]))}updateCamerasList(),switchCamera(1)}else updateCamerasList(),switchCamera(0);var c=gltf.animations;if(c&&c.length){mixer=new THREE.AnimationMixer(n);for(var o=0;o<c.length;o++){var d=c[o];sceneInfo.animationTime&&(d.duration=sceneInfo.animationTime),mixer.clipAction(d).play()}}scene.add(n),onWindowResize()}),orbitControls=new THREE.OrbitControls(defaultCamera,renderer.domElement)}function onWindowResize(){defaultCamera.aspect=container.offsetWidth/container.offsetHeight,defaultCamera.updateProjectionMatrix();var e,n=cameras.length;for(e=0;e<n;e++)cameras[e].aspect=container.offsetWidth/container.offsetHeight,cameras[e].updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight)}function animate(){requestAnimationFrame(animate),mixer&&mixer.update(clock.getDelta()),THREE.GLTFLoader.Shaders.update(scene,camera),0==cameraIndex&&orbitControls.update(),render()}function render(){renderer.render(scene,camera)}function onKeyDown(e){var n=String.fromCharCode(e.keyCode);if(" "==n)t=cameraIndex+1,t>cameras.length&&(t=0),switchCamera(t);else{var t=parseInt(n);!isNaN(t)&&t<=cameras.length&&switchCamera(t)}}function buildSceneList(){for(var e=document.getElementById("scenes_list");e.hasChildNodes();)e.removeChild(e.lastChild);var n,t=sceneList.length;for(n=0;n<t;n++)option=document.createElement("option"),option.text=sceneList[n].name,e.add(option)}function switchScene(e){cleanup(),initScene(e);var n=document.getElementById("scenes_list");n.selectedIndex=e}function selectScene(){var e=document.getElementById("scenes_list"),n=e.selectedIndex;n>=0&&switchScene(n)}function switchCamera(e){cameraIndex=e,0==cameraIndex&&(camera=defaultCamera),cameraIndex>=1&&cameraIndex<=cameras.length&&(camera=cameras[cameraIndex-1]);var n=document.getElementById("cameras_list");n.selectedIndex=cameraIndex}function updateCamerasList(){for(var e=document.getElementById("cameras_list");e.hasChildNodes();)e.removeChild(e.lastChild);option=document.createElement("option"),option.text="[default]",e.add(option);var n,t=cameraNames.length;for(n=0;n<t;n++)option=document.createElement("option"),option.text=cameraNames[n],e.add(option)}function selectCamera(){var e=document.getElementById("cameras_list"),n=e.selectedIndex;n>=0&&switchCamera(n)}function toggleAnimations(){var e,n=gltf.clips.length;for(e=0;e<n;e++){var t=gltf.clips[e],a=mixer.existingAction(t);a.isRunning()?a.stop():a.play()}}function toggleMaterialsExtension(){useMaterialsExtension=!useMaterialsExtension,selectScene()}function cleanup(){container&&renderer&&container.removeChild(renderer.domElement),cameraIndex=0,cameras=[],cameraNames=[],defaultCamera=null,loader&&mixer&&mixer.stopAllAction()}var orbitControls=null,container,camera,scene,renderer,loader,cameraIndex=0,cameras=[],cameraNames=[],defaultCamera=null,gltf=null,mixer=null,clock=new THREE.Clock,sceneList=[{name:"Monster",url:"./models/gltf/monster/%s/monster.gltf",cameraPos:new THREE.Vector3(30,10,70),objectScale:new THREE.Vector3(.4,.4,.4),objectPosition:new THREE.Vector3(2,1,0),objectRotation:new THREE.Euler(0,-3*Math.PI/4,0),animationTime:3,addLights:!0,shadows:!0,addGround:!0},{name:"Duck",url:"./models/gltf/duck/%s/duck.gltf",cameraPos:new THREE.Vector3(0,3,5),addLights:!0,addGround:!0,shadows:!0},{name:"Cesium Man",url:"./models/gltf/CesiumMan/%s/Cesium_Man.gltf",cameraPos:new THREE.Vector3(0,3,10),objectRotation:new THREE.Euler(0,0,0),addLights:!0,addGround:!0,shadows:!0},{name:"Cesium Milk Truck",url:"./models/gltf/CesiumMilkTruck/%s/CesiumMilkTruck.gltf",cameraPos:new THREE.Vector3(0,3,10),addLights:!0,addGround:!0,shadows:!0}],useextmaterials=document.getElementById("materials_extension_checkbox"),useMaterialsExtension=useextmaterials.hasAttribute("checked");onload();</script>
+
+	
+
+</body></html>

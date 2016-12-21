@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - geometry - vertex colors</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #808080;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			a {
+
+				color: #0080ff;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> webgl - vertex colors</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.getElementById("container"),camera=new THREE.PerspectiveCamera(20,window.innerWidth/window.innerHeight,1,1e4),camera.position.z=1800,scene=new THREE.Scene,light=new THREE.DirectionalLight(16777215),light.position.set(0,0,1),scene.add(light);var e=document.createElement("canvas");e.width=128,e.height=128;var n=e.getContext("2d"),t=n.createRadialGradient(e.width/2,e.height/2,0,e.width/2,e.height/2,e.width/2);t.addColorStop(.1,"rgba(210,210,210,1)"),t.addColorStop(1,"rgba(255,255,255,1)"),n.fillStyle=t,n.fillRect(0,0,e.width,e.height);var i=new THREE.Texture(e);i.needsUpdate=!0;var o=new THREE.MeshBasicMaterial({map:i}),r=new THREE.PlaneBufferGeometry(300,300,1,1);mesh=new THREE.Mesh(r,o),mesh.position.y=-250,mesh.rotation.x=-Math.PI/2,scene.add(mesh),mesh=new THREE.Mesh(r,o),mesh.position.y=-250,mesh.position.x=-400,mesh.rotation.x=-Math.PI/2,scene.add(mesh),mesh=new THREE.Mesh(r,o),mesh.position.y=-250,mesh.position.x=400,mesh.rotation.x=-Math.PI/2,scene.add(mesh);for(var a,s,d,c,w,h,l=["a","b","c"],m=200,E=new THREE.IcosahedronGeometry(m,1),g=new THREE.IcosahedronGeometry(m,1),p=new THREE.IcosahedronGeometry(m,1),u=0;u<E.faces.length;u++){s=E.faces[u],d=g.faces[u],c=p.faces[u];for(var H=0;H<3;H++)h=s[l[H]],w=E.vertices[h],a=new THREE.Color(16777215),a.setHSL((w.y/m+1)/2,1,.5),s.vertexColors[H]=a,a=new THREE.Color(16777215),a.setHSL(0,(w.y/m+1)/2,.5),d.vertexColors[H]=a,a=new THREE.Color(16777215),a.setHSL(.125*h/E.vertices.length,1,.5),c.vertexColors[H]=a}var R=[new THREE.MeshPhongMaterial({color:16777215,shading:THREE.FlatShading,vertexColors:THREE.VertexColors,shininess:0}),new THREE.MeshBasicMaterial({color:0,shading:THREE.FlatShading,wireframe:!0,transparent:!0})];group1=THREE.SceneUtils.createMultiMaterialObject(E,R),group1.position.x=-400,group1.rotation.x=-1.87,scene.add(group1),group2=THREE.SceneUtils.createMultiMaterialObject(g,R),group2.position.x=400,group2.rotation.x=0,scene.add(group2),group3=THREE.SceneUtils.createMultiMaterialObject(p,R),group3.position.x=0,group3.rotation.x=0,scene.add(group3),renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(16777215),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),document.addEventListener("mousemove",onDocumentMouseMove,!1),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,mouseY=e.clientY-windowHalfY}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-mouseY-camera.position.y),camera.lookAt(scene.position),renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var container,stats,camera,scene,renderer,mesh,group1,group2,group3,light,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;init(),animate();</script>
+
+	
+
+</body></html>

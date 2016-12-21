@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - sea3d / sound</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+
+			}
+
+			#blocker {
+
+				position: absolute;
+
+				width: 100%;
+				height: 100%;
+
+				background-color: rgba(0,0,0,0.5);
+
+			}
+
+			#instructions {
+
+				width: 100%;
+				height: 100%;
+
+				display: -webkit-box;
+				display: -moz-box;
+				display: box;
+
+				-webkit-box-orient: horizontal;
+				-moz-box-orient: horizontal;
+				box-orient: horizontal;
+
+				-webkit-box-pack: center;
+				-moz-box-pack: center;
+				box-pack: center;
+
+				-webkit-box-align: center;
+				-moz-box-align: center;
+				box-align: center;
+
+				color: #ffffff;
+				text-align: center;
+
+				cursor: pointer;
+
+			}
+
+			a { color: white }
+		</style>
+	</head>
+	<body>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">Three.JS</a> - Exported by <a href="https://github.com/sunag/sea3d" style="color:#FFFFFF" target="_blank">SEA3D Exporter</a> and edited by <a href="https://github.com/sunag/sea3d" style="color:#FFFFFF" target="_blank">SEA3D Studio</a>
+		</div>
+
+		<div id="blocker">
+
+			<div id="instructions">
+				<span style="font-size:40px">Click to play</span>
+				<br>
+				(W, A, S, D = Move, MOUSE = Look around)
+			</div>
+
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/controls/PointerLockControls.js"></script>
+
+		<script src="js/postprocessing/EffectComposer.js"></script>
+		<script src="js/postprocessing/RenderPass.js"></script>
+		<script src="js/postprocessing/ShaderPass.js"></script>
+		<script src="js/postprocessing/MaskPass.js"></script>
+		<script src="js/shaders/CopyShader.js"></script>
+		<script src="js/shaders/ColorCorrectionShader.js"></script>
+		<script src="js/shaders/VignetteShader.js"></script>
+
+		<script src="js/loaders/sea3d/SEA3D.js"></script>
+		<script src="js/loaders/sea3d/SEA3DLZMA.js"></script>
+		<script src="js/loaders/sea3d/SEA3DLoader.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function initPointerLock(){blocker=document.getElementById("blocker"),instructions=document.getElementById("instructions");var e="pointerLockElement"in document||"mozPointerLockElement"in document||"webkitPointerLockElement"in document;if(e){var t=document.body,o=function(e){document.pointerLockElement===t||document.mozPointerLockElement===t||document.webkitPointerLockElement===t?(controlsEnabled=!0,controls.enabled=!0,blocker.style.display="none"):(controls.enabled=!1,blocker.style.display="-webkit-box",blocker.style.display="-moz-box",blocker.style.display="box",instructions.style.display="")},n=function(e){instructions.style.display=""};document.addEventListener("pointerlockchange",o,!1),document.addEventListener("mozpointerlockchange",o,!1),document.addEventListener("webkitpointerlockchange",o,!1),document.addEventListener("pointerlockerror",n,!1),document.addEventListener("mozpointerlockerror",n,!1),document.addEventListener("webkitpointerlockerror",n,!1),instructions.addEventListener("click",function(e){instructions.style.display="none",t.requestPointerLock=t.requestPointerLock||t.mozRequestPointerLock||t.webkitRequestPointerLock,t.requestPointerLock()},!1)}else instructions.innerHTML="Your browser doesn't seem to support Pointer Lock API"}function initKeyDown(){function e(e){switch(e.keyCode){case 38:case 87:moveForward=!0;break;case 37:case 65:moveLeft=!0;break;case 40:case 83:moveBackward=!0;break;case 39:case 68:moveRight=!0}}function t(e){switch(e.keyCode){case 38:case 87:moveForward=!1;break;case 37:case 65:moveLeft=!1;break;case 40:case 83:moveBackward=!1;break;case 39:case 68:moveRight=!1}}document.addEventListener("keydown",e,!1),document.addEventListener("keyup",t,!1)}function init(){raycaster=new THREE.Raycaster,scene=new THREE.Scene,velocity=new THREE.Vector3,container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,2e3),controls=new THREE.PointerLockControls(camera),scene.add(controls.getObject()),controls.getObject().translateX(250),controls.getObject().translateZ(250),renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),renderer.setClearColor(3355443,1),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),composer=new THREE.EffectComposer(renderer);var e=new THREE.RenderPass(scene,camera),t=new THREE.ShaderPass(THREE.CopyShader);composer.addPass(e);var o=1.4,n=1.2,r=new THREE.ShaderPass(THREE.ColorCorrectionShader);r.uniforms.powRGB.value=new THREE.Vector3(o,o,o),r.uniforms.mulRGB.value=new THREE.Vector3(n,n,n),composer.addPass(r);var i=new THREE.ShaderPass(THREE.VignetteShader);i.uniforms.darkness.value=1,composer.addPass(i),composer.addPass(t),t.renderToScreen=!0,window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),composer.setSize(window.innerWidth,window.innerHeight),renderer.setSize(window.innerWidth,window.innerHeight)}function animateCamera(e){var t=1400;velocity.x-=10*velocity.x*e,velocity.z-=10*velocity.z*e,velocity.y-=9.8*100*e,moveForward&&(velocity.z-=t*e),moveBackward&&(velocity.z+=t*e),moveLeft&&(velocity.x-=t*e),moveRight&&(velocity.x+=t*e),controls.getObject().translateX(velocity.x*e),controls.getObject().translateZ(velocity.z*e)}function updateSoundFilter(){var e=(new THREE.Vector3).setFromMatrixPosition(soundArea.matrixWorld).sub(audioPos),t=e.length();raycaster.set(audioPos,e.normalize()),t>50&&raycaster.intersectObjects([collisionArea]).length?soundArea.getFilters()[0]!==soundFilter&&soundArea.setFilters([soundFilter]):soundArea.getFilters()[0]===soundFilter&&soundArea.setFilters([])}function animate(){var e=clock.getDelta();animateCamera(e),loader.audioListener.position.copy(audioPos.setFromMatrixPosition(camera.matrixWorld)),loader.audioListener.rotation.copy(audioRot.setFromRotationMatrix(camera.matrixWorld)),updateSoundFilter(),lightOutside.intensity=soundOutsideAnalyser.getAverageFrequency()/100,lightArea.intensity=soundAreaAnalyser.getAverageFrequency()/50,THREE.SEA3D.AnimationHandler.update(e),render(e),stats.update(),requestAnimationFrame(animate)}function render(e){composer.render(e)}Detector.webgl||Detector.addGetWebGLMessage(),console.log("Visit https://github.com/sunag/sea3d to all codes and builds under development.");var container,raycaster,stats,camera,scene,renderer,composer,controls,velocity,blocker,instructions,moveLeft,moveForward,moveBackward,moveRight,loader,audioListener,soundFilter,soundAreaAnalyser,soundOutsideAnalyser,soundArea,collisionArea,lightArea,lightOutside;initPointerLock(),initKeyDown(),init(),loader=new THREE.SEA3D({autoPlay:!0,container:scene}),loader.onComplete=function(e){audioListener=loader.audioListener,soundFilter=audioListener.context.createBiquadFilter(),soundFilter.type="lowpass",soundFilter.Q.value=10,soundFilter.frequency.value=440,lightOutside=loader.getLight("Light1"),soundOutside=loader.getSound3D("Point001"),soundOutsideAnalyser=new THREE.AudioAnalyser(soundOutside,32),lightArea=loader.getLight("Light2"),soundArea=loader.getSound3D("Point002"),soundAreaAnalyser=new THREE.AudioAnalyser(soundArea,512),collisionArea=loader.getMesh("Torus003"),animate()},loader.load("./models/sea3d/sound.tjs.sea");var clock=new THREE.Clock,audioPos=new THREE.Vector3,audioRot=new THREE.Euler;</script>
+	
+
+</body></html>

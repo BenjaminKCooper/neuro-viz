@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webvr - cubes</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #101010;
+				color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+			a {
+				color: #f00;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/controls/VRControls.js"></script>
+		<script src="js/effects/VREffect.js"></script>
+		<script src="js/vr/WebVR.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container);var e=document.createElement("div");e.style.position="absolute",e.style.top="10px",e.style.width="100%",e.style.textAlign="center",e.innerHTML='<a href="http://threejs.org" target="_blank">three.js</a> webgl - interactive cubes',container.appendChild(e),scene=new THREE.Scene,camera=new THREE.PerspectiveCamera(70,window.innerWidth/window.innerHeight,.1,10),scene.add(camera),crosshair=new THREE.Mesh(new THREE.RingGeometry(.02,.04,32),new THREE.MeshBasicMaterial({color:16777215,opacity:.5,transparent:!0})),crosshair.position.z=-2,camera.add(crosshair),room=new THREE.Mesh(new THREE.BoxGeometry(6,6,6,8,8,8),new THREE.MeshBasicMaterial({color:4210752,wireframe:!0})),scene.add(room),scene.add(new THREE.HemisphereLight(6316128,4210752));var t=new THREE.DirectionalLight(16777215);t.position.set(1,1,1).normalize(),scene.add(t);for(var o=new THREE.BoxGeometry(.15,.15,.15),a=0;a<200;a++){var n=new THREE.Mesh(o,new THREE.MeshLambertMaterial({color:16777215*Math.random()}));n.position.x=4*Math.random()-2,n.position.y=4*Math.random()-2,n.position.z=4*Math.random()-2,n.rotation.x=2*Math.random()*Math.PI,n.rotation.y=2*Math.random()*Math.PI,n.rotation.z=2*Math.random()*Math.PI,n.scale.x=Math.random()+.5,n.scale.y=Math.random()+.5,n.scale.z=Math.random()+.5,n.userData.velocity=new THREE.Vector3,n.userData.velocity.x=.01*Math.random()-.005,n.userData.velocity.y=.01*Math.random()-.005,n.userData.velocity.z=.01*Math.random()-.005,room.add(n)}raycaster=new THREE.Raycaster,renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(5263440),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),renderer.sortObjects=!1,container.appendChild(renderer.domElement),controls=new THREE.VRControls(camera),effect=new THREE.VREffect(renderer),navigator.getVRDisplays&&(navigator.getVRDisplays().then(function(e){effect.setVRDisplay(e[0]),controls.setVRDisplay(e[0])}).catch(function(){}),document.body.appendChild(WEBVR.getButton(effect))),renderer.domElement.addEventListener("mousedown",onMouseDown,!1),renderer.domElement.addEventListener("mouseup",onMouseUp,!1),renderer.domElement.addEventListener("touchstart",onMouseDown,!1),renderer.domElement.addEventListener("touchend",onMouseUp,!1),window.addEventListener("resize",onWindowResize,!1)}function onMouseDown(){isMouseDown=!0}function onMouseUp(){isMouseDown=!1}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),effect.setSize(window.innerWidth,window.innerHeight)}function animate(){effect.requestAnimationFrame(animate),render()}function render(){var e=60*clock.getDelta();if(isMouseDown===!0){var t=room.children[0];room.remove(t),t.position.set(0,0,-.75),t.position.applyQuaternion(camera.quaternion),t.userData.velocity.x=.02*(Math.random()-.5)*e,t.userData.velocity.y=.02*(Math.random()-.5)*e,t.userData.velocity.z=(.01*Math.random()-.05)*e,t.userData.velocity.applyQuaternion(camera.quaternion),room.add(t)}raycaster.setFromCamera({x:0,y:0},camera);var o=raycaster.intersectObjects(room.children);o.length>0?INTERSECTED!=o[0].object&&(INTERSECTED&&INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex),INTERSECTED=o[0].object,INTERSECTED.currentHex=INTERSECTED.material.emissive.getHex(),INTERSECTED.material.emissive.setHex(16711680)):(INTERSECTED&&INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex),INTERSECTED=void 0);for(var a=0;a<room.children.length;a++){var t=room.children[a];t.userData.velocity.multiplyScalar(1-.001*e),t.position.add(t.userData.velocity),(t.position.x<-3||t.position.x>3)&&(t.position.x=THREE.Math.clamp(t.position.x,-3,3),t.userData.velocity.x=-t.userData.velocity.x),(t.position.y<-3||t.position.y>3)&&(t.position.y=THREE.Math.clamp(t.position.y,-3,3),t.userData.velocity.y=-t.userData.velocity.y),(t.position.z<-3||t.position.z>3)&&(t.position.z=THREE.Math.clamp(t.position.z,-3,3),t.userData.velocity.z=-t.userData.velocity.z),t.rotation.x+=2*t.userData.velocity.x*e,t.rotation.y+=2*t.userData.velocity.y*e,t.rotation.z+=2*t.userData.velocity.z*e}controls.update(),effect.render(scene,camera)}WEBVR.isAvailable()===!1&&document.body.appendChild(WEBVR.getMessage());var clock=new THREE.Clock,container,camera,scene,raycaster,renderer,effect,controls,room,isMouseDown=!1,INTERSECTED,crosshair;init(),animate();</script>
+	
+
+</body></html>

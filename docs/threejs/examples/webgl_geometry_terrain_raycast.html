@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - geometry - terrain</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #61443e;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #bfd1e5;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			a {
+
+				color: #a06851;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="container"><br><br><br><br><br>Generating world...</div>
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> - webgl terrain raycasting demo</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/controls/OrbitControls.js"></script>
+
+		<script src="js/ImprovedNoise.js"></script>
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.getElementById("container"),camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,2e4),scene=new THREE.Scene,controls=new THREE.OrbitControls(camera),controls.target.set(0,100,0),controls.userPanSpeed=100,data=generateHeight(worldWidth,worldDepth),controls.target.y=data[worldHalfWidth+worldHalfDepth*worldWidth]+500,camera.position.y=controls.target.y+2e3,camera.position.x=2e3;var e=new THREE.PlaneBufferGeometry(7500,7500,worldWidth-1,worldDepth-1);e.rotateX(-Math.PI/2);for(var t=e.attributes.position.array,r=0,n=0,a=t.length;r<a;r++,n+=3)t[n+1]=10*data[r];e.computeFaceNormals(),texture=new THREE.CanvasTexture(generateTexture(data,worldWidth,worldDepth)),texture.wrapS=THREE.ClampToEdgeWrapping,texture.wrapT=THREE.ClampToEdgeWrapping,mesh=new THREE.Mesh(e,new THREE.MeshBasicMaterial({map:texture})),scene.add(mesh);var e=new THREE.CylinderGeometry(0,20,100,3);e.translate(0,50,0),e.rotateX(Math.PI/2),helper=new THREE.Mesh(e,new THREE.MeshNormalMaterial),scene.add(helper),renderer=new THREE.WebGLRenderer,renderer.setClearColor(12571109),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.innerHTML="",container.appendChild(renderer.domElement),container.addEventListener("mousemove",onMouseMove,!1),stats=new Stats,container.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function generateHeight(e,t){for(var r=e*t,n=new Uint8Array(r),a=new ImprovedNoise,o=1,i=100*Math.random(),d=0;d<4;d++){for(var l=0;l<r;l++){var c=l%e,s=~~(l/e);n[l]+=Math.abs(a.noise(c/o,s/o,i)*o*1.75)}o*=5}return n}function generateTexture(e,t,r){var n,a,o,i,d,l,c,s;l=new THREE.Vector3(0,0,0),c=new THREE.Vector3(1,1,1),c.normalize(),n=document.createElement("canvas"),n.width=t,n.height=r,o=n.getContext("2d"),o.fillStyle="#000",o.fillRect(0,0,t,r),i=o.getImageData(0,0,n.width,n.height),d=i.data;for(var h=0,w=0,m=d.length;h<m;h+=4,w++)l.x=e[w-2]-e[w+2],l.y=2,l.z=e[w-2*t]-e[w+2*t],l.normalize(),s=l.dot(c),d[h]=(96+128*s)*(.5+.007*e[w]),d[h+1]=(32+96*s)*(.5+.007*e[w]),d[h+2]=96*s*(.5+.007*e[w]);o.putImageData(i,0,0),a=document.createElement("canvas"),a.width=4*t,a.height=4*r,o=a.getContext("2d"),o.scale(4,4),o.drawImage(n,0,0),i=o.getImageData(0,0,a.width,a.height),d=i.data;for(var h=0,m=d.length;h<m;h+=4){var E=~~(5*Math.random());d[h]+=E,d[h+1]+=E,d[h+2]+=E}return o.putImageData(i,0,0),a}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){controls.update(clock.getDelta()),renderer.render(scene,camera)}function onMouseMove(e){mouse.x=e.clientX/renderer.domElement.clientWidth*2-1,mouse.y=2*-(e.clientY/renderer.domElement.clientHeight)+1,raycaster.setFromCamera(mouse,camera);var t=raycaster.intersectObject(mesh);t.length>0&&(helper.position.set(0,0,0),helper.lookAt(t[0].face.normal),helper.position.copy(t[0].point))}Detector.webgl||(Detector.addGetWebGLMessage(),document.getElementById("container").innerHTML="");var container,stats,camera,controls,scene,renderer,mesh,texture,worldWidth=256,worldDepth=256,worldHalfWidth=worldWidth/2,worldHalfDepth=worldDepth/2,clock=new THREE.Clock,helper,raycaster=new THREE.Raycaster,mouse=new THREE.Vector2;init(),animate();</script>
+
+	
+
+</body></html>

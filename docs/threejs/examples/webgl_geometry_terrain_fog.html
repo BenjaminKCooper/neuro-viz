@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - geometry - terrain + fog</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #61443e;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #efd1b5;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			a {
+
+				color: #a06851;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="container"><br><br><br><br><br>Generating world...</div>
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> - webgl terrain + fog demo <br>(left click: forward, right click: backward)</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/controls/FirstPersonControls.js"></script>
+
+		<script src="js/ImprovedNoise.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.getElementById("container"),camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1e4),controls=new THREE.FirstPersonControls(camera),controls.movementSpeed=150,controls.lookSpeed=.1,scene=new THREE.Scene,scene.fog=new THREE.FogExp2(15716789,.0025),data=generateHeight(worldWidth,worldDepth),camera.position.y=10*data[worldHalfWidth+worldHalfDepth*worldWidth]+500;var e=new THREE.PlaneBufferGeometry(7500,7500,worldWidth-1,worldDepth-1);e.rotateX(-Math.PI/2);for(var t=e.attributes.position.array,n=0,r=0,a=t.length;n<a;n++,r+=3)t[r+1]=10*data[n];texture=new THREE.CanvasTexture(generateTexture(data,worldWidth,worldDepth)),texture.wrapS=THREE.ClampToEdgeWrapping,texture.wrapT=THREE.ClampToEdgeWrapping,mesh=new THREE.Mesh(e,new THREE.MeshBasicMaterial({map:texture})),scene.add(mesh),renderer=new THREE.WebGLRenderer,renderer.setClearColor(15716789),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.innerHTML="",container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight),controls.handleResize()}function generateHeight(e,t){for(var n=e*t,r=new Uint8Array(n),a=new ImprovedNoise,o=1,i=100*Math.random(),d=0;d<4;d++){for(var w=0;w<n;w++){var l=w%e,c=~~(w/e);r[w]+=Math.abs(a.noise(l/o,c/o,i)*o*1.75)}o*=5}return r}function generateTexture(e,t,n){var r,a,o,i,d,w,l,c;w=new THREE.Vector3(0,0,0),l=new THREE.Vector3(1,1,1),l.normalize(),r=document.createElement("canvas"),r.width=t,r.height=n,o=r.getContext("2d"),o.fillStyle="#000",o.fillRect(0,0,t,n),i=o.getImageData(0,0,r.width,r.height),d=i.data;for(var s=0,h=0,m=d.length;s<m;s+=4,h++)w.x=e[h-2]-e[h+2],w.y=2,w.z=e[h-2*t]-e[h+2*t],w.normalize(),c=w.dot(l),d[s]=(96+128*c)*(.5+.007*e[h]),d[s+1]=(32+96*c)*(.5+.007*e[h]),d[s+2]=96*c*(.5+.007*e[h]);o.putImageData(i,0,0),a=document.createElement("canvas"),a.width=4*t,a.height=4*n,o=a.getContext("2d"),o.scale(4,4),o.drawImage(r,0,0),i=o.getImageData(0,0,a.width,a.height),d=i.data;for(var s=0,m=d.length;s<m;s+=4){var g=~~(5*Math.random());d[s]+=g,d[s+1]+=g,d[s+2]+=g}return o.putImageData(i,0,0),a}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){controls.update(clock.getDelta()),renderer.render(scene,camera)}Detector.webgl||(Detector.addGetWebGLMessage(),document.getElementById("container").innerHTML="");var container,stats,camera,controls,scene,renderer,mesh,texture,worldWidth=256,worldDepth=256,worldHalfWidth=worldWidth/2,worldHalfDepth=worldDepth/2,clock=new THREE.Clock;init(),animate();</script>
+
+	
+
+</body></html>

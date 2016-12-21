@@ -1,0 +1,1 @@
+!function(){"use strict";var t;QUnit.module("Lights - DirectionalLight",{beforeEach:function(){t=[new THREE.DirectionalLight(11184810),new THREE.DirectionalLight(11184810,.8)]}}),QUnit.test("standard light tests",function(i){runStdLightTests(i,t)})}();

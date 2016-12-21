@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - effects - stereo</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background:#777;
+				padding:0;
+				margin:0;
+				font-weight: bold;
+				overflow:hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				z-index:1000;
+			}
+
+			a {
+				color: #ffffff;
+			}
+
+			#oldie a { color:#da0 }
+		</style>
+	</head>
+
+	<body>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - effects - stereo. skybox by <a href="http://www.zfight.com/" target="_blank">Jochum Skoglund</a>
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/effects/StereoEffect.js"></script>
+
+		<script src="js/Detector.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1e5),camera.position.z=3200,scene=new THREE.Scene,scene.background=(new THREE.CubeTextureLoader).setPath("textures/cube/Park3Med/").load(["px.jpg","nx.jpg","py.jpg","ny.jpg","pz.jpg","nz.jpg"]);var e=new THREE.SphereBufferGeometry(100,32,16),n=(new THREE.CubeTextureLoader).setPath("textures/cube/Park3Med/").load(["px.jpg","nx.jpg","py.jpg","ny.jpg","pz.jpg","nz.jpg"]);n.mapping=THREE.CubeRefractionMapping;for(var i=new THREE.MeshBasicMaterial({color:16777215,envMap:n,refractionRatio:.95}),o=0;o<500;o++){var t=new THREE.Mesh(e,i);t.position.x=1e4*Math.random()-5e3,t.position.y=1e4*Math.random()-5e3,t.position.z=1e4*Math.random()-5e3,t.scale.x=t.scale.y=t.scale.z=3*Math.random()+1,scene.add(t),spheres.push(t)}renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),container.appendChild(renderer.domElement),effect=new THREE.StereoEffect(renderer),effect.setSize(window.innerWidth,window.innerHeight),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),effect.setSize(window.innerWidth,window.innerHeight)}function onDocumentMouseMove(e){mouseX=10*(e.clientX-windowHalfX),mouseY=10*(e.clientY-windowHalfY)}function animate(){requestAnimationFrame(animate),render()}function render(){var e=1e-4*Date.now();camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-mouseY-camera.position.y),camera.lookAt(scene.position);for(var n=0,i=spheres.length;n<i;n++){var o=spheres[n];o.position.x=5e3*Math.cos(e+n),o.position.y=5e3*Math.sin(e+1.1*n)}effect.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var container,camera,scene,renderer,effect,mesh,lightMesh,geometry,spheres=[],directionalLight,pointLight,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;document.addEventListener("mousemove",onDocumentMouseMove,!1),init(),animate();</script>
+
+	
+
+</body></html>

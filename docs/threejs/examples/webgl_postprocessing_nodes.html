@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - postprocessing with nodes</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				margin: 0px;
+				background-color: #000;
+				overflow: hidden;
+				font-family:Monospace;
+				font-size:13px;
+				margin: 0px;
+				text-align:center;
+				overflow: hidden;
+			}
+
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				display:block;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - Node-Based Post-Processing
+		</div>
+
+		<script src="../build/three.js"></script>
+		<script src="js/libs/dat.gui.min.js"></script>
+
+		<script src="js/shaders/CopyShader.js"></script>
+
+		<script src="js/postprocessing/EffectComposer.js"></script>
+		<script src="js/postprocessing/RenderPass.js"></script>
+		<script src="js/postprocessing/MaskPass.js"></script>
+		<script src="js/postprocessing/ShaderPass.js"></script>
+
+		
+		<script src="js/nodes/GLNode.js"></script>
+		<script src="js/nodes/RawNode.js"></script>
+		<script src="js/nodes/TempNode.js"></script>
+		<script src="js/nodes/InputNode.js"></script>
+		<script src="js/nodes/ConstNode.js"></script>
+		<script src="js/nodes/FunctionNode.js"></script>
+		<script src="js/nodes/FunctionCallNode.js"></script>
+		<script src="js/nodes/NodeBuilder.js"></script>
+		<script src="js/nodes/NodeLib.js"></script>
+		<script src="js/nodes/NodeMaterial.js"></script>
+
+		
+		<script src="js/nodes/accessors/PositionNode.js"></script>
+		<script src="js/nodes/accessors/NormalNode.js"></script>
+		<script src="js/nodes/accessors/UVNode.js"></script>
+		<script src="js/nodes/accessors/ColorsNode.js"></script>
+
+		
+		<script src="js/nodes/inputs/IntNode.js"></script>
+		<script src="js/nodes/inputs/FloatNode.js"></script>
+		<script src="js/nodes/inputs/ColorNode.js"></script>
+		<script src="js/nodes/inputs/Vector2Node.js"></script>
+		<script src="js/nodes/inputs/Vector3Node.js"></script>
+		<script src="js/nodes/inputs/Vector4Node.js"></script>
+		<script src="js/nodes/inputs/TextureNode.js"></script>
+		<script src="js/nodes/inputs/CubeTextureNode.js"></script>
+		<script src="js/nodes/inputs/ScreenNode.js"></script>
+
+		
+		<script src="js/nodes/math/Math1Node.js"></script>
+		<script src="js/nodes/math/Math2Node.js"></script>
+		<script src="js/nodes/math/Math3Node.js"></script>
+		<script src="js/nodes/math/OperatorNode.js"></script>
+
+		
+		<script src="js/nodes/utils/SwitchNode.js"></script>
+		<script src="js/nodes/utils/JoinNode.js"></script>
+		<script src="js/nodes/utils/TimerNode.js"></script>
+		<script src="js/nodes/utils/ColorAdjustmentNode.js"></script>
+		<script src="js/nodes/utils/BlurNode.js"></script>
+
+		
+		<script src="js/nodes/postprocessing/NodePass.js"></script>
+
+		<script>function clearGui(){gui&&gui.destroy(),gui=new dat.GUI;gui.add(param,"example",{"basic / color-adjustment":"color-adjustment","basic / blends":"blends","basic / fade":"fade","basic / invert":"invert","basic / blur":"blur","adv / saturation":"saturation","adv / refraction":"refraction","adv / mosaic":"mosaic"}).onFinishChange(function(){updateMaterial()});gui.open()}function addGui(e,n,a,o,r,d){var t;return param[e]=n,t=o?gui.addColor(param,e).onChange(function(){a(param[e])}):"object"==typeof n?gui.add(param,e,n).onChange(function(){a(param[e])}):gui.add(param,e,r,d).onChange(function(){a(param[e])})}function updateMaterial(){var e=param.example;switch(clearGui(),e){case"color-adjustment":var n=new THREE.ScreenNode,a=new THREE.FloatNode,o=new THREE.FloatNode(1),r=new THREE.FloatNode,d=new THREE.FloatNode(0),t=new THREE.FloatNode(1),i=new THREE.ColorAdjustmentNode(n,a,THREE.ColorAdjustmentNode.HUE),E=new THREE.ColorAdjustmentNode(i,o,THREE.ColorAdjustmentNode.SATURATION),s=new THREE.ColorAdjustmentNode(E,r,THREE.ColorAdjustmentNode.VIBRANCE),u=new THREE.ColorAdjustmentNode(s,d,THREE.ColorAdjustmentNode.BRIGHTNESS),c=new THREE.ColorAdjustmentNode(u,t,THREE.ColorAdjustmentNode.CONTRAST);nodepass.value=c,addGui("hue",a.number,function(e){a.number=e},!1,0,2*Math.PI),addGui("saturation",o.number,function(e){o.number=e},!1,0,2),addGui("vibrance",r.number,function(e){r.number=e},!1,-1,1),addGui("brightness",d.number,function(e){d.number=e},!1,0,.5),addGui("contrast",t.number,function(e){t.number=e},!1,0,2);break;case"fade":var l=new THREE.ColorNode(16777215),R=new THREE.FloatNode(.5),T=new THREE.Math3Node(new THREE.ScreenNode,l,R,THREE.Math3Node.MIX);nodepass.value=T,addGui("color",l.value.getHex(),function(e){l.value.setHex(e)},!0),addGui("fade",R.number,function(e){R.number=e},!1,0,1);break;case"invert":var m=new THREE.FloatNode(1),n=new THREE.ScreenNode,w=new THREE.Math1Node(n,THREE.Math1Node.INVERT),T=new THREE.Math3Node(n,w,m,THREE.Math3Node.MIX);nodepass.value=T,addGui("alpha",m.number,function(e){m.number=e},!1,0,1);break;case"blends":var H=new THREE.OperatorNode(new THREE.ScreenNode,new THREE.TextureNode(lensflare2),THREE.OperatorNode.ADD);nodepass.value=H,addGui("blend",{addition:THREE.OperatorNode.ADD,subtract:THREE.OperatorNode.SUB,multiply:THREE.OperatorNode.MUL,division:THREE.OperatorNode.DIV},function(e){H.op=e,nodepass.build()});break;case"saturation":var n=new THREE.ScreenNode,p=new THREE.FloatNode(0),N=new THREE.FunctionNode(["vec3 satrgb(vec3 rgb, float adjustment) {","\tvec3 intensity = vec3(dot(rgb, LUMA));","\treturn mix(intensity, rgb, adjustment);","}"].join("\n")),b=new THREE.FunctionCallNode(N);b.inputs.rgb=n,b.inputs.adjustment=p,nodepass.value=b,addGui("saturation",p.number,function(e){p.number=e},!1,0,2);break;case"refraction":var h=new THREE.TextureNode(decalNormal),f=new THREE.SwitchNode(h,"xy"),g=new THREE.FloatNode(.5),v=(new THREE.Vector2Node(-1,1),new THREE.Math1Node(f,THREE.Math1Node.INVERT)),M=new THREE.OperatorNode(v,new THREE.FloatNode(.5),THREE.OperatorNode.ADD),j=new THREE.OperatorNode(new THREE.SwitchNode(h,"z"),M,THREE.OperatorNode.MUL),S=new THREE.Math3Node(new THREE.FloatNode(1),j,g,THREE.Math3Node.MIX),C=new THREE.OperatorNode(new THREE.UVNode,S,THREE.OperatorNode.MUL),n=new THREE.ScreenNode(C);nodepass.value=n,addGui("scale",g.number,function(e){g.number=e},!1,0,1),addGui("invert",!1,function(e){M.a=e?v:f,nodepass.build()});break;case"mosaic":var g=new THREE.FloatNode(128),T=new THREE.FloatNode(1),G=new THREE.UVNode,x=new THREE.OperatorNode(G,g,THREE.OperatorNode.MUL),A=new THREE.Math1Node(x,THREE.Math1Node.FLOOR),F=new THREE.OperatorNode(A,g,THREE.OperatorNode.DIV),O=new THREE.Math3Node(G,F,T,THREE.Math3Node.MIX);nodepass.value=new THREE.ScreenNode(O),addGui("scale",g.number,function(e){g.number=e},!1,16,1024),addGui("fade",T.number,function(e){T.number=e},!1,0,1),addGui("mask",!0,function(e){fadeCoord.c=e?maskAlpha:T,nodepass.build()});break;case"blur":var L=renderer.getSize(),y=new THREE.BlurNode(new THREE.ScreenNode);y.size=new THREE.Vector2(L.width,L.height),nodepass.value=y,addGui("blurX",y.radius.x,function(e){y.radius.x=e},!1,0,15),addGui("blurY",y.radius.y,function(e){y.radius.y=e},!1,0,15)}nodepass.build()}function init(){renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),document.body.appendChild(renderer.domElement),camera=new THREE.PerspectiveCamera(70,window.innerWidth/window.innerHeight,1,1e3),camera.position.z=400,scene=new THREE.Scene,scene.fog=new THREE.Fog(26367,1,1e3),object=new THREE.Object3D,scene.add(object);for(var e=new THREE.SphereGeometry(1,4,4),n=0;n<100;n++){var a=new THREE.MeshPhongMaterial({color:8947848+8947848*Math.random(),shading:THREE.FlatShading}),o=new THREE.Mesh(e,a);o.position.set(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize(),o.position.multiplyScalar(400*Math.random()),o.rotation.set(2*Math.random(),2*Math.random(),2*Math.random()),o.scale.x=o.scale.y=o.scale.z=10+40*Math.random(),object.add(o)}scene.add(new THREE.AmbientLight(10066329)),light=new THREE.DirectionalLight(16777215),light.position.set(1,1,1),scene.add(light),composer=new THREE.EffectComposer(renderer),composer.addPass(new THREE.RenderPass(scene,camera)),nodepass=new THREE.NodePass,nodepass.renderToScreen=!0,composer.addPass(nodepass),updateMaterial(),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight),composer.setSize(window.innerWidth,window.innerHeight)}function animate(){requestAnimationFrame(animate);var e=clock.getDelta();object.rotation.x+=.005,object.rotation.y+=.01,nodepass.node.updateFrame(e),composer.render()}var camera,scene,renderer,composer,object,light,nodepass,gui,guiElements=[],clock=new THREE.Clock,param={example:"color-adjustment"},textureLoader=new THREE.TextureLoader,lensflare2=textureLoader.load("textures/lensflare2.jpg");lensflare2.wrapS=lensflare2.wrapT=THREE.RepeatWrapping;var decalNormal=textureLoader.load("textures/decal/decal-normal.jpg");decalNormal.wrapS=decalNormal.wrapT=THREE.RepeatWrapping,init(),animate();</script>
+
+	
+
+</body></html>

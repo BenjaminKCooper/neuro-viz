@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - particles - sprites</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+				text-align:center;
+			}
+
+			a {
+				color:#0078ff;
+			}
+
+			#info {
+				color:#fff;
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+				z-index:100;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - webgl particle sprites example -
+			snowflakes by <a href="http://en.wikipedia.org/wiki/File:Sketch_of_snow_crystal_by_Ren%C3%A9_Descartes.jpg">René  Descartes</a>
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,1,2e3),camera.position.z=1e3,scene=new THREE.Scene,scene.fog=new THREE.FogExp2(0,8e-4),geometry=new THREE.Geometry;var e=new THREE.TextureLoader;for(sprite1=e.load("textures/sprites/snowflake1.png"),sprite2=e.load("textures/sprites/snowflake2.png"),sprite3=e.load("textures/sprites/snowflake3.png"),sprite4=e.load("textures/sprites/snowflake4.png"),sprite5=e.load("textures/sprites/snowflake5.png"),i=0;i<1e4;i++){var n=new THREE.Vector3;n.x=2e3*Math.random()-1e3,n.y=2e3*Math.random()-1e3,n.z=2e3*Math.random()-1e3,geometry.vertices.push(n)}for(parameters=[[[1,.2,.5],sprite2,20],[[.95,.1,.5],sprite3,15],[[.9,.05,.5],sprite1,10],[[.85,0,.5],sprite5,8],[[.8,0,.5],sprite4,5]],i=0;i<parameters.length;i++)color=parameters[i][0],sprite=parameters[i][1],size=parameters[i][2],materials[i]=new THREE.PointsMaterial({size:size,map:sprite,blending:THREE.AdditiveBlending,depthTest:!1,transparent:!0}),materials[i].color.setHSL(color[0],color[1],color[2]),particles=new THREE.Points(geometry,materials[i]),particles.rotation.x=6*Math.random(),particles.rotation.y=6*Math.random(),particles.rotation.z=6*Math.random(),scene.add(particles);renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),document.addEventListener("mousemove",onDocumentMouseMove,!1),document.addEventListener("touchstart",onDocumentTouchStart,!1),document.addEventListener("touchmove",onDocumentTouchMove,!1),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,mouseY=e.clientY-windowHalfY}function onDocumentTouchStart(e){1===e.touches.length&&(e.preventDefault(),mouseX=e.touches[0].pageX-windowHalfX,mouseY=e.touches[0].pageY-windowHalfY)}function onDocumentTouchMove(e){1===e.touches.length&&(e.preventDefault(),mouseX=e.touches[0].pageX-windowHalfX,mouseY=e.touches[0].pageY-windowHalfY)}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){var e=5e-5*Date.now();for(camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-mouseY-camera.position.y),camera.lookAt(scene.position),i=0;i<scene.children.length;i++){var n=scene.children[i];n instanceof THREE.Points&&(n.rotation.y=e*(i<4?i+1:-(i+1)))}for(i=0;i<materials.length;i++)color=parameters[i][0],h=360*(color[0]+e)%360/360,materials[i].color.setHSL(h,color[1],color[2]);renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var container,stats,camera,scene,renderer,particles,geometry,materials=[],parameters,i,h,color,sprite,size,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;init(),animate();</script>
+	
+
+</body></html>

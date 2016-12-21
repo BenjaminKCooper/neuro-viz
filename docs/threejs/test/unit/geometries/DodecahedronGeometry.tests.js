@@ -1,0 +1,1 @@
+!function(){"use strict";var e,t={radius:10,detail:void 0};QUnit.module("Extras - Geometries - DodecahedronGeometry",{beforeEach:function(){e=[new THREE.DodecahedronGeometry,new THREE.DodecahedronGeometry(t.radius),new THREE.DodecahedronGeometry(t.radius,t.detail)]}}),QUnit.test("standard geometry tests",function(t){runStdGeometryTests(t,e)})}();

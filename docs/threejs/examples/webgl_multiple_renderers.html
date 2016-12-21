@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - multiple renderers</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #808080;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			a {
+				color: #0080ff;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> webgl - multiple renderers</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){camera=new THREE.PerspectiveCamera(20,window.innerWidth/(window.innerHeight/2),1,1e4),scene=new THREE.Scene;var e=new THREE.DirectionalLight(16777215);e.position.set(0,0,1),scene.add(e);var e=new THREE.DirectionalLight(16776960,.75);e.position.set(0,0,-1),scene.add(e);var r=document.createElement("canvas");r.width=128,r.height=128;var t=r.getContext("2d"),n=t.createRadialGradient(r.width/2,r.height/2,0,r.width/2,r.height/2,r.width/2);n.addColorStop(.1,"rgba(210,210,210,1)"),n.addColorStop(1,"rgba(255,255,255,1)"),t.fillStyle=n,t.fillRect(0,0,r.width,r.height);var o=new THREE.CanvasTexture(r),a=new THREE.MeshBasicMaterial({map:o}),i=new THREE.PlaneBufferGeometry(300,300,1,1),d=new THREE.Mesh(i,a);d.position.y=-250,d.rotation.x=-Math.PI/2,scene.add(d);var d=new THREE.Mesh(i,a);d.position.x=-400,d.position.y=-250,d.rotation.x=-Math.PI/2,scene.add(d);var d=new THREE.Mesh(i,a);d.position.x=400,d.position.y=-250,d.rotation.x=-Math.PI/2,scene.add(d);for(var s,c,l,E,h,w,g=["a","b","c"],p=200,H=new THREE.IcosahedronGeometry(p,1),R=new THREE.IcosahedronGeometry(p,1),m=new THREE.IcosahedronGeometry(p,1),v=0;v<H.faces.length;v++){c=H.faces[v],l=R.faces[v],E=m.faces[v];for(var T=0;T<3;T++)w=c[g[T]],h=H.vertices[w],s=new THREE.Color(16777215),s.setHSL((h.y/p+1)/2,1,.5),c.vertexColors[T]=s,s=new THREE.Color(16777215),s.setHSL(0,(h.y/p+1)/2,.5),l.vertexColors[T]=s,s=new THREE.Color(16777215),s.setHSL(.125*w/H.vertices.length,1,.5),E.vertexColors[T]=s}var u=[new THREE.MeshPhongMaterial({color:16777215,shading:THREE.FlatShading,vertexColors:THREE.VertexColors,shininess:0}),new THREE.MeshBasicMaterial({color:0,shading:THREE.FlatShading,wireframe:!0,transparent:!0})];group1=THREE.SceneUtils.createMultiMaterialObject(H,u),group1.position.x=-400,scene.add(group1),group2=THREE.SceneUtils.createMultiMaterialObject(R,u),group2.position.x=400,scene.add(group2),group3=THREE.SceneUtils.createMultiMaterialObject(m,u),scene.add(group3),renderer1=new THREE.WebGLRenderer({antialias:!0}),renderer1.setClearColor(16777215),renderer1.setPixelRatio(window.devicePixelRatio),renderer1.setSize(window.innerWidth,window.innerHeight/2),document.body.appendChild(renderer1.domElement),renderer2=new THREE.WebGLRenderer({antialias:!1}),renderer2.setClearColor(16777215),renderer2.setPixelRatio(window.devicePixelRatio),renderer2.setSize(window.innerWidth,window.innerHeight/2),document.body.appendChild(renderer2.domElement)}function animate(){requestAnimationFrame(animate),group1.rotation.z+=Math.PI/500,group2.rotation.z+=Math.PI/500,group3.rotation.z+=Math.PI/500;for(var e=group3.children[0].geometry,r=0;r<e.faces.length;r++)for(var t=e.faces[r],n=0;n<3;n++){var o=t.vertexColors[n];o.setHex((o.getHex()+16645629)%16777215)}e.colorsNeedUpdate=!0;var a=performance.now()/2e3;camera.position.x=1800*Math.sin(a),camera.position.z=1800*Math.cos(a),camera.lookAt(scene.position),renderer1.render(scene,camera),renderer2.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var camera,scene,renderer1,renderer2,group1,group2,group3;init(),animate();</script>
+
+	
+
+</body></html>

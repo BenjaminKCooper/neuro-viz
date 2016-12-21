@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - buffergeometry [particles]</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #cccccc;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #050505;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			a {
+				color: #0080ff;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> webgl - buffergeometry - particles</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.getElementById("container"),camera=new THREE.PerspectiveCamera(27,window.innerWidth/window.innerHeight,5,3500),camera.position.z=2750,scene=new THREE.Scene,scene.fog=new THREE.Fog(328965,2e3,3500);for(var e=5e5,n=new THREE.BufferGeometry,r=new Float32Array(4*e),t=new Uint8Array(r.buffer),i=new THREE.Color,a=1e3,o=a/2,d=0;d<r.length;d+=4){var s=Math.random()*a-o,w=Math.random()*a-o,c=Math.random()*a-o;r[d+0]=s,r[d+1]=w,r[d+2]=c;var E=s/a+.5,l=w/a+.5,m=c/a+.5;i.setRGB(E,l,m);var f=4*(d+3);t[f+0]=255*i.r,t[f+1]=255*i.g,t[f+2]=255*i.b,t[f+3]=0}var R=new THREE.InterleavedBuffer(r,4),u=new THREE.InterleavedBuffer(t,16);n.addAttribute("position",new THREE.InterleavedBufferAttribute(R,3,0,!1)),n.addAttribute("color",new THREE.InterleavedBufferAttribute(u,3,12,!0));var H=new THREE.PointsMaterial({size:15,vertexColors:THREE.VertexColors});points=new THREE.Points(n,H),scene.add(points),renderer=new THREE.WebGLRenderer({antialias:!1}),renderer.setClearColor(scene.fog.color),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){var e=.001*Date.now();points.rotation.x=.25*e,points.rotation.y=.5*e,renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var container,stats,camera,scene,renderer,points;init(),animate();</script>
+
+	
+
+</body></html>

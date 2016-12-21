@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js canvas - sandbox</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #f0f0f0;
+				margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/renderers/Projector.js"></script>
+		<script src="js/renderers/CanvasRenderer.js"></script>
+
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,1e4),camera.position.set(0,150,400),camera.target=new THREE.Vector3(0,150,0),scene=new THREE.Scene;for(var e=500,t=100,o=new THREE.Geometry,n=-e;n<=e;n+=t)o.vertices.push(new THREE.Vector3(-e,0,n)),o.vertices.push(new THREE.Vector3(e,0,n)),o.vertices.push(new THREE.Vector3(n,0,-e)),o.vertices.push(new THREE.Vector3(n,0,e));var a=new THREE.LineBasicMaterial({color:0,opacity:.5}),r=new THREE.LineSegments(o,a);scene.add(r),objects=[],o=new THREE.IcosahedronGeometry(100,1);var i=(new THREE.TextureLoader).load("textures/metal.jpg");i.mapping=THREE.SphericalReflectionMapping,a=new THREE.MeshBasicMaterial({envMap:i,overdraw:.5});for(var n=0;n<10;n++)sphere=new THREE.Mesh(o,a),sphere.position.x=1e3*Math.random()-500,sphere.position.y=1e3*Math.random()-500,sphere.position.z=1e3*Math.random()-500,sphere.rotation.x=200*Math.random()-100,sphere.rotation.y=200*Math.random()-100,sphere.rotation.z=200*Math.random()-100,sphere.scale.x=sphere.scale.y=sphere.scale.z=Math.random()+.5,objects.push(sphere),scene.add(sphere);var s=new THREE.AmbientLight(2105376*Math.random());scene.add(s);var d=new THREE.DirectionalLight(16777215*Math.random());d.position.x=Math.random()-.5,d.position.y=Math.random()-.5,d.position.z=Math.random()-.5,d.position.normalize(),scene.add(d),pointLight=new THREE.PointLight(16711680,1),scene.add(pointLight),renderer=new THREE.CanvasRenderer,renderer.setClearColor(15790320),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement);var c=document.createElement("canvas");c.width=512,c.height=512,c.style.position="absolute",c.style.top="0px",c.style.left="0px",container.appendChild(c),debugContext=c.getContext("2d"),debugContext.setTransform(1,0,0,1,256,256),debugContext.strokeStyle="#000000",stats=new Stats,container.appendChild(stats.dom),document.addEventListener("keydown",onDocumentKeyDown,!1),document.addEventListener("keyup",onDocumentKeyUp,!1),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function onDocumentKeyDown(e){switch(e.keyCode){case 38:moveForward=!0;break;case 40:moveBackwards=!0;break;case 37:moveLeft=!0;break;case 39:moveRight=!0;break;case 87:moveUp=!0;break;case 83:moveDown=!0;break;case 65:targetMoveLeft=!0;break;case 68:targetMoveRight=!0}}function onDocumentKeyUp(e){switch(e.keyCode){case 38:moveForward=!1;break;case 40:moveBackwards=!1;break;case 37:moveLeft=!1;break;case 39:moveRight=!1;break;case 87:moveUp=!1;break;case 83:moveDown=!1;break;case 65:targetMoveLeft=!1;break;case 68:targetMoveRight=!1}}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){moveForward&&(camera.position.z-=10),moveBackwards&&(camera.position.z+=10),moveLeft&&(camera.position.x-=10),moveRight&&(camera.position.x+=10),moveUp&&(camera.position.y+=10),moveDown&&(camera.position.y-=10),targetMoveLeft&&(camera.target.x-=10),targetMoveRight&&(camera.target.x+=10),camera.lookAt(camera.target),debugContext.clearRect(-256,-256,512,512),debugContext.beginPath(),debugContext.moveTo(-10,0),debugContext.lineTo(10,0),debugContext.moveTo(0,-10),debugContext.lineTo(0,10),debugContext.moveTo(.1*camera.position.x,.1*camera.position.z),debugContext.lineTo(.1*camera.target.x,.1*camera.target.z),debugContext.rect(.1*camera.position.x-5,.1*camera.position.z-5,10,10),debugContext.rect(.1*camera.target.x-5,.1*camera.target.z-5,10,10),debugContext.rect(-50,-50,100,100);for(var e=0,t=objects.length;e<t;e++){var o=objects[e];o.rotation.x+=.01,o.rotation.y+=.005,o.position.y=200*Math.sin(o.rotation.x),debugContext.rect(.1*o.position.x-5,.1*o.position.z-5,10,10)}debugContext.closePath(),debugContext.stroke(),renderer.render(scene,camera)}var container,stats,camera,scene,renderer,objects,pointLight,sphere,targetRotation=0,targetRotationOnMouseDown=0,mouseX=0,mouseXOnMouseDown=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,moveForward=!1,moveBackwards=!1,moveLeft=!1,moveRight=!1,moveUp=!1,moveDown=!1,targetMoveLeft=!1,targetMoveRight=!1,debugContext;init(),animate();</script>
+
+	
+
+</body></html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js canvas - geometry - hierarchy</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background:#fff;
+				padding:0;
+				margin:0;
+				font-weight: bold;
+				overflow:hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/renderers/Projector.js"></script>
+		<script src="js/renderers/CanvasRenderer.js"></script>
+
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1e4),camera.position.z=500,scene=new THREE.Scene;var e=new THREE.BoxGeometry(100,100,100),n=new THREE.MeshNormalMaterial({overdraw:.5});group=new THREE.Group;for(var i=0;i<200;i++){var o=new THREE.Mesh(e,n);o.position.x=2e3*Math.random()-1e3,o.position.y=2e3*Math.random()-1e3,o.position.z=2e3*Math.random()-1e3,o.rotation.x=2*Math.random()*Math.PI,o.rotation.y=2*Math.random()*Math.PI,o.matrixAutoUpdate=!1,o.updateMatrix(),group.add(o)}scene.add(group),renderer=new THREE.CanvasRenderer,renderer.setClearColor(16777215),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function onDocumentMouseMove(e){mouseX=10*(e.clientX-windowHalfX),mouseY=10*(e.clientY-windowHalfY)}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-mouseY-camera.position.y),camera.lookAt(scene.position);var e=Date.now();group.rotation.x=.5*Math.sin(7e-4*e),group.rotation.y=.5*Math.sin(3e-4*e),group.rotation.z=.5*Math.sin(2e-4*e),renderer.render(scene,camera)}var container,stats,camera,scene,renderer,geometry,group,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;document.addEventListener("mousemove",onDocumentMouseMove,!1),init(),animate();</script>
+
+	
+
+</body></html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html><html lang="en"><head>
+	<title>three.js webgl - instancing test (single triangle)</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+	<style>
+		body {
+			color: #ffffff;
+			font-family: Monospace;
+			font-size: 13px;
+			text-align: center;
+			font-weight: bold;
+			background-color: #000000;
+			margin: 0px;
+			overflow: hidden;
+		}
+
+		#info {
+			position: absolute;
+			top: 0px;
+			width: 100%;
+			padding: 5px;
+		}
+
+		a {
+			color: #ffffff;
+		}
+
+		#oldie a {
+			color: #da0;
+		}
+
+		#notSupported {
+			width: 50%;
+			margin: auto;
+			border: 2px red solid;
+			margin-top: 20px;
+			padding: 10px;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="container"></div>
+	<div id="info">
+		<a href="http://threejs.org" target="_blank">three.js</a> - instancing demo (single triangle)
+		<div id="notSupported" style="display:none">Sorry your graphics card + browser does not support hardware instancing</div>
+	</div>
+
+	<script src="js/libs/dat.gui.min.js"></script>
+	<script src="../build/three.js"></script>
+	<script src="js/Detector.js"></script>
+	<script src="js/libs/stats.min.js"></script>
+
+	<script id="vertexShader" type="x-shader/x-vertex">
+		precision highp float;
+
+		uniform float sineTime;
+
+		uniform mat4 modelViewMatrix;
+		uniform mat4 projectionMatrix;
+
+		attribute vec3 position;
+		attribute vec3 offset;
+		attribute vec4 color;
+		attribute vec4 orientationStart;
+		attribute vec4 orientationEnd;
+
+		varying vec3 vPosition;
+		varying vec4 vColor;
+
+		void main(){
+
+			vPosition = offset * max(abs(sineTime * 2.0 + 1.0), 0.5) + position;
+			vec4 orientation = normalize(mix(orientationStart, orientationEnd, sineTime));
+			vec3 vcV = cross(orientation.xyz, vPosition);
+			vPosition = vcV * (2.0 * orientation.w) + (cross(orientation.xyz, vcV) * 2.0 + vPosition);
+
+			vColor = color;
+
+			gl_Position = projectionMatrix * modelViewMatrix * vec4( vPosition, 1.0 );
+
+		}
+
+	</script>
+
+	<script id="fragmentShader" type="x-shader/x-fragment">
+
+		precision highp float;
+
+		uniform float time;
+
+		varying vec3 vPosition;
+		varying vec4 vColor;
+
+		void main() {
+
+			vec4 color = vec4( vColor );
+			color.r += sin( vPosition.x * 10.0 + time ) * 0.5;
+
+			gl_FragColor = color;
+
+		}
+
+	</script>
+
+	<script>function init(){container=document.getElementById("container"),camera=new THREE.PerspectiveCamera(50,window.innerWidth/window.innerHeight,1,10),camera.position.z=2,scene=new THREE.Scene;var e=1,t=65e3,n=new THREE.InstancedBufferGeometry;n.maxInstancedCount=t;var r=new dat.GUI;r.add(n,"maxInstancedCount",0,t);var a=new THREE.BufferAttribute(new Float32Array(3*e*3),3);a.setXYZ(0,.025,-.025,0),a.setXYZ(1,-.025,.025,0),a.setXYZ(2,0,0,.025),n.addAttribute("position",a);for(var i=new THREE.InstancedBufferAttribute(new Float32Array(3*t),3,1),d=0,o=i.count;d<o;d++)i.setXYZ(d,Math.random()-.5,Math.random()-.5,Math.random()-.5);n.addAttribute("offset",i);for(var s=new THREE.InstancedBufferAttribute(new Float32Array(4*t),4,1),d=0,o=s.count;d<o;d++)s.setXYZW(d,Math.random(),Math.random(),Math.random(),Math.random());n.addAttribute("color",s);for(var m=new THREE.Vector4,c=new THREE.InstancedBufferAttribute(new Float32Array(4*t),4,1),d=0,o=c.count;d<o;d++)m.set(2*Math.random()-1,2*Math.random()-1,2*Math.random()-1,2*Math.random()-1),m.normalize(),c.setXYZW(d,m.x,m.y,m.z,m.w);n.addAttribute("orientationStart",c);for(var w=new THREE.InstancedBufferAttribute(new Float32Array(4*t),4,1),d=0,o=w.count;d<o;d++)m.set(2*Math.random()-1,2*Math.random()-1,2*Math.random()-1,2*Math.random()-1),m.normalize(),w.setXYZW(d,m.x,m.y,m.z,m.w);n.addAttribute("orientationEnd",w);var u=new THREE.RawShaderMaterial({uniforms:{time:{value:1},sineTime:{value:1}},vertexShader:document.getElementById("vertexShader").textContent,fragmentShader:document.getElementById("fragmentShader").textContent,side:THREE.DoubleSide,transparent:!0}),E=new THREE.Mesh(n,u);return scene.add(E),renderer=new THREE.WebGLRenderer,renderer.extensions.get("ANGLE_instanced_arrays")===!1?void(document.getElementById("notSupported").style.display=""):(renderer.setClearColor(1052688),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),void window.addEventListener("resize",onWindowResize,!1))}function onWindowResize(e){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){var e=performance.now(),t=scene.children[0];t.rotation.y=5e-4*e,t.material.uniforms.time.value=.005*e,t.material.uniforms.sineTime.value=Math.sin(.05*t.material.uniforms.time.value),renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var container,stats,camera,scene,renderer;init(),animate();</script>
+
+
+
+
+</body></html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - baked illumination</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background:#000;
+				color:#000;
+				padding:0;
+				margin:0;
+				overflow:hidden;
+				font-family:monospace;
+				font-size:13px;
+				text-align:center;
+			}
+
+			a { color:skyblue }
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #fff;
+				background:rgba(0,0,0,0.65);
+				padding: 5px;
+				text-align: center;
+				z-index:100;
+				display:block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="info">
+		<a href="http://threejs.org" target="_blank">three.js</a> webgl -
+		using <a href="http://code.google.com/p/js-openctm/">js-openctm</a> -
+		camaro by <a href="http://www.turbosquid.com/3d-models/blender-camaro/411348" target="_blank">dskfnwn</a> -
+		skybox by <a href="http://ict.debevec.org/~debevec/" target="_blank">Paul Debevec</a>
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/controls/OrbitControls.js"></script>
+
+		<script src="js/loaders/ctm/lzma.js"></script>
+		<script src="js/loaders/ctm/ctm.js"></script>
+		<script src="js/loaders/ctm/CTMLoader.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(30,SCREEN_WIDTH/SCREEN_HEIGHT,1,1e4),camera.position.set(185,40,170),controls=new THREE.OrbitControls(camera),controls.maxPolarAngle=Math.PI/2,controls.minDistance=150,controls.maxDistance=500;var e="textures/cube/pisa/",n=[e+"px.png",e+"nx.png",e+"py.png",e+"ny.png",e+"pz.png",e+"nz.png"];textureCube=(new THREE.CubeTextureLoader).load(n),scene=new THREE.Scene,scene.background=textureCube;var a=new THREE.PointLight(16777215,1);a.position.set(2,5,1),a.position.multiplyScalar(30),scene.add(a);var a=new THREE.PointLight(16777215,.75);a.position.set(-12,4.6,2.4),a.position.multiplyScalar(30),scene.add(a),scene.add(new THREE.AmbientLight(328965)),renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),renderer.domElement.style.position="relative",container.appendChild(renderer.domElement),renderer.gammaInput=!0,renderer.gammaOutput=!0,stats=new Stats,container.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1),window.addEventListener("mousemove",onDocumentMouseMove,!1);var t=Date.now();loaderCTM=new THREE.CTMLoader;var r=new THREE.Vector3(-105,-78,-30),o=new THREE.Vector3(30,30,30);loaderCTM.loadParts("models/ctm/camaro/camaro.js",function(e,n){hackMaterials(n);for(var a=0;a<e.length;a++){var i=new THREE.Mesh(e[a],n[a]);i.position.copy(r),i.scale.copy(o),scene.add(i)}var s=Date.now();console.log("load time:",s-t,"ms")},{useWorker:!0})}function hackMaterials(e){for(var n=0;n<e.length;n++){var a=e[n];if(a.name.indexOf("Body")!==-1){var t=new THREE.MeshStandardMaterial;t.color.setHex(0),t.lightMap=a.map,t.envMap=textureCube,t.metalness=.5,t.roughness=.3,e[n]=t}else if(a.name.indexOf("tire_car")!==-1){var t=new THREE.MeshStandardMaterial;t.color.setHex(0),t.lightMap=a.map,t.metalness=.1,t.roughness=.9,e[n]=t}else if(a.name.indexOf("mirror")!==-1){var t=new THREE.MeshStandardMaterial;t.color.setHex(8421504),t.lightMap=a.map,t.envMap=textureCube,t.metalness=.9,t.roughness=.5,e[n]=t}else if(a.name.indexOf("glass")!==-1){var t=new THREE.MeshStandardMaterial;t.color.copy(a.color),t.envMap=textureCube,t.metalness=1,t.roughtness=.1,t.opacity=a.opacity,t.transparent=!0,e[n]=t}else if(a.name.indexOf("Material.001")!==-1){var t=new THREE.MeshPhongMaterial({map:a.map});t.specularMap=a.map,t.shininess=30,t.color.setHex(4210752),t.metal=!0,e[n]=t}e[n].side=THREE.DoubleSide}}function createScene(e,n,a,t,r,o){e.center(),hackMaterials(n);var i=new THREE.MultiMaterial(n);mesh=new THREE.Mesh(e,i),mesh.position.set(a,t,r),mesh.scale.set(o,o,o),scene.add(mesh)}function onWindowResize(e){SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),camera.aspect=SCREEN_WIDTH/SCREEN_HEIGHT,camera.updateProjectionMatrix()}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,mouseY=e.clientY-windowHalfY}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){controls.update(),renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,FLOOR=-250,container,stats,camera,scene,controls,renderer,mesh,textureCube,loader,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;init(),animate();</script>
+
+	
+
+</body></html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js canvas - geometry - shapes</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #f0f0f0;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				position: absolute;
+				top: 0px;
+				width: 100%;
+				padding: 5px;
+				text-align:center;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="debug" style="position:absolute; left:100px"></canvas>
+
+		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> - shape geometry</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/renderers/Projector.js"></script>
+		<script src="js/renderers/CanvasRenderer.js"></script>
+
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){function e(e,o,n,t,r,a,u,i,s){var c=new THREE.ShapeGeometry(e),E=new THREE.MeshBasicMaterial({color:o,overdraw:.5}),w=new THREE.Mesh(c,E);w.position.set(n,t,r),w.rotation.set(a,u,i),w.scale.set(s,s,s),group.add(w);var c=e.createPointsGeometry();c.vertices.push(c.vertices[0].clone());var E=new THREE.LineBasicMaterial({linewidth:10,color:3355443,transparent:!0}),d=new THREE.Line(c,E);d.position.set(n,t,r),d.rotation.set(a,u,i),d.scale.set(s,s,s),group.add(d)}container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(50,window.innerWidth/window.innerHeight,1,1e3),camera.position.set(0,150,500),scene=new THREE.Scene,group=new THREE.Group,group.position.y=50,scene.add(group);var o=[];o.push(new THREE.Vector2(610,320)),o.push(new THREE.Vector2(450,300)),o.push(new THREE.Vector2(392,392)),o.push(new THREE.Vector2(266,438)),o.push(new THREE.Vector2(190,570)),o.push(new THREE.Vector2(190,600)),o.push(new THREE.Vector2(160,620)),o.push(new THREE.Vector2(160,650)),o.push(new THREE.Vector2(180,640)),o.push(new THREE.Vector2(165,680)),o.push(new THREE.Vector2(150,670)),o.push(new THREE.Vector2(90,737)),o.push(new THREE.Vector2(80,795)),o.push(new THREE.Vector2(50,835)),o.push(new THREE.Vector2(64,870)),o.push(new THREE.Vector2(60,945)),o.push(new THREE.Vector2(300,945)),o.push(new THREE.Vector2(300,743)),o.push(new THREE.Vector2(600,473)),o.push(new THREE.Vector2(626,425)),o.push(new THREE.Vector2(600,370)),o.push(new THREE.Vector2(610,320));var n=new THREE.Shape(o),t=new THREE.Shape;t.moveTo(80,20),t.lineTo(40,80),t.lineTo(120,80),t.lineTo(80,20);var r=0,a=0,u=new THREE.Shape;u.moveTo(r+25,a+25),u.bezierCurveTo(r+25,a+25,r+20,a,r,a),u.bezierCurveTo(r-30,a,r-30,a+35,r-30,a+35),u.bezierCurveTo(r-30,a+55,r-10,a+77,r+25,a+95),u.bezierCurveTo(r+60,a+77,r+80,a+55,r+80,a+35),u.bezierCurveTo(r+80,a+35,r+80,a,r+50,a),u.bezierCurveTo(r+35,a,r+25,a+25,r+25,a+25);var i=80,s=new THREE.Shape;s.moveTo(0,0),s.lineTo(0,i),s.lineTo(i,i),s.lineTo(i,0),s.lineTo(0,0);var c=120,E=40,w=new THREE.Shape;w.moveTo(0,0),w.lineTo(0,E),w.lineTo(c,E),w.lineTo(c,0),w.lineTo(0,0);var d=new THREE.Shape;!function(e,o,n,t,r,a){e.moveTo(o,n+a),e.lineTo(o,n+r-a),e.quadraticCurveTo(o,n+r,o+a,n+r),e.lineTo(o+t-a,n+r),e.quadraticCurveTo(o+t,n+r,o+t,n+r-a),e.lineTo(o+t,n+a),e.quadraticCurveTo(o+t,n,o+t-a,n),e.lineTo(o+a,n),e.quadraticCurveTo(o,n,o,n+a)}(d,0,0,50,50,20);var T=40,v=new THREE.Shape;v.moveTo(0,T),v.quadraticCurveTo(T,T,T,0),v.quadraticCurveTo(T,-T,0,-T),v.quadraticCurveTo(-T,-T,-T,0),v.quadraticCurveTo(-T,T,0,T),r=a=0;var m=new THREE.Shape;m.moveTo(r,a),m.quadraticCurveTo(r+50,a-80,r+90,a-10),m.quadraticCurveTo(r+100,a-10,r+115,a-40),m.quadraticCurveTo(r+115,a,r+115,a+40),m.quadraticCurveTo(r+100,a+10,r+90,a+10),m.quadraticCurveTo(r+50,a+80,r,a);var h=new THREE.Shape;h.moveTo(50,10),h.absarc(10,10,40,0,2*Math.PI,!1);var p=new THREE.Path;p.moveTo(20,10),p.absarc(10,10,10,0,2*Math.PI,!0),h.holes.push(p);var R=new THREE.Shape;R.moveTo(80,40),R.absarc(40,40,40,0,2*Math.PI,!1);var H=new THREE.Path;H.moveTo(35,20),H.absellipse(25,20,10,10,0,2*Math.PI,!0),R.holes.push(H);var l=new THREE.Path;l.moveTo(65,20),l.absarc(55,20,10,0,2*Math.PI,!0),R.holes.push(l);var M=new THREE.Path;M.moveTo(20,40),M.quadraticCurveTo(40,60,60,40),M.bezierCurveTo(70,45,70,50,60,60),M.quadraticCurveTo(40,80,20,60),M.quadraticCurveTo(5,50,20,40),R.holes.push(M);var D=[];D.push(new THREE.Vector2(350,100)),D.push(new THREE.Vector2(400,450)),D.push(new THREE.Vector2(-140,350)),D.push(new THREE.Vector2(0,0));var C=new THREE.Shape;C.moveTo(0,0),C.splineThru(D),e(n,16755200,-300,-100,0,0,0,0,.25),e(t,16772608,-180,0,0,0,0,0,1),e(d,21760,-150,150,0,0,0,0,1),e(s,22015,150,100,0,0,0,0,1),e(u,16716032,60,100,0,0,0,Math.PI,1),e(v,65297,120,250,0,0,0,0,1),e(m,2236962,-60,200,0,0,0,0,1),e(R,15597823,-200,250,0,0,0,Math.PI,1),e(h,12272674,150,0,0,0,0,0,1),e(C,8947848,-50,-100,0,0,0,0,.2),renderer=new THREE.CanvasRenderer,renderer.setClearColor(15790320),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),renderer.sortElements=!1,container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),document.addEventListener("mousedown",onDocumentMouseDown,!1),document.addEventListener("touchstart",onDocumentTouchStart,!1),document.addEventListener("touchmove",onDocumentTouchMove,!1),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function onDocumentMouseDown(e){e.preventDefault(),document.addEventListener("mousemove",onDocumentMouseMove,!1),document.addEventListener("mouseup",onDocumentMouseUp,!1),document.addEventListener("mouseout",onDocumentMouseOut,!1),mouseXOnMouseDown=e.clientX-windowHalfX,targetRotationOnMouseDown=targetRotation}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,targetRotation=targetRotationOnMouseDown+.02*(mouseX-mouseXOnMouseDown)}function onDocumentMouseUp(e){document.removeEventListener("mousemove",onDocumentMouseMove,!1),document.removeEventListener("mouseup",onDocumentMouseUp,!1),document.removeEventListener("mouseout",onDocumentMouseOut,!1)}function onDocumentMouseOut(e){document.removeEventListener("mousemove",onDocumentMouseMove,!1),document.removeEventListener("mouseup",onDocumentMouseUp,!1),document.removeEventListener("mouseout",onDocumentMouseOut,!1)}function onDocumentTouchStart(e){1==e.touches.length&&(e.preventDefault(),mouseXOnMouseDown=e.touches[0].pageX-windowHalfX,targetRotationOnMouseDown=targetRotation)}function onDocumentTouchMove(e){1==e.touches.length&&(e.preventDefault(),mouseX=e.touches[0].pageX-windowHalfX,targetRotation=targetRotationOnMouseDown+.05*(mouseX-mouseXOnMouseDown))}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){group.rotation.y+=.05*(targetRotation-group.rotation.y),renderer.render(scene,camera)}var container,stats,camera,scene,renderer,group,text,plane,targetRotation=0,targetRotationOnMouseDown=0,mouseX=0,mouseXOnMouseDown=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;init(),animate();</script>
+
+	
+
+</body></html>

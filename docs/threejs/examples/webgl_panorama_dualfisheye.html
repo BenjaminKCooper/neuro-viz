@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - dual fisheye panorama</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #000000;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				font-weight: bold;
+				text-align:center;
+			}
+
+			a {
+				color: #0000ff;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js webgl</a> - dualfisheye panorama.
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script>function init(){var e,n;e=document.getElementById("container"),camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,1,2e3),scene=new THREE.Scene;var t=new THREE.SphereBufferGeometry(500,60,40).toNonIndexed();t.scale(-1,1,1);for(var o=t.attributes.normal.array,i=t.attributes.uv.array,a=0,r=o.length/3;a<r;a++){var s=o[3*a+0],d=o[3*a+1],c=o[3*a+2];if(a<r/2){var u=0==s&&0==c?1:Math.acos(d)/Math.sqrt(s*s+c*c)*(2/Math.PI);i[2*a+0]=s*(404/1920)*u+.2328125,i[2*a+1]=c*(404/1080)*u+582/1080}else{var u=0==s&&0==c?1:Math.acos(-d)/Math.sqrt(s*s+c*c)*(2/Math.PI);i[2*a+0]=-s*(404/1920)*u+1460/1920,i[2*a+1]=c*(404/1080)*u+582/1080}}t.rotateZ(-Math.PI/2);var w=(new THREE.TextureLoader).load("textures/ricoh_theta_s.jpg");w.format=THREE.RGBFormat;var h=new THREE.MeshBasicMaterial({map:w});n=new THREE.Mesh(t,h),scene.add(n),renderer=new THREE.WebGLRenderer,renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),e.appendChild(renderer.domElement),document.addEventListener("mousedown",onDocumentMouseDown,!1),document.addEventListener("mousemove",onDocumentMouseMove,!1),document.addEventListener("mouseup",onDocumentMouseUp,!1),document.addEventListener("wheel",onDocumentMouseWheel,!1),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function onDocumentMouseDown(e){e.preventDefault(),isUserInteracting=!0,onPointerDownPointerX=e.clientX,onPointerDownPointerY=e.clientY,onPointerDownLon=lon,onPointerDownLat=lat}function onDocumentMouseMove(e){isUserInteracting===!0&&(lon=.1*(onPointerDownPointerX-e.clientX)+onPointerDownLon,lat=.1*(onPointerDownPointerY-e.clientY)+onPointerDownLat)}function onDocumentMouseUp(e){isUserInteracting=!1}function onDocumentMouseWheel(e){distance+=.05*e.deltaY}function animate(){requestAnimationFrame(animate),update()}function update(){isUserInteracting===!1&&(lon+=.1),lat=Math.max(-85,Math.min(85,lat)),phi=THREE.Math.degToRad(90-lat),theta=THREE.Math.degToRad(lon-180),camera.position.x=distance*Math.sin(phi)*Math.cos(theta),camera.position.y=distance*Math.cos(phi),camera.position.z=distance*Math.sin(phi)*Math.sin(theta),camera.lookAt(scene.position),renderer.render(scene,camera)}var camera,scene,renderer,isUserInteracting=!1,onMouseDownMouseX=0,onMouseDownMouseY=0,lon=0,onMouseDownLon=0,lat=0,onMouseDownLat=0,phi=0,theta=0,distance=500;init(),animate();</script>
+	
+
+</body></html>

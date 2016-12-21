@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - cameras - logarithmic depth buffer</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #808080;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+				z-index: 100;
+				color: #ddd;
+				text-shadow: 0 0 1px rgba(0,0,0,1);
+			}
+
+			a {
+				color: #0080ff;
+			}
+
+			b { color: lightgreen }
+
+			.renderer_label {
+				position: absolute;
+				bottom: 1em;
+				width: 100%;
+				color: white;
+				z-index: 10;
+				display: block;
+				text-align: center;
+			}
+			.renderer_label.renderer_label_normal {
+			}
+			.renderer_label.renderer_label_logzbuf {
+			}
+			#container {
+				white-space: nowrap;
+			}
+			#container_normal {
+				width: 50%;
+				display: inline-block;
+				position: relative;
+				overflow: hidden;
+			}
+			#container_logzbuf {
+				width: 50%;
+				display: inline-block;
+				position: relative;
+				overflow: hidden;
+			}
+			#renderer_border {
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				width: 2px;
+				z-index: 10;
+				opacity: .8;
+				background: #ccc;
+				border: 1px inset #ccc;
+				cursor: col-resize;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="container">
+			<div id="container_normal"><h2 class="renderer_label renderer_label_normal">normal z-buffer</h2></div><div id="container_logzbuf"><h2 class="renderer_label renderer_label_logzbuf">logarithmic z-buffer</h2></div>
+			<div id="renderer_border"></div>
+		</div>
+
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - cameras - logarithmic depth buffer<br>
+			Zoom through scene with objects ranging in size from 1µm to 100,000,000 light years using the mousewheel<br>
+			Linear z-buffer handles close-up objects well, but fails spectacularly at distant objects<br>
+			Logarithmic handles all but the smallest objects with ease
+		</div>
+
+		<script src="../build/three.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.getElementById("container");var e=new THREE.FontLoader;e.load("fonts/helvetiker_regular.typeface.json",function(e){var a=initScene(e);objects.normal=initView(a,"normal",!1),objects.logzbuf=initView(a,"logzbuf",!0),animate()}),stats=new Stats,container.appendChild(stats.dom),border=document.getElementById("renderer_border"),border.addEventListener("mousedown",onBorderMouseDown),window.addEventListener("mousemove",onMouseMove,!1),window.addEventListener("resize",onWindowResize,!1),window.addEventListener("wheel",onMouseWheel,!1)}function initView(e,a,o){var s=document.getElementById("container_"+a),n=new THREE.PerspectiveCamera(50,screensplit*SCREEN_WIDTH/SCREEN_HEIGHT,NEAR,FAR);e.add(n);var t=new THREE.WebGLRenderer({antialias:!0,logarithmicDepthBuffer:o});return t.setPixelRatio(window.devicePixelRatio),t.setSize(SCREEN_WIDTH/2,SCREEN_HEIGHT),t.domElement.style.position="relative",t.domElement.id="renderer_"+a,s.appendChild(t.domElement),{container:s,renderer:t,scene:e,camera:n}}function initScene(e){var a=new THREE.Scene;a.add(new THREE.AmbientLight(2236962));var o=new THREE.DirectionalLight(16777215,1);o.position.set(100,100,100),a.add(o);for(var s={color:16777215,specular:328965,shininess:50,shading:THREE.SmoothShading,emissive:0},n=new THREE.SphereBufferGeometry(.5,24,12),t=0;t<labeldata.length;t++){var i=labeldata[t].scale||1,l=new THREE.TextGeometry(labeldata[t].label,{font:e,size:labeldata[t].size,height:labeldata[t].size/2});l.computeBoundingSphere(),l.translate(-l.boundingSphere.radius,0,0),s.color=(new THREE.Color).setHSL(Math.random(),.5,.5);var r=new THREE.MeshPhongMaterial(s),c=new THREE.Group;c.position.z=-labeldata[t].size*i,a.add(c);var d=new THREE.Mesh(l,r);d.scale.set(i,i,i),d.position.z=-labeldata[t].size*i,d.position.y=labeldata[t].size/4*i,c.add(d);var m=new THREE.Mesh(n,r);m.position.y=-labeldata[t].size/4*i,m.scale.multiplyScalar(labeldata[t].size*i),c.add(m)}return a}function updateRendererSizes(){SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,screensplit_right=1-screensplit,objects.normal.renderer.setSize(screensplit*SCREEN_WIDTH,SCREEN_HEIGHT),objects.normal.camera.aspect=screensplit*SCREEN_WIDTH/SCREEN_HEIGHT,objects.normal.camera.updateProjectionMatrix(),objects.normal.camera.setViewOffset(SCREEN_WIDTH,SCREEN_HEIGHT,0,0,SCREEN_WIDTH*screensplit,SCREEN_HEIGHT),objects.normal.container.style.width=100*screensplit+"%",objects.logzbuf.renderer.setSize(screensplit_right*SCREEN_WIDTH,SCREEN_HEIGHT),objects.logzbuf.camera.aspect=screensplit_right*SCREEN_WIDTH/SCREEN_HEIGHT,objects.logzbuf.camera.updateProjectionMatrix(),objects.logzbuf.camera.setViewOffset(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_WIDTH*screensplit,0,SCREEN_WIDTH*screensplit_right,SCREEN_HEIGHT),objects.logzbuf.container.style.width=100*screensplit_right+"%",border.style.left=100*screensplit+"%"}function animate(){requestAnimationFrame(animate),render()}function render(){var e=labeldata[0].size*labeldata[0].scale*1,a=labeldata[labeldata.length-1].size*labeldata[labeldata.length-1].scale*100,o=Math.abs(zoomspeed)>minzoomspeed?.95:1,s=THREE.Math.clamp(Math.pow(Math.E,zoompos),e,a);zoompos=Math.log(s),(s==e&&zoomspeed<0||s==a&&zoomspeed>0)&&(o=.85),zoompos+=zoomspeed,zoomspeed*=o,objects.normal.camera.position.x=Math.sin(.5*Math.PI*(mouse[0]-.5))*s,objects.normal.camera.position.y=Math.sin(.25*Math.PI*(mouse[1]-.5))*s,objects.normal.camera.position.z=Math.cos(.5*Math.PI*(mouse[0]-.5))*s,objects.normal.camera.lookAt(objects.normal.scene.position),objects.logzbuf.camera.position.copy(objects.normal.camera.position),objects.logzbuf.camera.quaternion.copy(objects.normal.camera.quaternion),screensplit_right!=1-screensplit&&updateRendererSizes(),objects.normal.renderer.render(objects.normal.scene,objects.normal.camera),objects.logzbuf.renderer.render(objects.logzbuf.scene,objects.logzbuf.camera),stats.update()}function onWindowResize(e){updateRendererSizes()}function onBorderMouseDown(e){window.addEventListener("mousemove",onBorderMouseMove),window.addEventListener("mouseup",onBorderMouseUp),e.stopPropagation(),e.preventDefault()}function onBorderMouseMove(e){screensplit=Math.max(0,Math.min(1,e.clientX/window.innerWidth)),e.stopPropagation()}function onBorderMouseUp(e){window.removeEventListener("mousemove",onBorderMouseMove),window.removeEventListener("mouseup",onBorderMouseUp)}function onMouseMove(e){mouse[0]=e.clientX/window.innerWidth,mouse[1]=e.clientY/window.innerHeight}function onMouseWheel(e){var a=e.deltaY;if(0!==a){var o=a/Math.abs(a);zoomspeed=o/10,minzoomspeed=.001}}var NEAR=1e-6,FAR=1e27,SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,screensplit=.25,screensplit_right=0,mouse=[.5,.5],zoompos=-100,minzoomspeed=.015,zoomspeed=minzoomspeed,container,stats,objects={},labeldata=[{size:.01,scale:.001,label:"microscopic (1µm)",scale:1e-4},{size:.01,scale:.1,label:"minuscule (1mm)",scale:.1},{size:.01,scale:1,label:"tiny (1cm)",scale:1},{size:1,scale:1,label:"child-sized (1m)",scale:1},{size:10,scale:1,label:"tree-sized (10m)",scale:1},{size:100,scale:1,label:"building-sized (100m)",scale:1},{size:1e3,scale:1,label:"medium (1km)",scale:1},{size:1e4,scale:1,label:"city-sized (10km)",scale:1},{size:34e5,scale:1,label:"moon-sized (3,400 Km)",scale:1},{size:12e6,scale:1,label:"planet-sized (12,000 km)",scale:1},{size:14e8,scale:1,label:"sun-sized (1,400,000 km)",scale:1},{size:747e10,scale:1,label:"solar system-sized (50Au)",scale:1},{size:94605284e8,scale:1,label:"gargantuan (1 light year)",scale:1},{size:308567758e8,scale:1,label:"ludicrous (1 parsec)",scale:1},{size:1e19,scale:1,label:"mind boggling (1000 light years)",scale:1},{size:1.135e21,scale:1,label:"galaxy-sized (120,000 light years)",scale:1},{size:9.46e23,scale:1,label:"... (100,000,000 light years)",scale:1}];init();</script>
+	
+
+</body></html>

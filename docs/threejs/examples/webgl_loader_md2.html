@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - morphtargets - MD2</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #fff;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				padding: 10px;
+				width: 100%;
+				text-align: center;
+				color: #fff;
+			}
+
+			a { color: skyblue; }
+		</style>
+	</head>
+
+	<body>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - MD2 Loader -
+			Character by <a href="http://planetquake.gamespy.com/View.php?view=Quake2.Detail&amp;id=368">Brian Collins</a>
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/controls/OrbitControls.js"></script>
+
+		<script src="js/loaders/MD2Loader.js"></script>
+		<script src="js/MD2Character.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+		<script src="js/libs/dat.gui.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(40,window.innerWidth/window.innerHeight,1,1e3),camera.position.set(0,150,400),scene=new THREE.Scene,scene.fog=new THREE.Fog(328965,400,1e3),scene.add(new THREE.AmbientLight(2236962));var e=new THREE.SpotLight(16777215,5,1e3);e.position.set(200,250,500),e.angle=.5,e.penumbra=.5,e.castShadow=!0,e.shadow.mapSize.width=1024,e.shadow.mapSize.height=1024,scene.add(e);var e=new THREE.SpotLight(16777215,5,1e3);e.position.set(-100,350,350),e.angle=.5,e.penumbra=.5,e.castShadow=!0,e.shadow.mapSize.width=1024,e.shadow.mapSize.height=1024,scene.add(e);var a=(new THREE.TextureLoader).load("textures/terrain/grasslight-big.jpg"),n=new THREE.PlaneBufferGeometry(2e3,2e3),r=new THREE.MeshPhongMaterial({color:16777215,map:a}),t=new THREE.Mesh(n,r);t.rotation.x=-Math.PI/2,t.material.map.repeat.set(8,8),t.material.map.wrapS=t.material.map.wrapT=THREE.RepeatWrapping,t.receiveShadow=!0,scene.add(t),renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(scene.fog.color),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),container.appendChild(renderer.domElement),renderer.gammaInput=!0,renderer.gammaOutput=!0,renderer.shadowMap.enabled=!0,stats=new Stats,container.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1),controls=new THREE.OrbitControls(camera,renderer.domElement),controls.target.set(0,50,0),gui=new dat.GUI,gui.add(playbackConfig,"speed",0,2).onChange(function(){character.setPlaybackRate(playbackConfig.speed)}),gui.add(playbackConfig,"wireframe",!1).onChange(function(){character.setWireframe(playbackConfig.wireframe)});var i={baseUrl:"models/md2/ratamahatta/",body:"ratamahatta.md2",skins:["ratamahatta.png","ctf_b.png","ctf_r.png","dead.png","gearwhore.png"],weapons:[["weapon.md2","weapon.png"],["w_bfg.md2","w_bfg.png"],["w_blaster.md2","w_blaster.png"],["w_chaingun.md2","w_chaingun.png"],["w_glauncher.md2","w_glauncher.png"],["w_hyperblaster.md2","w_hyperblaster.png"],["w_machinegun.md2","w_machinegun.png"],["w_railgun.md2","w_railgun.png"],["w_rlauncher.md2","w_rlauncher.png"],["w_shotgun.md2","w_shotgun.png"],["w_sshotgun.md2","w_sshotgun.png"]]};character=new THREE.MD2Character,character.scale=3,character.onLoadComplete=function(){setupSkinsGUI(character),setupWeaponsGUI(character),setupGUIAnimations(character),character.setAnimation(character.meshBody.geometry.animations[0].name)},character.loadParts(i),scene.add(character.root)}function onWindowResize(e){SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),camera.aspect=SCREEN_WIDTH/SCREEN_HEIGHT,camera.updateProjectionMatrix()}function labelize(e){var a=e.split(".");return a.length>1?(a.length-=1,a.join(".")):e}function setupWeaponsGUI(e){for(var a=gui.addFolder("Weapons"),n=function(a){return function(){e.setWeapon(a)}},r=[],t=0;t<e.weapons.length;t++){var i=e.weapons[t].name;playbackConfig[i]=n(t),r[t]=a.add(playbackConfig,i).name(labelize(i))}}function setupSkinsGUI(e){for(var a=gui.addFolder("Skins"),n=function(a){return function(){e.setSkin(a)}},r=[],t=0;t<e.skinsBody.length;t++){var i=e.skinsBody[t].name;playbackConfig[i]=n(t),r[t]=a.add(playbackConfig,i).name(labelize(i))}}function setupGUIAnimations(e){for(var a=gui.addFolder("Animations"),n=function(a){return function(){e.setAnimation(a.name)}},r=0,t=[],i=e.meshBody.geometry.animations,r=0;r<i.length;r++){var o=i[r];playbackConfig[o.name]=n(o),t[r]=a.add(playbackConfig,o.name,o.name),r++}}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){var e=clock.getDelta();controls.update(),character.update(e),renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,container,camera,scene,renderer,character,gui,playbackConfig={speed:1,wireframe:!1},controls,clock=new THREE.Clock;init(),animate();</script>
+
+	
+
+</body></html>

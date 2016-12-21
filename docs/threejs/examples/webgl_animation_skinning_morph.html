@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - skinning + morphing [knight]</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				color: #000;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+
+				background-color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			#meminfo {
+				margin-top: 8px;
+				font-size: 10px;
+				display: none;
+			}
+
+			a {
+				color: #0af;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="container"></div>
+
+		<div id="info">
+		<a href="http://threejs.org" target="_blank">three.js</a> webgl - clip system
+		- knight by <a href="http://vimeo.com/36113323">apendua</a>
+			<div id="meminfo"></div>
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+		<script src="js/libs/dat.gui.min.js"></script>
+
+		<script>function init(){container=document.getElementById("container"),camera=new THREE.PerspectiveCamera(30,SCREEN_WIDTH/SCREEN_HEIGHT,1,1e4),camera.position.z=2200,scene=new THREE.Scene,scene.fog=new THREE.Fog(16777215,2e3,1e4),scene.add(camera);var e=new THREE.PlaneBufferGeometry(16e3,16e3),n=new THREE.MeshPhongMaterial({emissive:8947848}),t=new THREE.Mesh(e,n);t.position.set(0,FLOOR,0),t.rotation.x=-Math.PI/2,scene.add(t),t.receiveShadow=!0,scene.add(new THREE.HemisphereLight(1118481,4473924));var i=new THREE.DirectionalLight(15463423,1.5);i.position.set(0,140,500).multiplyScalar(1.1),scene.add(i),i.castShadow=!0,i.shadow.mapSize.width=1024,i.shadow.mapSize.height=1024;var o=390;i.shadow.camera.left=-o,i.shadow.camera.right=o,i.shadow.camera.top=1.5*o,i.shadow.camera.bottom=-o,i.shadow.camera.far=3500,renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(scene.fog.color),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),renderer.domElement.style.position="relative",container.appendChild(renderer.domElement),renderer.gammaInput=!0,renderer.gammaOutput=!0,renderer.shadowMap.enabled=!0,stats=new Stats,container.appendChild(stats.dom);var a=new THREE.JSONLoader;a.load("models/skinned/knight.js",function(e,n){createScene(e,n,0,FLOOR,-300,60),initGUI()}),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function createScene(e,n,t,i,o,a){e.computeBoundingBox();for(var c=e.boundingBox,s=0;s<n.length;s++){var r=n[s];r.skinning=!0,r.morphTargets=!0,r.specular.setHSL(0,0,.1),r.color.setHSL(.6,0,.6)}mesh=new THREE.SkinnedMesh(e,new THREE.MultiMaterial(n)),mesh.name="Knight Mesh",mesh.position.set(t,i-c.min.y*a,o),mesh.scale.set(a,a,a),scene.add(mesh),mesh.castShadow=!0,mesh.receiveShadow=!0,mesh2=new THREE.SkinnedMesh(e,new THREE.MultiMaterial(n)),mesh2.name="Lil' Bro Mesh",mesh2.position.set(t-240,i-c.min.y*a,o+500),mesh2.scale.set(a/2,a/2,a/2),mesh2.rotation.y=THREE.Math.degToRad(60),mesh2.visible=!1,mesh2.castShadow=!0,mesh2.receiveShadow=!0,scene.add(mesh2),helper=new THREE.SkeletonHelper(mesh),helper.material.linewidth=3,helper.visible=!1,scene.add(helper),mixer=new THREE.AnimationMixer(mesh),bonesClip=e.animations[0],facesClip=THREE.AnimationClip.CreateFromMorphTargetSequence("facialExpressions",mesh.geometry.morphTargets,3)}function initGUI(){var e={"show model":!0,"show skeleton":!1,"show 2nd model":!1,"show mem. info":!1},n=new dat.GUI;n.add(e,"show model").onChange(function(){mesh.visible=e["show model"]}),n.add(e,"show skeleton").onChange(function(){helper.visible=e["show skeleton"]}),n.add(e,"show 2nd model").onChange(function(){mesh2.visible=e["show 2nd model"]}),n.add(e,"show mem. info").onChange(function(){showMemInfo=e["show mem. info"],domMemInfo.style.display=showMemInfo?"block":"none"});var t=function(e){for(var n=[],t=0,i=e.length;t!==i;++t){var o=e[t];n.push(o&&o.name||"&lt;null&gt;")}return n},i=function(e,n,i,o){var a=e.addFolder("Clip '"+i.name+"'"),c=t(o),s=c[0],r=o[0],d=null,l={"play()":function(){d=n.clipAction(i,r),d.play()},"stop()":function(){d=n.clipAction(i,r),d.stop()},"reset()":function(){d=n.clipAction(i,r),d.reset()},get"time ="(){return null!==d?d.time:0},set"time ="(e){d=n.clipAction(i,r),d.time=e},get"paused ="(){return null!==d&&d.paused},set"paused ="(e){d=n.clipAction(i,r),d.paused=e},get"enabled ="(){return null!==d&&d.enabled},set"enabled ="(e){d=n.clipAction(i,r),d.enabled=e},get"clamp ="(){return null!==d&&d.clampWhenFinished},set"clamp ="(e){d=n.clipAction(i,r),d.clampWhenFinished=e},get"isRunning() ="(){return null!==d&&d.isRunning()},set"isRunning() ="(e){alert("Read only - this is the result of a method.")},"play delayed":function(){d=n.clipAction(i,r),d.startAt(n.time+.5).play()},get"weight ="(){return null!==d?d.weight:1},set"weight ="(e){d=n.clipAction(i,r),d.weight=e},get"eff. weight"(){return null!==d?d.getEffectiveWeight():1},set"eff. weight"(e){d=n.clipAction(i,r),d.setEffectiveWeight(e)},"fade in":function(){d=n.clipAction(i,r),d.reset().fadeIn(.25).play()},"fade out":function(){d=n.clipAction(i,r),d.fadeOut(.25).play()},get"timeScale ="(){return null!==d?d.timeScale:1},set"timeScale ="(e){d=n.clipAction(i,r),d.timeScale=e},get"eff.T.Scale"(){return null!==d?d.getEffectiveTimeScale():1},set"eff.T.Scale"(e){d=n.clipAction(i,r),d.setEffectiveTimeScale(e)},"time warp":function(){d=n.clipAction(i,r);var e=d.getEffectiveTimeScale(),t=e>0?-1:1;d.warp(e,t,4).play()},get"loop mode"(){return null!==d?d.loop:THREE.LoopRepeat},set"loop mode"(e){d=n.clipAction(i,r),d.loop=+e},get"repetitions"(){return null!==d?d.repetitions:1/0},set"repetitions"(e){d=n.clipAction(i,r),d.repetitions=+e},get"local root"(){return s},set"local root"(e){s=e,r=o[c.indexOf(s)],d=n.clipAction(i,r)}};a.add(l,"play()"),a.add(l,"stop()"),a.add(l,"reset()"),a.add(l,"time =",0,i.duration).listen(),a.add(l,"paused =").listen(),a.add(l,"enabled =").listen(),a.add(l,"clamp ="),a.add(l,"isRunning() =").listen(),a.add(l,"play delayed"),a.add(l,"weight =",0,1).listen(),a.add(l,"eff. weight",0,1).listen(),a.add(l,"fade in"),a.add(l,"fade out"),a.add(l,"timeScale =",-2,2).listen(),a.add(l,"eff.T.Scale",-2,2).listen(),a.add(l,"time warp"),a.add(l,"loop mode",{LoopOnce:THREE.LoopOnce,LoopRepeat:THREE.LoopRepeat,LoopPingPong:THREE.LoopPingPong}),a.add(l,"repetitions",0,1/0),a.add(l,"local root",c),l["play()"]()};i(n,mixer,bonesClip,[null,mesh,mesh2]),i(n,mixer,facesClip,[null,mesh,mesh2]);var o=function(e,n,i,o){var a=t(i),c=t(o),s=e.addFolder("Memory Management"),r=a[0],d=i[0],l=c[0],m=o[0],u={get"clip"(){return r},set"clip"(e){r=e,d=i[a.indexOf(r)]},get"root"(){return l},set"root"(e){l=e,m=o[c.indexOf(l)]},"uncache clip":function(){n.uncacheClip(d)},"uncache root":function(){n.uncacheRoot(m)},"uncache action":function(){n.uncacheAction(d,m)}};s.add(u,"clip",a),s.add(u,"root",c),s.add(u,"uncache root"),s.add(u,"uncache clip"),s.add(u,"uncache action")};o(n,mixer,[bonesClip,facesClip],[mesh,mesh2])}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,mouseY=e.clientY-windowHalfY}function animate(){if(requestAnimationFrame(animate),stats.begin(),render(),stats.end(),showMemInfo){var e=mixer.stats,n=e.controlInterpolants;domMemInfo.innerHTML=e.actions.inUse+" / "+e.actions.total+" actions "+e.bindings.inUse+" / "+e.bindings.total+" bindings "+n.inUse+" / "+n.total+" control interpolants"}}function render(){var e=.75*clock.getDelta();camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y=THREE.Math.clamp(camera.position.y+.05*(-mouseY-camera.position.y),0,1e3),camera.lookAt(scene.position),mixer&&(mixer.update(e),helper.update()),renderer.render(scene,camera)}var SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,FLOOR=-250,container,stats,camera,scene,renderer,mesh,mesh2,helper,mixer,facesClip,bonesClip,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,clock=new THREE.Clock,domMemInfo=document.getElementById("meminfo"),showMemInfo=!1;document.addEventListener("mousemove",onDocumentMouseMove,!1),init(),animate();</script>
+
+	
+
+</body></html>

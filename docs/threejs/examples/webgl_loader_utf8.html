@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - loader - UTF8</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #000;
+				color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+			}
+			#info a, .button { color: #f00; font-weight: bold; text-decoration: underline; cursor: pointer }
+		</style>
+	</head>
+
+	<body>
+		<div id="info">
+		<a href="http://threejs.org" target="_blank">three.js</a> -
+		<a href="http://code.google.com/p/webgl-loader/" target="_blank">UTF8 format</a> loader test -
+		models from <a href="http://www.sci.utah.edu/~wald/animrep/" target="_blank">The Utah 3D Animation Repository</a>
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/loaders/UTF8Loader.js"></script>
+		<script src="js/loaders/MTLLoader.js"></script>
+		<script src="js/loaders/DDSLoader.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(20,SCREEN_WIDTH/SCREEN_HEIGHT,1,2e3),camera.position.z=800,scene=new THREE.Scene,scene.fog=new THREE.Fog(0,800,2e3);var e="textures/cube/SwedishRoyalCastle/",n=".jpg",a=[e+"px"+n,e+"nx"+n,e+"py"+n,e+"ny"+n,e+"pz"+n,e+"nz"+n];reflectionCube=(new THREE.CubeTextureLoader).load(a);var o=new THREE.AmbientLight(2236962);scene.add(o);var i=new THREE.DirectionalLight(16777215,1.1);i.position.set(0,20,300),scene.add(i),i.castShadow=!0,i.shadow.mapSize.width=2048,i.shadow.mapSize.height=2048;var r=150;i.shadow.camera.left=1.2*-r,i.shadow.camera.right=1.2*r,i.shadow.camera.top=r,i.shadow.camera.bottom=-r,i.shadow.camera.near=200,i.shadow.camera.far=500,renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(scene.fog.color),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),renderer.domElement.style.position="relative",container.appendChild(renderer.domElement),renderer.gammaInput=!0,renderer.gammaOutput=!0,renderer.shadowMap.enabled=!0,renderer.shadowMap.type=THREE.PCFShadowMap,stats=new Stats,container.appendChild(stats.dom);var t=Date.now();THREE.Loader.Handlers.add(/\.dds$/i,new THREE.DDSLoader);var d=new THREE.UTF8Loader;d.load("models/utf8/hand.js",function(e){var n=Date.now();console.log("hand",n-t,"ms");var a=350;e.scale.set(a,a,a),e.position.x=125,e.position.y=-125,scene.add(e),e.traverse(function(e){e.castShadow=!0,e.receiveShadow=!0})},{normalizeRGB:!0}),d.load("models/utf8/ben_dds.js",function(e){var n=Date.now();console.log("ben",n-t,"ms");var a=350;e.scale.set(a,a,a),e.position.x=-125,e.position.y=-125,scene.add(e),e.traverse(function(e){e.castShadow=!0,e.receiveShadow=!0})},{normalizeRGB:!0}),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,mouseY=e.clientY-windowHalfY}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-mouseY-camera.position.y),camera.lookAt(scene.position),renderer.render(scene,camera)}var SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight,FLOOR=-150,container,stats,camera,scene,renderer,mesh,zmesh,geometry,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;document.addEventListener("mousemove",onDocumentMouseMove,!1),init(),animate();</script>
+
+	
+
+</body></html>

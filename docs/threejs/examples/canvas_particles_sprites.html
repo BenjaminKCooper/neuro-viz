@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js canvas - particles - sprites</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			a {
+				color: #0078ff;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/renderers/Projector.js"></script>
+		<script src="js/renderers/CanvasRenderer.js"></script>
+
+		<script src="js/libs/stats.min.js"></script>
+		<script src="js/libs/tween.min.js"></script>
+
+		<script>function init(){container=document.createElement("div"),document.body.appendChild(container),camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,1,5e3),camera.position.z=1e3,scene=new THREE.Scene;for(var e=new THREE.SpriteMaterial({map:new THREE.CanvasTexture(generateSprite()),blending:THREE.AdditiveBlending}),n=0;n<1e3;n++)particle=new THREE.Sprite(e),initParticle(particle,10*n),scene.add(particle);renderer=new THREE.CanvasRenderer,renderer.setClearColor(64),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),container.appendChild(renderer.domElement),stats=new Stats,container.appendChild(stats.dom),document.addEventListener("mousemove",onDocumentMouseMove,!1),document.addEventListener("touchstart",onDocumentTouchStart,!1),document.addEventListener("touchmove",onDocumentTouchMove,!1),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2,camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function generateSprite(){var e=document.createElement("canvas");e.width=16,e.height=16;var n=e.getContext("2d"),t=n.createRadialGradient(e.width/2,e.height/2,0,e.width/2,e.height/2,e.width/2);return t.addColorStop(0,"rgba(255,255,255,1)"),t.addColorStop(.2,"rgba(0,255,255,1)"),t.addColorStop(.4,"rgba(0,0,64,1)"),t.addColorStop(1,"rgba(0,0,0,1)"),n.fillStyle=t,n.fillRect(0,0,e.width,e.height),e}function initParticle(e,n){var e=this instanceof THREE.Sprite?this:e,n=void 0!==n?n:0;e.position.set(0,0,0),e.scale.x=e.scale.y=32*Math.random()+16,new TWEEN.Tween(e).delay(n).to({},1e4).onComplete(initParticle).start(),new TWEEN.Tween(e.position).delay(n).to({x:4e3*Math.random()-2e3,y:1e3*Math.random()-500,z:4e3*Math.random()-2e3},1e4).start(),new TWEEN.Tween(e.scale).delay(n).to({x:.01,y:.01},1e4).start()}function onDocumentMouseMove(e){mouseX=e.clientX-windowHalfX,mouseY=e.clientY-windowHalfY}function onDocumentTouchStart(e){1==e.touches.length&&(e.preventDefault(),mouseX=e.touches[0].pageX-windowHalfX,mouseY=e.touches[0].pageY-windowHalfY)}function onDocumentTouchMove(e){1==e.touches.length&&(e.preventDefault(),mouseX=e.touches[0].pageX-windowHalfX,mouseY=e.touches[0].pageY-windowHalfY)}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){TWEEN.update(),camera.position.x+=.05*(mouseX-camera.position.x),camera.position.y+=.05*(-mouseY-camera.position.y),camera.lookAt(scene.position),renderer.render(scene,camera)}var container,stats,camera,scene,renderer,particle,mouseX=0,mouseY=0,windowHalfX=window.innerWidth/2,windowHalfY=window.innerHeight/2;init(),animate();</script>
+	
+
+</body></html>

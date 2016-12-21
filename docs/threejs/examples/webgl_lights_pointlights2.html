@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="en"><head>
+		<title>three.js webgl - lights - point lights</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+		<style>
+			body {
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family: Monospace;
+				font-size: 13px;
+				text-align: center;
+			}
+
+			a {
+				color: #ff0080;
+				text-decoration: none;
+			}
+
+			a:hover {
+				color: #0080ff;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - point lights WebGL demo
+		</div>
+
+		<script src="../build/three.js"></script>
+
+		<script src="js/controls/TrackballControls.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>function init(){var e=document.getElementById("container");camera=new THREE.PerspectiveCamera(50,window.innerWidth/window.innerHeight,1,FAR),camera.position.set(0,15,150),camera.lookAt(new THREE.Vector3),scene=new THREE.Scene,scene.fog=new THREE.Fog(262918,10,FAR),controls=new THREE.TrackballControls(camera),controls.rotateSpeed=1,controls.zoomSpeed=1.2,controls.panSpeed=.8,controls.noZoom=!1,controls.noPan=!1,controls.staticMoving=!1,controls.dynamicDampingFactor=.15,controls.keys=[65,83,68];var t=new THREE.TextureLoader,n=t.load("textures/disturb.jpg");n.repeat.set(20,10),n.wrapS=n.wrapT=THREE.RepeatWrapping,n.format=THREE.RGBFormat;var i=new THREE.MeshPhongMaterial({color:16777215,map:n}),o=new THREE.MeshStandardMaterial({color:16777215,roughness:.5,metalness:1}),a=new THREE.Mesh(new THREE.PlaneBufferGeometry(800,400,2,2),i);a.position.y=-5,a.rotation.x=-Math.PI/2,scene.add(a);for(var r=new THREE.TorusGeometry(1.5,.4,8,16),s=0;s<5e3;s++){var a=new THREE.Mesh(r,o);a.position.x=400*(.5-Math.random()),a.position.y=50*(.5-Math.random())+25,a.position.z=200*(.5-Math.random()),a.rotation.y=3.14*(.5-Math.random()),a.rotation.x=3.14*(.5-Math.random()),a.matrixAutoUpdate=!1,a.updateMatrix(),scene.add(a)}var l=2.5,d=100,h=2,c=16711744,E=16639,g=8454016,w=16755200,p=65450,R=16716032,M=new THREE.SphereGeometry(.25,16,8);light1=new THREE.PointLight(c,l,d,h),light1.add(new THREE.Mesh(M,new THREE.MeshBasicMaterial({color:c}))),scene.add(light1),light2=new THREE.PointLight(E,l,d,h),light2.add(new THREE.Mesh(M,new THREE.MeshBasicMaterial({color:E}))),scene.add(light2),light3=new THREE.PointLight(g,l,d,h),light3.add(new THREE.Mesh(M,new THREE.MeshBasicMaterial({color:g}))),scene.add(light3),light4=new THREE.PointLight(w,l,d,h),light4.add(new THREE.Mesh(M,new THREE.MeshBasicMaterial({color:w}))),scene.add(light4),light5=new THREE.PointLight(p,l,d,h),light5.add(new THREE.Mesh(M,new THREE.MeshBasicMaterial({color:p}))),scene.add(light5),light6=new THREE.PointLight(R,l,d,h),light6.add(new THREE.Mesh(M,new THREE.MeshBasicMaterial({color:R}))),scene.add(light6);var m=new THREE.DirectionalLight(16777215,.05);m.position.set(.5,1,0).normalize(),scene.add(m),renderer=new THREE.WebGLRenderer({antialias:!1}),renderer.setClearColor(scene.fog.color),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),e.appendChild(renderer.domElement),renderer.gammaInput=!0,renderer.gammaOutput=!0,stats=new Stats,e.appendChild(stats.dom),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight),controls.handleResize()}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){var e=25e-5*Date.now(),t=150;light1.position.x=Math.sin(.7*e)*t,light1.position.z=Math.cos(.3*e)*t,light2.position.x=Math.cos(.3*e)*t,light2.position.z=Math.sin(.7*e)*t,light3.position.x=Math.sin(.7*e)*t,light3.position.z=Math.sin(.5*e)*t,light4.position.x=Math.sin(.3*e)*t,light4.position.z=Math.sin(.5*e)*t,light5.position.x=Math.cos(.3*e)*t,light5.position.z=Math.sin(.5*e)*t,light6.position.x=Math.cos(.7*e)*t,light6.position.z=Math.cos(.5*e)*t,controls.update(clock.getDelta()),renderer.render(scene,camera)}Detector.webgl||Detector.addGetWebGLMessage();var camera,scene,renderer,controls,particle1,particle2,particle4,particle5,particle6,light1,light2,light3,light4,light5,light6,FAR=300,clock=new THREE.Clock;init(),animate();</script>
+	
+
+</body></html>

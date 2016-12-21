@@ -1,0 +1,37 @@
+<html><head>
+	  <title>three.js webgl - BVHLoader</title>
+		<style>
+			body {
+				color: #fff;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				padding: 10px;
+				width: 100%;
+				text-align: center;
+				color: #000000;
+			}
+		</style>
+
+	</head>
+	<body>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank">three.js</a> - BVH Loader -
+			animation from <a href="http://mocap.cs.cmu.edu/">http://mocap.cs.cmu.edu/</a>
+		</div>
+		<script src="../build/three.js"></script>
+		<script src="js/controls/OrbitControls.js"></script>
+		<script src="js/loaders/BVHLoader.js"></script>
+		<script>function init(){camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1e3),camera.position.set(0,200,400),controls=new THREE.OrbitControls(camera),controls.minDistance=300,controls.maxDistance=700,scene=new THREE.Scene,scene.add(new THREE.GridHelper(200,10)),renderer=new THREE.WebGLRenderer({antialias:!0}),renderer.setClearColor(15658734),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(window.innerWidth,window.innerHeight),document.body.appendChild(renderer.domElement),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight,camera.updateProjectionMatrix(),renderer.setSize(window.innerWidth,window.innerHeight)}function animate(){requestAnimationFrame(animate);var e=clock.getDelta();mixer&&mixer.update(e),skeletonHelper&&skeletonHelper.update(),renderer.render(scene,camera)}var clock=new THREE.Clock,camera,controls,scene,renderer,mixer,skeletonHelper;init(),animate();var loader=new THREE.BVHLoader;loader.load("models/bvh/pirouette.bvh",function(e){skeletonHelper=new THREE.SkeletonHelper(e.skeleton.bones[0]),skeletonHelper.skeleton=e.skeleton;var n=new THREE.Group;n.add(e.skeleton.bones[0]),scene.add(skeletonHelper),scene.add(n),mixer=new THREE.AnimationMixer(skeletonHelper),mixer.clipAction(e.clip).setEffectiveWeight(1).play()});</script>
+	
+
+</body></html>

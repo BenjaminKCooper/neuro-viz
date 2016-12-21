@@ -1,0 +1,83 @@
+<!DOCTYPE html><html lang="en"><head>
+	<title>three.js webgl - marching cubes</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1,maximum-scale=1">
+	<style>
+		body {
+		  color: #fff;
+		  font-family: Monospace;
+		  font-size: 13px;
+		  text-align: center;
+
+		  background-color: #000;
+		  margin: 0px;
+		  overflow: hidden;
+		}
+
+		#info {
+		  color: #ffffff;
+		  position: absolute;
+		  top: 0px;
+		  width: 100%;
+		  padding: 5px;
+		}
+
+		a {
+		  color: gold;
+		}
+
+		#oldie {
+		  font-family: monospace;
+		  font-size: 13px;
+
+		  text-align: center;
+		  background: rgb(0, 0, 50);
+		  color: #fff;
+		  padding: 1em;
+
+		  width: 475px;
+		  margin: 5em auto 0;
+
+		  display: none;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div id="container"></div>
+	<div id="info">
+		<a href="http://threejs.org" target="_blank">three.js</a> -
+		marching cubes -
+		[based on greggman's <a href="http://webglsamples.googlecode.com/hg/blob/blob.html">blob</a>, original code by Henrik Rydgård]
+	</div>
+
+	<script src="../build/three.js"></script>
+
+	<script src="js/controls/OrbitControls.js"></script>
+
+	<script src="js/shaders/CopyShader.js"></script>
+	<script src="js/shaders/FXAAShader.js"></script>
+	<script src="js/shaders/HorizontalTiltShiftShader.js"></script>
+	<script src="js/shaders/VerticalTiltShiftShader.js"></script>
+
+	<script src="js/postprocessing/EffectComposer.js"></script>
+	<script src="js/postprocessing/RenderPass.js"></script>
+	<script src="js/postprocessing/BloomPass.js"></script>
+	<script src="js/postprocessing/ShaderPass.js"></script>
+	<script src="js/postprocessing/MaskPass.js"></script>
+	<script src="js/postprocessing/SavePass.js"></script>
+
+	<script src="js/MarchingCubes.js"></script>
+	<script src="js/ShaderToon.js"></script>
+
+	<script src="js/Detector.js"></script>
+	<script src="js/libs/stats.min.js"></script>
+	<script src="js/libs/dat.gui.min.js"></script>
+
+
+	<script>function init(){container=document.getElementById("container"),camera=new THREE.PerspectiveCamera(45,SCREEN_WIDTH/SCREEN_HEIGHT,1,1e4),camera.position.set(-500,500,1500),scene=new THREE.Scene,light=new THREE.DirectionalLight(16777215),light.position.set(.5,.5,1),scene.add(light),pointLight=new THREE.PointLight(16724736),pointLight.position.set(0,0,100),scene.add(pointLight),ambientLight=new THREE.AmbientLight(526344),scene.add(ambientLight),materials=generateMaterials(),current_material="shiny",resolution=28,numBlobs=10,effect=new THREE.MarchingCubes(resolution,materials[current_material].m,!0,!0),effect.position.set(0,0,0),effect.scale.set(700,700,700),effect.enableUvs=!1,effect.enableColors=!1,scene.add(effect),renderer=new THREE.WebGLRenderer,renderer.setClearColor(328965),renderer.setPixelRatio(window.devicePixelRatio),renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),renderer.domElement.style.position="absolute",renderer.domElement.style.top=MARGIN+"px",renderer.domElement.style.left="0px",container.appendChild(renderer.domElement),renderer.gammaInput=!0,renderer.gammaOutput=!0,controls=new THREE.OrbitControls(camera,renderer.domElement),stats=new Stats,container.appendChild(stats.dom),renderer.autoClear=!1;var e={minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter,format:THREE.RGBFormat,stencilBuffer:!1};renderTarget=new THREE.WebGLRenderTarget(SCREEN_WIDTH,SCREEN_HEIGHT,e),effectFXAA=new THREE.ShaderPass(THREE.FXAAShader),hblur=new THREE.ShaderPass(THREE.HorizontalTiltShiftShader),vblur=new THREE.ShaderPass(THREE.VerticalTiltShiftShader);var t=8;hblur.uniforms.h.value=t/SCREEN_WIDTH,vblur.uniforms.v.value=t/SCREEN_HEIGHT,hblur.uniforms.r.value=vblur.uniforms.r.value=.5,effectFXAA.uniforms.resolution.value.set(1/SCREEN_WIDTH,1/SCREEN_HEIGHT),composer=new THREE.EffectComposer(renderer,renderTarget);var r=new THREE.RenderPass(scene,camera);vblur.renderToScreen=!0,composer=new THREE.EffectComposer(renderer,renderTarget),composer.addPass(r),composer.addPass(effectFXAA),composer.addPass(hblur),composer.addPass(vblur),setupGui(),window.addEventListener("resize",onWindowResize,!1)}function onWindowResize(e){SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight-2*MARGIN,camera.aspect=SCREEN_WIDTH/SCREEN_HEIGHT,camera.updateProjectionMatrix(),renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),composer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT),hblur.uniforms.h.value=4/SCREEN_WIDTH,vblur.uniforms.v.value=4/SCREEN_HEIGHT,effectFXAA.uniforms.resolution.value.set(1/SCREEN_WIDTH,1/SCREEN_HEIGHT)}function generateMaterials(){var e="textures/cube/SwedishRoyalCastle/",t=".jpg",r=[e+"px"+t,e+"nx"+t,e+"py"+t,e+"ny"+t,e+"pz"+t,e+"nz"+t],o=new THREE.CubeTextureLoader,l=o.load(r);l.format=THREE.RGBFormat;var a=o.load(r);l.format=THREE.RGBFormat,a.mapping=THREE.CubeRefractionMapping;var n=createShaderMaterial("toon1",light,ambientLight),i=createShaderMaterial("toon2",light,ambientLight),s=createShaderMaterial("hatching",light,ambientLight),f=createShaderMaterial("hatching",light,ambientLight),c=createShaderMaterial("dotted",light,ambientLight),u=createShaderMaterial("dotted",light,ambientLight);f.uniforms.uBaseColor.value.setRGB(0,0,0),f.uniforms.uLineColor1.value.setHSL(0,.8,.5),f.uniforms.uLineColor2.value.setHSL(0,.8,.5),f.uniforms.uLineColor3.value.setHSL(0,.8,.5),f.uniforms.uLineColor4.value.setHSL(.1,.8,.5),u.uniforms.uBaseColor.value.setRGB(0,0,0),u.uniforms.uLineColor1.value.setHSL(.05,1,.5);var d=(new THREE.TextureLoader).load("textures/UV_Grid_Sm.jpg");d.wrapS=d.wrapT=THREE.RepeatWrapping;var h={chrome:{m:new THREE.MeshLambertMaterial({color:16777215,envMap:l}),h:0,s:0,l:1},liquid:{m:new THREE.MeshLambertMaterial({color:16777215,envMap:a,refractionRatio:.85}),h:0,s:0,l:1},shiny:{m:new THREE.MeshStandardMaterial({color:5570560,envMap:l,roughness:.1,metalness:1}),h:0,s:.8,l:.2},matte:{m:new THREE.MeshPhongMaterial({color:0,specular:1118481,shininess:1}),h:0,s:0,l:1},flat:{m:new THREE.MeshPhongMaterial({color:0,specular:1118481,shininess:1,shading:THREE.FlatShading}),h:0,s:0,l:1},textured:{m:new THREE.MeshPhongMaterial({color:16777215,specular:1118481,shininess:1,map:d}),h:0,s:0,l:1},colors:{m:new THREE.MeshPhongMaterial({color:16777215,specular:16777215,shininess:2,vertexColors:THREE.VertexColors}),h:0,s:0,l:1},plastic:{m:new THREE.MeshPhongMaterial({color:0,specular:8947848,shininess:250}),h:.6,s:.8,l:.1},toon1:{m:n,h:.2,s:1,l:.75},toon2:{m:i,h:.4,s:1,l:.75},hatching:{m:s,h:.2,s:1,l:.9},hatching2:{m:f,h:0,s:.8,l:.5},dotted:{m:c,h:.2,s:1,l:.9},dotted2:{m:u,h:.1,s:1,l:.5}};return h}function createShaderMaterial(e,t,r){var o=THREE.ShaderToon[e],l=THREE.UniformsUtils.clone(o.uniforms),a=o.vertexShader,n=o.fragmentShader,i=new THREE.ShaderMaterial({uniforms:l,vertexShader:a,fragmentShader:n});return i.uniforms.uDirLightPos.value=t.position,i.uniforms.uDirLightColor.value=t.color,i.uniforms.uAmbientLightColor.value=r.color,i}function setupGui(){var e=function(e){return function(){var t=materials[current_material];t.h=r.getValue(),t.s=o.getValue(),t.l=l.getValue(),current_material=e;var a=materials[e];effect.material=a.m,r.setValue(a.h),o.setValue(a.s),l.setValue(a.l),effect.enableUvs="textured"===current_material,effect.enableColors="colors"===current_material}};effectController={material:"shiny",speed:1,numBlobs:10,resolution:28,isolation:80,floor:!0,wallx:!1,wallz:!1,hue:0,saturation:.8,lightness:.1,lhue:.04,lsaturation:1,llightness:.5,lx:.5,ly:.5,lz:1,postprocessing:!1,dummy:function(){}};var t,r,o,l,a=new dat.GUI;t=a.addFolder("Materials");for(var n in materials)effectController[n]=e(n),t.add(effectController,n).name(n);t=a.addFolder("Material color"),r=t.add(effectController,"hue",0,1,.025),o=t.add(effectController,"saturation",0,1,.025),l=t.add(effectController,"lightness",0,1,.025),t=a.addFolder("Point light color"),t.add(effectController,"lhue",0,1,.025).name("hue"),t.add(effectController,"lsaturation",0,1,.025).name("saturation"),t.add(effectController,"llightness",0,1,.025).name("lightness"),t=a.addFolder("Directional light orientation"),t.add(effectController,"lx",-1,1,.025).name("x"),t.add(effectController,"ly",-1,1,.025).name("y"),t.add(effectController,"lz",-1,1,.025).name("z"),t=a.addFolder("Simulation"),t.add(effectController,"speed",.1,8,.05),t.add(effectController,"numBlobs",1,50,1),t.add(effectController,"resolution",14,100,1),t.add(effectController,"isolation",10,300,1),t.add(effectController,"floor"),t.add(effectController,"wallx"),t.add(effectController,"wallz"),t=a.addFolder("Rendering"),t.add(effectController,"postprocessing")}function updateCubes(e,t,r,o,l,a){e.reset();var n,i,s,f,c,u;for(c=12,u=1.2/((Math.sqrt(r)-1)/4+1),n=0;n<r;n++)i=.27*Math.sin(n+1.26*t*(1.03+.5*Math.cos(.21*n)))+.5,s=.77*Math.abs(Math.cos(n+1.12*t*Math.cos(1.22+.1424*n))),f=.27*Math.cos(n+1.32*t*.1*Math.sin(.92+.53*n))+.5,e.addBall(i,s,f,u,c);o&&e.addPlaneY(2,12),a&&e.addPlaneZ(2,12),l&&e.addPlaneX(2,12)}function animate(){requestAnimationFrame(animate),render(),stats.update()}function render(){var e=clock.getDelta();time+=e*effectController.speed*.5,controls.update(e),effectController.resolution!==resolution&&(resolution=effectController.resolution,effect.init(Math.floor(resolution))),effectController.isolation!==effect.isolation&&(effect.isolation=effectController.isolation),updateCubes(effect,time,effectController.numBlobs,effectController.floor,effectController.wallx,effectController.wallz),effect.material instanceof THREE.ShaderMaterial?"dotted2"===current_material?effect.material.uniforms.uLineColor1.value.setHSL(effectController.hue,effectController.saturation,effectController.lightness):"hatching2"===current_material?(u=effect.material.uniforms,u.uLineColor1.value.setHSL(effectController.hue,effectController.saturation,effectController.lightness),u.uLineColor2.value.setHSL(effectController.hue,effectController.saturation,effectController.lightness),u.uLineColor3.value.setHSL(effectController.hue,effectController.saturation,effectController.lightness),u.uLineColor4.value.setHSL(effectController.hue+.2,effectController.saturation,effectController.lightness)):effect.material.uniforms.uBaseColor.value.setHSL(effectController.hue,effectController.saturation,effectController.lightness):effect.material.color.setHSL(effectController.hue,effectController.saturation,effectController.lightness),light.position.set(effectController.lx,effectController.ly,effectController.lz),light.position.normalize(),pointLight.color.setHSL(effectController.lhue,effectController.lsaturation,effectController.llightness),effectController.postprocessing?composer.render(e):(renderer.clear(),renderer.render(scene,camera))}Detector.webgl||Detector.addGetWebGLMessage();var MARGIN=0,SCREEN_WIDTH=window.innerWidth,SCREEN_HEIGHT=window.innerHeight-2*MARGIN,container,stats,camera,scene,renderer,mesh,texture,geometry,materials,material,current_material,light,pointLight,ambientLight,effect,resolution,numBlobs,composer,effectFXAA,hblur,vblur,effectController,time=0,clock=new THREE.Clock;init(),animate();</script>
+
+
+
+</body></html>

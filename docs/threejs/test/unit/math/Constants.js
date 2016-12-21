@@ -1,0 +1,1 @@
+var x=2,y=3,z=4,w=5,negInf2=new THREE.Vector2(-(1/0),-(1/0)),posInf2=new THREE.Vector2(1/0,1/0),zero2=new THREE.Vector2,one2=new THREE.Vector2(1,1),two2=new THREE.Vector2(2,2),negInf3=new THREE.Vector3(-(1/0),-(1/0),-(1/0)),posInf3=new THREE.Vector3(1/0,1/0,1/0),zero3=new THREE.Vector3,one3=new THREE.Vector3(1,1,1),two3=new THREE.Vector3(2,2,2);
