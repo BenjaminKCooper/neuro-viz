@@ -1,5 +1,7 @@
 <html><head><link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/three.js/three.js">
+<link rel="import" href="../bower_components/three.js/three.modules.js">
 
 </head><body><dom-module id="my-neuroviz2">
   <template>
@@ -11,10 +13,9 @@
       }
     </style>
   </template>
-  <script src="../bower_components/three.js/build/three.js"></script>
-  <script src="../bower_components/three.js/examples/js/loaders/OBJLoader.js"></script>
-  <script src="../bower_components/three.js/examples/js/renderers/SVGRenderer.js"></script>
-  <script src="../bower_components/mojs/build/mo.js"></script>
+  <script src="../bower_components/threejs/build/three.js"></script>
+  <script src="../bower_components/threejs/examples/js/loaders/OBJLoader.js"></script>
+  <script src="../bower_components/threejs/examples/js/renderers/SVGRenderer.js"></script>
   <script>
     let scene;
     let raycaster = new THREE.Raycaster();
@@ -151,10 +152,10 @@
 
       function updateCamera() {
           // if (mouseX >= -52 && mouseX <= 84) {
-            camera.position.x = mouseX *.05;//( mouseX - camera.position.x ) * .05;
+          camera.position.x = mouseX * .05;//( mouseX - camera.position.x ) * .05;
           // };
           // if (mouseY >= 37.5 && mouseY <= 57.5) {
-  				camera.position.y = mouseY *.05;//( - mouseY - camera.position.y ) * .05;
+  				// camera.position.y = mouseY *.05;//( - mouseY - camera.position.y ) * .05;
         // }
       }
 
@@ -176,7 +177,7 @@
 
       function render () {
 				requestAnimationFrame( render );
-        // updateCamera();
+        updateCamera();
         camera.lookAt( scene.position );
 				renderer.render(scene, camera);
 
@@ -188,8 +189,8 @@
         						// if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
         						INTERSECTED = intersects[ 0 ].object;
                     if (INTERSECTED.name != "the Neuron") {
-                      console.log (INTERSECTED.visible)
-                      INTERSECTED.visible = false;
+                      console.log(INTERSECTED)
+                      INTERSECTED.children[0].visible = true;
                     }
                     else {
                       // console.log ("the NEURON")
@@ -201,8 +202,11 @@
         					// if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
                   // INTERSECTED.visible=false;
 
+                  for (i=0;i<markers.length;i++) {
+                    markers[i].popup.visible = false;
+                  }
+
                   INTERSECTED = null;
-                  console.log(scene.children)
 
         				}
         // if ( intersects.length > 0 ) {

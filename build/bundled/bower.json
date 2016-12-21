@@ -17,7 +17,8 @@
     "paper-icon-button": "PolymerElements/paper-icon-button#~1.1.0",
     "polymer": "Polymer/polymer#^1.6.0",
     "mojs": "^0.288.1",
-    "tween.js": "tweenjs#^16.3.5"
+    "tween.js": "tweenjs#^16.3.5",
+    "threejs": "*"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
