@@ -1,1 +1,0 @@
-module("InstancedInterleavedBuffer"),test("can be created",function(){var e=new Float32Array([1,2,3,7,8,9]),t=new THREE.InstancedInterleavedBuffer(e,3);ok(1===t.meshPerAttribute,"ok")}),test("copy",function(){var e=new Float32Array([1,2,3,7,8,9]),t=new THREE.InstancedInterleavedBuffer(e,3),n=t.copy(t);ok(1===n.meshPerAttribute,"additional attribute was copied")});

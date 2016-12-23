@@ -1,1 +1,0 @@
-THREE.VarNode=function(t){THREE.GLNode.call(this,t)},THREE.VarNode.prototype=Object.create(THREE.GLNode.prototype),THREE.VarNode.prototype.constructor=THREE.VarNode,THREE.VarNode.prototype.getType=function(t){return t.getTypeByFormat(this.type)},THREE.VarNode.prototype.generate=function(t,e){var o=t.material.getVar(this.uuid,this.type);return t.format(o.name,this.getType(t),e)};

@@ -1,1 +1,0 @@
-!function(){"use strict";var t;QUnit.module("Lights - PointLight",{beforeEach:function(){t=[new THREE.PointLight(11184810)]}}),QUnit.test("standard light tests",function(i){runStdLightTests(i,t)})}();

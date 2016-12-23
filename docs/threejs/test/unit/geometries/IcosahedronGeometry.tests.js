@@ -1,1 +1,0 @@
-!function(){"use strict";var e,t={radius:10,detail:void 0};QUnit.module("Extras - Geometries - IcosahedronGeometry",{beforeEach:function(){e=[new THREE.IcosahedronGeometry,new THREE.IcosahedronGeometry(t.radius),new THREE.IcosahedronGeometry(t.radius,t.detail)]}}),QUnit.test("standard geometry tests",function(t){runStdGeometryTests(t,e)})}();

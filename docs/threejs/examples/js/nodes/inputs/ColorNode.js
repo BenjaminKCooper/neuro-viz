@@ -1,1 +1,0 @@
-THREE.ColorNode=function(o){THREE.InputNode.call(this,"c"),this.value=new THREE.Color(o||0)},THREE.ColorNode.prototype=Object.create(THREE.InputNode.prototype),THREE.ColorNode.prototype.constructor=THREE.ColorNode,THREE.NodeMaterial.addShortcuts(THREE.ColorNode.prototype,"value",["r","g","b"]);

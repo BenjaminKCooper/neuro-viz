@@ -1,1 +1,0 @@
-Menubar.View=function(e){var n=new UI.Panel;n.setClass("menu");var a=new UI.Panel;a.setClass("title"),a.setTextContent("View"),n.add(a);var t=new UI.Panel;t.setClass("options"),n.add(t);var s=new UI.Row;return s.setClass("option"),s.setTextContent("VR mode"),s.onClick(function(){WEBVR.isAvailable()===!0?e.signals.enterVR.dispatch():alert("WebVR not available")}),t.add(s),n};

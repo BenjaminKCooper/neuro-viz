@@ -1,1 +1,0 @@
-var Command=function(t){this.id=-1,this.inMemory=!1,this.updatable=!1,this.type="",this.name="",void 0!==t&&(Command.editor=t),this.editor=Command.editor};Command.prototype.toJSON=function(){var t={};return t.type=this.type,t.id=this.id,t.name=this.name,t},Command.prototype.fromJSON=function(t){this.inMemory=!0,this.type=t.type,this.id=t.id,this.name=t.name};

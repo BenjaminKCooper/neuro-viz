@@ -1,1 +1,0 @@
-Menubar.Play=function(t){var e=t.signals,n=new UI.Panel;n.setClass("menu");var a=!1,s=new UI.Panel;return s.setClass("title"),s.setTextContent("Play"),s.onClick(function(){a===!1?(a=!0,s.setTextContent("Stop"),e.startPlayer.dispatch()):(a=!1,s.setTextContent("Play"),e.stopPlayer.dispatch())}),n.add(s),n};

@@ -1,1 +1,0 @@
-!function(){"use strict";var e,t={radius:10,detail:void 0};QUnit.module("Extras - Geometries - TetrahedronGeometry",{beforeEach:function(){e=[new THREE.TetrahedronGeometry,new THREE.TetrahedronGeometry(t.radius),new THREE.TetrahedronGeometry(t.radius,t.detail)]}}),QUnit.test("standard geometry tests",function(t){runStdGeometryTests(t,e)})}();
