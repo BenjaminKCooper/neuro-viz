@@ -47,6 +47,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // scene.add(this.node);
 
 
+      this.clicked = false;
+      this.hovered = false;
+      this.displayed = false;
+
+      console.log(this)
+
+
       var plane = new THREE.PlaneGeometry( 5, 5, 32 );
       var planeMaterial = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
       this.popup= new THREE.Mesh( plane, planeMaterial );
@@ -60,6 +67,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       this.node.add(this.popup);
       scene.add(this.node);
     }
+
+
 
 
     renderer.setPixelRatio( window.devicePixelRatio );
@@ -78,9 +87,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				gridHelper.position.x = 0;
 				// scene.add( gridHelper );
 			camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
-      camera.position.x = 10;//10;
-      camera.position.y = 10;
-      camera.position.z = 10;
+      camera.position.x = 0;//10;
+      camera.position.y = 11;
+      camera.position.z = 15;
 
 
 
@@ -135,6 +144,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         marker = new PopUpNode(current.x,current.y,current.z, i);
 
         markers.push(marker);
+        console.log(marker);
+        console.log(markers)
 
       }
 
@@ -143,6 +154,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
       function onDocumentMouseMove(){
+        console.log('mouse movingggg')
 
         mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 	      mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
@@ -186,7 +198,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       function render () {
 				requestAnimationFrame( render );
-        updateCamera();
+        // updateCamera();
         camera.lookAt( scene.position );
 				renderer.render(scene, camera);
 
@@ -200,6 +212,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     if (INTERSECTED.name != "the Neuron") {
                       console.log(INTERSECTED)
                       INTERSECTED.children[0].visible = true;
+                      for (i=0;i<markers.length;i++) {
+                        if (markers[i].node == INTERSECTED) {
+                          console.log(markers[i].node)
+                        };
+                      }
+
+
                     }
                     else {
                       // console.log ("the NEURON")
